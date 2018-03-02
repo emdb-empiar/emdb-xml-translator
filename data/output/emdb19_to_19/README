@@ -1,0 +1,2 @@
+Canonical EMD-xxxx.xml v1.9.6 files created from the original EMD-xxxx.xml v1.9.6 files.
+These files are then used to make the comparison with output from round-trip conversion (1.9 -> 3.0 -> 1.9).
