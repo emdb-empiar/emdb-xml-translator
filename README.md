@@ -1,4 +1,4 @@
-# emd-xml-translator
+# emdb-xml-translator
 
 Translators for converting EMDB XML files from 1.9 <-> 3.0 <-> 1.9.
 
