@@ -1,8 +1,7 @@
-# emdb-xml-translator
 
-Translators for converting EMDB XML files from 1.9 <-> 3.0 <-> 1.9.
+A set of translators for converting EMDB XML files from 1.9 <-> 3.0 <-> 1.9.
 
-Authosr: Ardan Patwardhan (ardan@ebi.ac.uk) and Sanja Abbott (sanja@ebi.ac.uk)
+Authors: Ardan Patwardhan (ardan@ebi.ac.uk) and Sanja Abbott (sanja@ebi.ac.uk)
 
 Date: 2018/03/02
 
