@@ -187,7 +187,7 @@ def process_all_19_19(file_path_template, out_dir):
     i = 0
     for emdb_file in emdb_files:
         i = i + 1
-        if i == 5472:
+        if i > 0:
             print i
             inf = os.path.basename(emdb_file)
             outf = os.path.join(out_dir, inf)
