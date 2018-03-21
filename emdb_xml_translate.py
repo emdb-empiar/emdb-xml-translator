@@ -47,6 +47,7 @@ class EMDBXMLTranslator(object):
         There are many constants in use for the translation. They have been collected here for  ease of use.
         """
         # Global constants
+        LATEST_XML_VERSION = '3.0.0.0'
         # Used to identify sample supramolecule
         EM_SAMPLE_ID = 1000
         EM_DATE_FORMAT = '%d-%b-%Y'
@@ -1323,7 +1324,7 @@ class EMDBXMLTranslator(object):
         xml_out.set_emdb_id(fmt_code_in)
         # attribute 2 - <xs:complexType name="entry_type">
         # XSD: <xs:attribute name="version" use="required">
-        xml_out.set_version('3.0')
+        xml_out.set_version(const.LATEST_XML_VERSION)
         # element 1 - <xs:complexType name="entry_type">
         # XSD: <xs:element name="admin" type="admin_type">
         # XSD: <<xs:complexType name="admin_type"> has 13 elements
@@ -2614,7 +2615,7 @@ class EMDBXMLTranslator(object):
                 # XSD: <xs:complexType name="applied_symmetry_type"> has 3 elements
                 symm = emdb30.applied_symmetry_type()
                 if self.roundtrip:
-                    # applied_symmetry_type are a sequence
+                    # applied_symmetry_type is a sequence
                     if proc is not None and not no_apply_symm:
                         symm_in = proc.get_appliedSymmetry()
                         if symm_in is not None:
@@ -3547,8 +3548,7 @@ class EMDBXMLTranslator(object):
                 if strain_in is not None:
                     # element 2 - <xs:complexType name="proteinType/virusType/cellCompType/nuclAcidType/ligandType/riboTypeEu/riboTypePro">
                     # XSD: <xs:element name="sciSpeciesStrain" type="xs:string" minOccurs="0"/>
-                    strn = strain_in.get_valueOf_()
-                    src_out.set_sciSpeciesStrain(strn)
+                    src_out.set_sciSpeciesStrain(strain_in)
 
                 # element 3 - <xs:complexType name="proteinType/virusType/cellCompType/nuclAcidType/ligandType/riboTypeEu/riboTypePro">
                 # XSD: <xs:element name="synSpeciesName" type="xs:string" minOccurs="0"/>
@@ -4532,7 +4532,7 @@ class EMDBXMLTranslator(object):
                             # XSD: <xs:element name="hostSpeciesStrain" type="xs:string" minOccurs="0" maxOccurs="1"/>
                             ang_in_details = n_in.get_strain()
                             if ang_in_details is not None:
-                                self.check_set(ang_in_details.get_valueOf_, nat_src_virus.set_hostSpeciesStrain)
+                                nat_src_virus.set_hostSpeciesStrain(ang_in_details)
 
                             vir.add_natSource(nat_src_virus)
 

@@ -643,7 +643,7 @@
             <xs:element name="strain" type="xs:token" minOccurs="0"/>
             <xs:element name="synonym_organism" type="xs:token" minOccurs="0"/>
         </xs:sequence>
-        <xs:attribute name="database" use="required">
+        <xs:attribute name="database">
             <xs:simpleType>
                 <xs:restriction base="xs:token">
                     <xs:enumeration value="NCBI"/>
@@ -732,7 +732,7 @@
     </xs:complexType>
     <xs:simpleType name="allowed_assembly_weights">
         <xs:restriction base="xs:float">
-            <xs:minInclusive value="0"/>
+            <xs:minInclusive value="0.000000001"/>
             <xs:maxInclusive value="1000000000.0"/>
         </xs:restriction>
     </xs:simpleType>
@@ -922,7 +922,7 @@
         <xs:complexContent>
             <xs:extension base="base_macromolecule_type">
                 <xs:sequence>
-                    <xs:element name="sequence" minOccurs="0">
+                    <xs:element name="sequence"  minOccurs="0">
                         <xs:complexType>
                             <xs:sequence>
                                 <xs:element name="string" type="xs:token"/>

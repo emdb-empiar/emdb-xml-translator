@@ -2,22 +2,22 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Tue Oct 31 14:13:42 2017 by generateDS.py version 2.23a.
+# Generated Tue Mar 20 14:27:26 2018 by generateDS.py version 2.23a.
 #
 # Command line options:
 #   ('--root-element', 'emd')
 #   ('-f', '')
-#   ('-o', 'emdb_30relaxed.py')
+#   ('-o', '../../IdeaProjects/emdb-xml-translator/emdb_30relaxed.py')
 #   ('--external-encoding', 'utf-8')
 #
 # Command line arguments:
-#   ../../../../v3/DA_schema/emdb_relaxed.xsd
+#   ../../IdeaProjects/emdb-xml-translator/emdb_relaxed.xsd
 #
 # Command line:
-#   ../../../../../generateDS-2.23a0/generateDS.py --root-element="emd" -f -o "emdb_30relaxed.py" --external-encoding="utf-8" ../../../../v3/DA_schema/emdb_relaxed.xsd
+#   generateDS.py --root-element="emd" -f -o "../../IdeaProjects/emdb-xml-translator/emdb_30relaxed.py" --external-encoding="utf-8" ../../IdeaProjects/emdb-xml-translator/emdb_relaxed.xsd
 #
 # Current working directory (os.getcwd()):
-#   cifEMDBTranslator
+#   generateDS-2.23a0
 #
 
 import sys
@@ -3736,7 +3736,8 @@ class base_source_type(GeneratedsSuper):
         if self.organism is not None:
             self.organism.export(outfile, level, namespace_, name_='organism', pretty_print=pretty_print)
         if self.strain is not None:
-            self.strain.export(outfile, level, namespace_, name_='strain', pretty_print=pretty_print)
+            showIndent(outfile, level, pretty_print)
+            outfile.write('<%sstrain>%s</%sstrain>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.strain), input_name='strain')), namespace_, eol_))
         if self.synonym_organism is not None:
             showIndent(outfile, level, pretty_print)
             outfile.write('<%ssynonym_organism>%s</%ssynonym_organism>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.synonym_organism), input_name='synonym_organism')), namespace_, eol_))
@@ -3764,10 +3765,10 @@ class base_source_type(GeneratedsSuper):
             self.organism = obj_
             obj_.original_tagname_ = 'organism'
         elif nodeName_ == 'strain':
-            obj_ = organism_type.factory()
-            obj_.build(child_)
-            self.strain = obj_
-            obj_.original_tagname_ = 'strain'
+            strain_ = child_.text
+            strain_ = re_.sub(String_cleanup_pat_, " ", strain_).strip()
+            strain_ = self.gds_validate_string(strain_, node, 'strain')
+            self.strain = strain_
         elif nodeName_ == 'synonym_organism':
             synonym_organism_ = child_.text
             synonym_organism_ = re_.sub(String_cleanup_pat_, " ", synonym_organism_).strip()
@@ -3990,14 +3991,9 @@ class complex_supramolecule_type(base_supramolecule_type):
 class complex_natural_source_type(base_source_type):
     subclass = None
     superclass = base_source_type
-    def __init__(self, database=None, organism=None, strain=None, synonym_organism=None, organ=None, tissue=None, cell=None, organelle=None, cellular_location=None):
+    def __init__(self, database=None, organism=None, strain=None, synonym_organism=None):
         self.original_tagname_ = None
         super(complex_natural_source_type, self).__init__(database, organism, strain, synonym_organism, )
-        self.organ = organ
-        self.tissue = tissue
-        self.cell = cell
-        self.organelle = organelle
-        self.cellular_location = cellular_location
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -4009,23 +4005,8 @@ class complex_natural_source_type(base_source_type):
         else:
             return complex_natural_source_type(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_organ(self): return self.organ
-    def set_organ(self, organ): self.organ = organ
-    def get_tissue(self): return self.tissue
-    def set_tissue(self, tissue): self.tissue = tissue
-    def get_cell(self): return self.cell
-    def set_cell(self, cell): self.cell = cell
-    def get_organelle(self): return self.organelle
-    def set_organelle(self, organelle): self.organelle = organelle
-    def get_cellular_location(self): return self.cellular_location
-    def set_cellular_location(self, cellular_location): self.cellular_location = cellular_location
     def hasContent_(self):
         if (
-            self.organ is not None or
-            self.tissue is not None or
-            self.cell is not None or
-            self.organelle is not None or
-            self.cellular_location is not None or
             super(complex_natural_source_type, self).hasContent_()
         ):
             return True
@@ -4053,25 +4034,6 @@ class complex_natural_source_type(base_source_type):
         super(complex_natural_source_type, self).exportAttributes(outfile, level, already_processed, namespace_, name_='complex_natural_source_type')
     def exportChildren(self, outfile, level, namespace_='', name_='complex_natural_source_type', fromsubclass_=False, pretty_print=True):
         super(complex_natural_source_type, self).exportChildren(outfile, level, namespace_, name_, True, pretty_print=pretty_print)
-        if pretty_print:
-            eol_ = '\n'
-        else:
-            eol_ = ''
-        if self.organ is not None:
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sorgan>%s</%sorgan>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.organ), input_name='organ')), namespace_, eol_))
-        if self.tissue is not None:
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%stissue>%s</%stissue>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.tissue), input_name='tissue')), namespace_, eol_))
-        if self.cell is not None:
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%scell>%s</%scell>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.cell), input_name='cell')), namespace_, eol_))
-        if self.organelle is not None:
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sorganelle>%s</%sorganelle>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.organelle), input_name='organelle')), namespace_, eol_))
-        if self.cellular_location is not None:
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%scellular_location>%s</%scellular_location>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.cellular_location), input_name='cellular_location')), namespace_, eol_))
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -4082,32 +4044,8 @@ class complex_natural_source_type(base_source_type):
     def buildAttributes(self, node, attrs, already_processed):
         super(complex_natural_source_type, self).buildAttributes(node, attrs, already_processed)
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
-        if nodeName_ == 'organ':
-            organ_ = child_.text
-            organ_ = re_.sub(String_cleanup_pat_, " ", organ_).strip()
-            organ_ = self.gds_validate_string(organ_, node, 'organ')
-            self.organ = organ_
-        elif nodeName_ == 'tissue':
-            tissue_ = child_.text
-            tissue_ = re_.sub(String_cleanup_pat_, " ", tissue_).strip()
-            tissue_ = self.gds_validate_string(tissue_, node, 'tissue')
-            self.tissue = tissue_
-        elif nodeName_ == 'cell':
-            cell_ = child_.text
-            cell_ = re_.sub(String_cleanup_pat_, " ", cell_).strip()
-            cell_ = self.gds_validate_string(cell_, node, 'cell')
-            self.cell = cell_
-        elif nodeName_ == 'organelle':
-            organelle_ = child_.text
-            organelle_ = re_.sub(String_cleanup_pat_, " ", organelle_).strip()
-            organelle_ = self.gds_validate_string(organelle_, node, 'organelle')
-            self.organelle = organelle_
-        elif nodeName_ == 'cellular_location':
-            cellular_location_ = child_.text
-            cellular_location_ = re_.sub(String_cleanup_pat_, " ", cellular_location_).strip()
-            cellular_location_ = self.gds_validate_string(cellular_location_, node, 'cellular_location')
-            self.cellular_location = cellular_location_
         super(complex_natural_source_type, self).buildChildren(child_, node, nodeName_, True)
+        pass
 # end class complex_natural_source_type
 
 
@@ -7845,7 +7783,7 @@ class vitrification_type(GeneratedsSuper):
         # Validate type instrumentType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['FEI VITROBOT MARK I', 'FEI VITROBOT MARK II', 'FEI VITROBOT MARK III', 'FEI VITROBOT MARK IV', 'GATAN CRYOPLUNGE 3', 'HOMEMADE PLUNGER', 'LEICA EM CPC', 'LEICA EM GP', 'LEICA KF80', 'LEICA PLUNGER', 'REICHERT-JUNG PLUNGER', 'OTHER']
+            enumerations = ['EMS-002 RAPID IMMERSION FREEZER', 'FEI VITROBOT MARK I', 'FEI VITROBOT MARK II', 'FEI VITROBOT MARK III', 'FEI VITROBOT MARK IV', 'GATAN CRYOPLUNGE 3', 'HOMEMADE PLUNGER', 'LEICA EM CPC', 'LEICA EM GP', 'LEICA KF80', 'LEICA PLUNGER', 'REICHERT-JUNG PLUNGER', 'SPOTITON', 'OTHER']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
@@ -9340,7 +9278,7 @@ class base_microscopy_type(GeneratedsSuper):
         # Validate type microscopeType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['FEI MORGAGNI', 'FEI POLARA 300', 'FEI TALOS ARCTICA', 'FEI TECNAI 10', 'FEI TECNAI 12', 'FEI TECNAI 20', 'FEI TECNAI ARCTICA', 'FEI TECNAI F20', 'FEI TECNAI F30', 'FEI TECNAI SPHERA', 'FEI TECNAI SPIRIT', 'FEI TITAN', 'FEI TITAN KRIOS', 'FEI/PHILIPS CM10', 'FEI/PHILIPS CM12', 'FEI/PHILIPS CM120T', 'FEI/PHILIPS CM200FEG', 'FEI/PHILIPS CM200FEG/SOPHIE', 'FEI/PHILIPS CM200FEG/ST', 'FEI/PHILIPS CM200FEG/UT', 'FEI/PHILIPS CM200T', 'FEI/PHILIPS CM300FEG/HE', 'FEI/PHILIPS CM300FEG/ST', 'FEI/PHILIPS CM300FEG/T', 'FEI/PHILIPS EM400', 'FEI/PHILIPS EM420', 'HITACHI EF2000', 'HITACHI H-95000SD', 'HITACHI H7600', 'HITACHI HF2000', 'HITACHI HF3000', 'JEOL 100CX', 'JEOL 1010', 'JEOL 1200', 'JEOL 1200EX', 'JEOL 1200EXII', 'JEOL 1230', 'JEOL 1400', 'JEOL 2000EX', 'JEOL 2000EXII', 'JEOL 2010', 'JEOL 2010F', 'JEOL 2010HC', 'JEOL 2010HT', 'JEOL 2010UHR', 'JEOL 2011', 'JEOL 2100', 'JEOL 2100F', 'JEOL 2200FS', 'JEOL 2200FSC', 'JEOL 3000SFF', 'JEOL 3100FFC', 'JEOL 3200FS', 'JEOL 3200FSC', 'JEOL 4000', 'JEOL 4000EX', 'JEOL KYOTO-3000SFF', 'ZEISS LEO912', 'ZEISS LIBRA120PLUS', 'OTHER']
+            enumerations = ['FEI MORGAGNI', 'FEI POLARA 300', 'FEI TALOS ARCTICA', 'FEI TECNAI 10', 'FEI TECNAI 12', 'FEI TECNAI 20', 'FEI TECNAI ARCTICA', 'FEI TECNAI F20', 'FEI TECNAI F30', 'FEI TECNAI SPHERA', 'FEI TECNAI SPIRIT', 'FEI TITAN', 'FEI TITAN KRIOS', 'FEI/PHILIPS CM10', 'FEI/PHILIPS CM12', 'FEI/PHILIPS CM120T', 'FEI/PHILIPS CM200FEG', 'FEI/PHILIPS CM200FEG/SOPHIE', 'FEI/PHILIPS CM200FEG/ST', 'FEI/PHILIPS CM200FEG/UT', 'FEI/PHILIPS CM200T', 'FEI/PHILIPS CM300FEG/HE', 'FEI/PHILIPS CM300FEG/ST', 'FEI/PHILIPS CM300FEG/T', 'FEI/PHILIPS EM400', 'FEI/PHILIPS EM420', 'HITACHI EF2000', 'HITACHI H-95000SD', 'HITACHI H7600', 'HITACHI HF2000', 'HITACHI HF3000', 'JEOL 100CX', 'JEOL 1010', 'JEOL 1200', 'JEOL 1200EX', 'JEOL 1200EXII', 'JEOL 1230', 'JEOL 1400', 'JEOL 2000EX', 'JEOL 2000EXII', 'JEOL 2010', 'JEOL 2010F', 'JEOL 2010HC', 'JEOL 2010HT', 'JEOL 2010UHR', 'JEOL 2011', 'JEOL 2100', 'JEOL 2100F', 'JEOL 2200FS', 'JEOL 2200FSC', 'JEOL 3000SFF', 'JEOL 3100FFC', 'JEOL 3200FS', 'JEOL 3200FSC', 'JEOL 4000', 'JEOL 4000EX', 'JEOL CRYO ARM 200', 'JEOL CRYO ARM 300', 'JEOL KYOTO-3000SFF', 'ZEISS LEO912', 'ZEISS LIBRA120PLUS', 'OTHER']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
@@ -9387,9 +9325,9 @@ class base_microscopy_type(GeneratedsSuper):
     def validate_allowed_magnification(self, value):
         # Validate type allowed_magnification, a restriction on xs:float.
         if value is not None and Validate_simpletypes_:
-            if value < 40:
+            if value < 1000:
                 warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on allowed_magnification' % {"value" : value} )
-            if value > 1000000:
+            if value > 500000:
                 warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on allowed_magnification' % {"value" : value} )
     def validate_specimen_holder_modelType(self, value):
         # Validate type specimen_holder_modelType, a restriction on xs:token.
@@ -10959,14 +10897,12 @@ class applied_symmetry_type(GeneratedsSuper):
 class helical_parameters_type(GeneratedsSuper):
     subclass = None
     superclass = None
-    def __init__(self, delta_z=None, delta_phi=None, axial_symmetry=None, hand=None):
+    def __init__(self, delta_z=None, delta_phi=None, axial_symmetry=None):
         self.original_tagname_ = None
         self.delta_z = delta_z
         self.delta_phi = delta_phi
         self.axial_symmetry = axial_symmetry
         self.validate_axial_symmetryType(self.axial_symmetry)
-        self.hand = hand
-        self.validate_handType(self.hand)
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -10984,8 +10920,6 @@ class helical_parameters_type(GeneratedsSuper):
     def set_delta_phi(self, delta_phi): self.delta_phi = delta_phi
     def get_axial_symmetry(self): return self.axial_symmetry
     def set_axial_symmetry(self, axial_symmetry): self.axial_symmetry = axial_symmetry
-    def get_hand(self): return self.hand
-    def set_hand(self, hand): self.hand = hand
     def validate_axial_symmetryType(self, value):
         # Validate type axial_symmetryType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
@@ -10993,24 +10927,11 @@ class helical_parameters_type(GeneratedsSuper):
                     self.validate_axial_symmetryType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_axial_symmetryType_patterns_, ))
     validate_axial_symmetryType_patterns_ = [['^[C|D][1-9][0-9]*$']]
-    def validate_handType(self, value):
-        # Validate type handType, a restriction on xs:token.
-        if value is not None and Validate_simpletypes_:
-            value = str(value)
-            enumerations = ['LEFT HANDED', 'RIGHT HANDED']
-            enumeration_respectee = False
-            for enum in enumerations:
-                if value == enum:
-                    enumeration_respectee = True
-                    break
-            if not enumeration_respectee:
-                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on handType' % {"value" : value.encode("utf-8")} )
     def hasContent_(self):
         if (
             self.delta_z is not None or
             self.delta_phi is not None or
-            self.axial_symmetry is not None or
-            self.hand is not None
+            self.axial_symmetry is not None
         ):
             return True
         else:
@@ -11047,9 +10968,6 @@ class helical_parameters_type(GeneratedsSuper):
         if self.axial_symmetry is not None:
             showIndent(outfile, level, pretty_print)
             outfile.write('<%saxial_symmetry>%s</%saxial_symmetry>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.axial_symmetry), input_name='axial_symmetry')), namespace_, eol_))
-        if self.hand is not None:
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%shand>%s</%shand>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.hand), input_name='hand')), namespace_, eol_))
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -11077,13 +10995,6 @@ class helical_parameters_type(GeneratedsSuper):
             self.axial_symmetry = axial_symmetry_
             # validate type axial_symmetryType
             self.validate_axial_symmetryType(self.axial_symmetry)
-        elif nodeName_ == 'hand':
-            hand_ = child_.text
-            hand_ = re_.sub(String_cleanup_pat_, " ", hand_).strip()
-            hand_ = self.gds_validate_string(hand_, node, 'hand')
-            self.hand = hand_
-            # validate type handType
-            self.validate_handType(self.hand)
 # end class helical_parameters_type
 
 
@@ -13154,7 +13065,7 @@ class angle_assignment_type(GeneratedsSuper):
         # Validate type typeType36, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['ANGULAR RECONSTITUTION', 'COMMON LINE', 'NOT APPLICABLE', 'OTHER', 'PROJECTION MATCHING', 'RANDOM ASSIGNMENT']
+            enumerations = ['ANGULAR RECONSTITUTION', 'COMMON LINE', 'NOT APPLICABLE', 'OTHER', 'PROJECTION MATCHING', 'RANDOM ASSIGNMENT', 'MAXIMUM LIKELIHOOD']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
@@ -23977,9 +23888,10 @@ class average_electron_dose_per_imageType(GeneratedsSuper):
 class energy_filterType(GeneratedsSuper):
     subclass = None
     superclass = None
-    def __init__(self, name=None, lower_energy_threshold=None, upper_energy_threshold=None):
+    def __init__(self, name=None, slit_width=None, lower_energy_threshold=None, upper_energy_threshold=None):
         self.original_tagname_ = None
         self.name = name
+        self.slit_width = slit_width
         self.lower_energy_threshold = lower_energy_threshold
         self.upper_energy_threshold = upper_energy_threshold
     def factory(*args_, **kwargs_):
@@ -23995,6 +23907,8 @@ class energy_filterType(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_name(self): return self.name
     def set_name(self, name): self.name = name
+    def get_slit_width(self): return self.slit_width
+    def set_slit_width(self, slit_width): self.slit_width = slit_width
     def get_lower_energy_threshold(self): return self.lower_energy_threshold
     def set_lower_energy_threshold(self, lower_energy_threshold): self.lower_energy_threshold = lower_energy_threshold
     def get_upper_energy_threshold(self): return self.upper_energy_threshold
@@ -24002,6 +23916,7 @@ class energy_filterType(GeneratedsSuper):
     def hasContent_(self):
         if (
             self.name is not None or
+            self.slit_width is not None or
             self.lower_energy_threshold is not None or
             self.upper_energy_threshold is not None
         ):
@@ -24036,6 +23951,8 @@ class energy_filterType(GeneratedsSuper):
         if self.name is not None:
             showIndent(outfile, level, pretty_print)
             outfile.write('<%sname>%s</%sname>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.name), input_name='name')), namespace_, eol_))
+        if self.slit_width is not None:
+            self.slit_width.export(outfile, level, namespace_, name_='slit_width', pretty_print=pretty_print)
         if self.lower_energy_threshold is not None:
             self.lower_energy_threshold.export(outfile, level, namespace_, name_='lower_energy_threshold', pretty_print=pretty_print)
         if self.upper_energy_threshold is not None:
@@ -24055,6 +23972,11 @@ class energy_filterType(GeneratedsSuper):
             name_ = re_.sub(String_cleanup_pat_, " ", name_).strip()
             name_ = self.gds_validate_string(name_, node, 'name')
             self.name = name_
+        elif nodeName_ == 'slit_width':
+            obj_ = slit_widthType.factory()
+            obj_.build(child_)
+            self.slit_width = obj_
+            obj_.original_tagname_ = 'slit_width'
         elif nodeName_ == 'lower_energy_threshold':
             obj_ = lower_energy_thresholdType.factory()
             obj_.build(child_)
@@ -24066,6 +23988,78 @@ class energy_filterType(GeneratedsSuper):
             self.upper_energy_threshold = obj_
             obj_.original_tagname_ = 'upper_energy_threshold'
 # end class energy_filterType
+
+
+class slit_widthType(GeneratedsSuper):
+    subclass = None
+    superclass = None
+    def __init__(self, units=None, valueOf_=None):
+        self.original_tagname_ = None
+        self.units = _cast(None, units)
+        self.valueOf_ = valueOf_
+    def factory(*args_, **kwargs_):
+        if CurrentSubclassModule_ is not None:
+            subclass = getSubclassFromModule_(
+                CurrentSubclassModule_, slit_widthType)
+            if subclass is not None:
+                return subclass(*args_, **kwargs_)
+        if slit_widthType.subclass:
+            return slit_widthType.subclass(*args_, **kwargs_)
+        else:
+            return slit_widthType(*args_, **kwargs_)
+    factory = staticmethod(factory)
+    def get_units(self): return self.units
+    def set_units(self, units): self.units = units
+    def get_valueOf_(self): return self.valueOf_
+    def set_valueOf_(self, valueOf_): self.valueOf_ = valueOf_
+    def hasContent_(self):
+        if (
+            1 if type(self.valueOf_) in [int,float] else self.valueOf_
+        ):
+            return True
+        else:
+            return False
+    def export(self, outfile, level, namespace_='', name_='slit_widthType', namespacedef_='', pretty_print=True):
+        if pretty_print:
+            eol_ = '\n'
+        else:
+            eol_ = ''
+        if self.original_tagname_ is not None:
+            name_ = self.original_tagname_
+        showIndent(outfile, level, pretty_print)
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
+        already_processed = set()
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='slit_widthType')
+        if self.hasContent_():
+            outfile.write('>')
+            outfile.write((quote_xml(self.valueOf_) if type(self.valueOf_) is str else self.gds_encode(str(self.valueOf_))))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='slit_widthType', pretty_print=pretty_print)
+            outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
+        else:
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='slit_widthType'):
+        if self.units is not None and 'units' not in already_processed:
+            already_processed.add('units')
+            outfile.write(' units=%s' % (self.gds_encode(self.gds_format_string(quote_attrib(self.units), input_name='units')), ))
+    def exportChildren(self, outfile, level, namespace_='', name_='slit_widthType', fromsubclass_=False, pretty_print=True):
+        pass
+    def build(self, node):
+        already_processed = set()
+        self.buildAttributes(node, node.attrib, already_processed)
+        self.valueOf_ = get_all_text_(node)
+        for child in node:
+            nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
+            self.buildChildren(child, node, nodeName_)
+        return self
+    def buildAttributes(self, node, attrs, already_processed):
+        value = find_attr_value_('units', node)
+        if value is not None and 'units' not in already_processed:
+            already_processed.add('units')
+            self.units = value
+            self.units = ' '.join(self.units.split())
+    def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
+        pass
+# end class slit_widthType
 
 
 class lower_energy_thresholdType(GeneratedsSuper):
@@ -31157,6 +31151,7 @@ GDSClassesMapping = {
     'sites': sitesType,
     'slice': map_type,
     'slices_list': slices_listType,
+    'slit_width': slit_widthType,
     'software': software_type,
     'software_list': software_list_type,
     'spacing': spacingType,
@@ -31172,7 +31167,6 @@ GDSClassesMapping = {
     'statistics': map_statistics_type,
     'status': statusType,
     'status_history_list': version_list_type,
-    'strain': organism_type,
     'structure_determination': structure_determination_type,
     'structure_determination_list': structure_determination_listType,
     'structure_factors': structure_factors_validation_type,
@@ -31588,6 +31582,7 @@ __all__ = [
     "singleparticle_processing_type",
     "sitesType",
     "slices_listType",
+    "slit_widthType",
     "software_list_type",
     "software_type",
     "spacingType",

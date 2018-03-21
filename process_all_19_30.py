@@ -82,7 +82,7 @@ def main():
     # Handle command line options
     usage = """
             process_all_19_30.py [options]
-            Convert all EMDB XML 1.9 header files to XML 3.0 files.
+            Convert all EMDB XML 1.9 header files to XML 3.x.x.x files.
 
             Examples:
             python process_all_19_30.py
@@ -92,7 +92,7 @@ def main():
             /data/emstaging/EMD-*/header/emd-*.xml is the template used to glob all input 1.9 header files
             /data/emdb20 is the output directory with the EMDB XML 3.0 files
 
-            python process_all_19_30.py -t '/Users/sanja/Documents/workspaceSelenium/emdb_xml_translator/emdb_xml_translator/data/output/v2.0_strict_to_1.9/EMD-*.xml' -o '/Users/sanja/Documents/workspaceSelenium/emdb_xml_translator/emdb_xml_translator/data/output/tmp/'
+            python process_all_19_30.py -t '../emdb_xml_translator/emdb_xml_translator/data/output/v2.0_strict_to_1.9/EMD-*.xml' -o '../emdb_xml_translator/emdb_xml_translator/data/output/tmp/'
 
             """
     version = "0.1"
