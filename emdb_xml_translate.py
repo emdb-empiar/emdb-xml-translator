@@ -1556,7 +1556,7 @@ class EMDBXMLTranslator(object):
         exp_in = xml_in.get_experiment()
         im_ac_in = exp_in.get_imageAcquisition()
         num_det = len(im_ac_in)
-        if num_det == 0:
+        if num_det == 0 and not self.roundtrip:
             self.warn(1, "No image acquisition elements found!")
         if num_det > 0:
             min_idx = 0
@@ -2203,7 +2203,7 @@ class EMDBXMLTranslator(object):
                             # XSD: <xs:element name="natural_source" minOccurs="0" type="organelle_natural_source_type" maxOccurs="unbounded"/>
                             # XSD: <xs:complexType name="organelle_natural_source_type"> has base and 5 elements
                             org_nat_source = emdb30.organelle_natural_source_type()
-                            set_mol_natural_source(org_nat_source, component_in, cell_comp_in)
+                            set_mol_natural_source(org_nat_source, component_in, cell_comp_in, organelle=False)
                             if org_nat_source.hasContent_():
                                 comp_smol.add_natural_source(org_nat_source)
                         # element 2 - <xs:element name="organelle_or_cellular_component_supramolecule" substitutionGroup="supramolecule" type="organelle_or_cellular_component_supramolecule_type"/>
@@ -2241,7 +2241,7 @@ class EMDBXMLTranslator(object):
                             # element 1 - <xs:complexType name="complex_supramolecule_type">
                             # XSD: <xs:element name="natural_source" type="complex_natural_source_type" minOccurs="0" maxOccurs="unbounded"/>
                             complex_smol_nat_source = emdb30.complex_natural_source_type()
-                            set_mol_natural_source(complex_smol_nat_source, component_in, complex_smol_in)
+                            set_mol_natural_source(complex_smol_nat_source, component_in, complex_smol_in, tissue=False, cell=False, organelle=False, cell_loc=False)
                             if complex_smol_nat_source.hasContent_():
                                 complex_smol.add_natural_source(complex_smol_nat_source)
                             # element 2 - <xs:complexType name="complex_supramolecule_type">
@@ -2570,9 +2570,9 @@ class EMDBXMLTranslator(object):
                         # XSD: <xs:element name="axial_symmetry" minOccurs="0">
                         self.check_set(hx_par_in.get_axialSymmetry, hx_par.set_axial_symmetry)
                         # element 3 - <xs:complexType name="helical_parameters_type">
-                        # XSD: <xs:element name="hand" minOccurs="0"> added as required by old v1.9s
-                        hnd = hx_par_in.get_hand()
-                        hx_par.set_hand(hnd)
+                        # REMOVED - XSD: <xs:element name="hand" minOccurs="0"> added as required by old v1.9s
+                        #hnd = hx_par_in.get_hand()
+                        #hx_par.set_hand(hnd)
 
                     if hx_par.hasContent_():
                         symm.set_helical_parameters(hx_par)
@@ -3109,7 +3109,6 @@ class EMDBXMLTranslator(object):
                                     match_groups = mtch.groups()
                                     pdb_code = match_groups[0]
                                     ch = match_groups[2]
-                                    print 'ch %s' % ch
                                     if ch != '':
                                         if pdb_code == p_in:
                                             chain.set_chain_id(ch)
@@ -3117,7 +3116,6 @@ class EMDBXMLTranslator(object):
                                             # this is an annotation problem
                                             pass
                                 else:
-                                    print 'ch_in %s' % ch_in
                                     ch_minus_commas = ch_in.replace(',', '')
                                     chain.set_chain_id(ch_minus_commas)
                                 if chain.hasContent_():

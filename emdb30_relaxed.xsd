@@ -1533,11 +1533,13 @@
                     <xs:restriction base="xs:token">
                         <xs:enumeration value="ETHANE"/>
                         <xs:enumeration value="ETHANE-PROPANE"/>
+                        <xs:enumeration value="ETHANE-PROPANE MIXTURE"/>
                         <xs:enumeration value="FREON 12"/>
                         <xs:enumeration value="FREON 22"/>
                         <xs:enumeration value="HELIUM"/>
                         <xs:enumeration value="METHANE"/>
                         <xs:enumeration value="NITROGEN"/>
+                        <xs:enumeration value="NONE"/>
                         <xs:enumeration value="OTHER"/>
                         <xs:enumeration value="PROPANE"/>
                     </xs:restriction>
