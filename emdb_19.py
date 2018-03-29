@@ -2,22 +2,22 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Tue Jan  9 15:05:43 2018 by generateDS.py version 2.23a.
+# Generated Thu Mar 29 13:02:29 2018 by generateDS.py version 2.23a.
 #
 # Command line options:
 #   ('--root-element', 'emd')
 #   ('-f', '')
-#   ('-o', 'emdb_19.py')
+#   ('-o', '../../IdeaProjects/emdb-xml-translator/emdb_19.py')
 #   ('--external-encoding', 'utf-8')
 #
 # Command line arguments:
-#   ../../../../v3/emdb.xsd
+#   ../../IdeaProjects/emdb-schemas/current/emdb.xsd
 #
 # Command line:
-#   ../../../../../generateDS-2.23a0/generateDS.py --root-element="emd" -f -o "emdb_19.py" --external-encoding="utf-8" ../../../../v3/emdb.xsd
+#   generateDS.py --root-element="emd" -f -o "../../IdeaProjects/emdb-xml-translator/emdb_19.py" --external-encoding="utf-8" ../../IdeaProjects/emdb-schemas/current/emdb.xsd
 #
 # Current working directory (os.getcwd()):
-#   cifEMDBTranslator
+#   generateDS-2.23a0
 #
 
 import sys
@@ -3449,7 +3449,7 @@ class vitrifType(GeneratedsSuper):
         # Validate type vitrInstrType, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['BAL-TEC HPM 010', 'EMS-002 RAPID IMMERSION FREEZER', 'FEI VITROBOT', 'FEI VITROBOT MARK I', 'FEI VITROBOT MARK II', 'FEI VITROBOT MARK III', 'FEI VITROBOT MARK IV', 'GATAN CRYOPLUNGE 3', 'HOMEMADE PLUNGER', 'LEICA PLUNGER', 'LEICA EM GP', 'LEICA EM CPC', 'LEICA EM HPM100', 'LEICA EM PACT', 'LEICA EM PACT2', 'LEICA KF80', 'NONE', 'REICHERT-JUNG PLUNGER', 'ZEISS PLUNGE FREEZER CRYOBOX', 'OTHER']
+            enumerations = ['BAL-TEC HPM 010', 'EMS-002 RAPID IMMERSION FREEZER', 'FEI VITROBOT', 'FEI VITROBOT MARK I', 'FEI VITROBOT MARK II', 'FEI VITROBOT MARK III', 'FEI VITROBOT MARK IV', 'GATAN CRYOPLUNGE 3', 'HOMEMADE PLUNGER', 'LEICA PLUNGER', 'LEICA EM GP', 'LEICA EM CPC', 'LEICA EM HPM100', 'LEICA EM PACT', 'LEICA EM PACT2', 'LEICA KF80', 'NONE', 'REICHERT-JUNG PLUNGER', 'ZEISS PLUNGE FREEZER CRYOBOX', 'OTHER', 'SPOTITON']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
@@ -3701,7 +3701,7 @@ class imgType(GeneratedsSuper):
         # Validate type detectorType, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['AGFA SCIENTA FILM', 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'GENERIC FILM', 'GENERIC IMAGE PLATES', 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)', 'DIRECT ELECTRON DE-16 (4k x 4k)', 'DIRECT ELECTRON DE-20 (5k x 3k)', 'DIRECT ELECTRON DE-64 (8k x 8k)', 'FALCON II', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)', 'FEI EAGLE (4k x 4k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)', 'FEI FALCON III (4k x 4k)', 'GATAN MULTISCAN', 'GATAN ORIUS SC200 (2k x 2k)', 'GATAN ORIUS SC600 (2.7k x 2.7k)', 'GATAN ORIUS SC1000 (4k x 2.7k)', 'GATAN ULTRASCAN 1000 (2k x 2k)', 'GATAN ULTRASCAN 4000 (4k x 4k)', 'GATAN ULTRASCAN 10000 (10k x 10k)', 'GATAN K2 (4k x 4k)', 'GATAN K2 BASE (4k x 4k)', 'GATAN K2 SUMMIT (4k x 4k)', 'GATAN K2 IS (4k x 4k)', 'GATAN K2 QUANTUM (4k x 4k)', 'GENERIC GATAN (2k x 2k)', 'GENERIC GATAN (4k x 4k)', 'GENERIC GATAN', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F816 (8k x 8k)', 'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F216 (2k x 2k)', 'TVIPS TEMCAM-F224 (2k x 2k)', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)', 'GENERIC TVIPS', 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)', 'GENERIC CCD', 'OTHER']
+            enumerations = ['AGFA SCIENTA FILM', 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'GENERIC FILM', 'GENERIC IMAGE PLATES', 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)', 'DIRECT ELECTRON DE-16 (4k x 4k)', 'DIRECT ELECTRON DE-20 (5k x 3k)', 'DIRECT ELECTRON DE-64 (8k x 8k)', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)', 'FEI EAGLE (4k x 4k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)', 'GATAN MULTISCAN', 'GATAN ORIUS SC200 (2k x 2k)', 'GATAN ORIUS SC600 (2.7k x 2.7k)', 'GATAN ORIUS SC1000 (4k x 2.7k)', 'GATAN ULTRASCAN 1000 (2k x 2k)', 'GATAN ULTRASCAN 4000 (4k x 4k)', 'GATAN ULTRASCAN 10000 (10k x 10k)', 'GATAN K2 (4k x 4k)', 'GATAN K2 BASE (4k x 4k)', 'GATAN K2 SUMMIT (4k x 4k)', 'GATAN K2 IS (4k x 4k)', 'GATAN K2 QUANTUM (4k x 4k)', 'GENERIC GATAN (2k x 2k)', 'GENERIC GATAN (4k x 4k)', 'GENERIC GATAN', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F816 (8k x 8k)', 'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F216 (2k x 2k)', 'TVIPS TEMCAM-F224 (2k x 2k)', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)', 'GENERIC TVIPS', 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)', 'GENERIC CCD', 'OTHER']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
@@ -3713,7 +3713,7 @@ class imgType(GeneratedsSuper):
         # Validate type microscopeType, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['FEI MORGAGNI', 'FEI POLARA 300', 'FEI TECNAI 10', 'FEI TECNAI 12', 'FEI TECNAI 20', 'FEI TECNAI F20', 'FEI TECNAI F30', 'FEI TECNAI SPHERA', 'FEI TECNAI SPIRIT', 'FEI TITAN', 'FEI TITAN KRIOS', 'FEI/PHILIPS CM10', 'FEI/PHILIPS CM12', 'FEI/PHILIPS CM120T', 'FEI/PHILIPS CM200FEG', 'FEI/PHILIPS CM200FEG/SOPHIE', 'FEI/PHILIPS CM200FEG/ST', 'FEI/PHILIPS CM200FEG/UT', 'FEI/PHILIPS CM200T', 'FEI/PHILIPS CM300FEG/HE', 'FEI/PHILIPS CM300FEG/ST', 'FEI/PHILIPS CM300FEG/T', 'FEI/PHILIPS EM400', 'FEI/PHILIPS EM420', 'FEI TALOS ARCTICA', 'FEI TECNAI ARCTICA', 'HITACHI EF2000', 'HITACHI H7600', 'HITACHI HF2000', 'HITACHI HF3000', 'HITACHI H-9500SD', 'JEOL 100CX', 'JEOL 1010', 'JEOL 1200', 'JEOL 1200EX', 'JEOL 1200EXII', 'JEOL 1230', 'JEOL 1400', 'JEOL 2000EX', 'JEOL 2000EXII', 'JEOL 2010', 'JEOL 2010F', 'JEOL 2010HT', 'JEOL 2010HC', 'JEOL 2010UHR', 'JEOL 2011', 'JEOL 2100', 'JEOL 2100F', 'JEOL 2200FS', 'JEOL 2200FSC', 'JEOL 3000SFF', 'JEOL 3100FFC', 'JEOL 3200FS', 'JEOL 3200FSC', 'JEOL KYOTO-3000SFF', 'JEOL 3200FSC', 'JEOL 4000', 'JEOL 4000EX', 'JEOL CRYO ARM 200', 'JEOL CRYO ARM 300', 'ZEISS LEO912', 'ZEISS LIBRA120PLUS', 'OTHER']
+            enumerations = ['FEI MORGAGNI', 'FEI POLARA 300', 'FEI TECNAI 10', 'FEI TECNAI 12', 'FEI TECNAI 20', 'FEI TECNAI F20', 'FEI TECNAI F30', 'FEI TECNAI SPHERA', 'FEI TECNAI SPIRIT', 'FEI TITAN', 'FEI TITAN KRIOS', 'FEI/PHILIPS CM10', 'FEI/PHILIPS CM12', 'FEI/PHILIPS CM120T', 'FEI/PHILIPS CM200FEG', 'FEI/PHILIPS CM200FEG/SOPHIE', 'FEI/PHILIPS CM200FEG/ST', 'FEI/PHILIPS CM200FEG/UT', 'FEI/PHILIPS CM200T', 'FEI/PHILIPS CM300FEG/HE', 'FEI/PHILIPS CM300FEG/ST', 'FEI/PHILIPS CM300FEG/T', 'FEI/PHILIPS EM400', 'FEI/PHILIPS EM420', 'FEI TALOS ARCTICA', 'FEI TECNAI ARCTICA', 'HITACHI EF2000', 'HITACHI H7600', 'HITACHI HF2000', 'HITACHI HF3000', 'HITACHI H-9500SD', 'JEOL 100CX', 'JEOL 1010', 'JEOL 1200', 'JEOL 1200EX', 'JEOL 1200EXII', 'JEOL 1230', 'JEOL 1400', 'JEOL 2000EX', 'JEOL 2000EXII', 'JEOL 2010', 'JEOL 2010F', 'JEOL 2010HT', 'JEOL 2010HC', 'JEOL 2010UHR', 'JEOL 2011', 'JEOL 2100', 'JEOL 2100F', 'JEOL 2200FS', 'JEOL 2200FSC', 'JEOL 3000SFF', 'JEOL 3100FFC', 'JEOL 3200FS', 'JEOL 3200FSC', 'JEOL KYOTO-3000SFF', 'JEOL 3200FSC', 'JEOL 4000', 'JEOL 4000EX', 'ZEISS LEO912', 'ZEISS LIBRA120PLUS', 'OTHER']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
