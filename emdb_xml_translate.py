@@ -146,6 +146,14 @@ class EMDBXMLTranslator(object):
                                     'SIDE ENTRY, EUCENTRIC': 'SIDE ENTRY, EUCENTRIC',
                                     'JEOL3200FSC CRYOHOLDER': 'JEOL 3200FSC CRYOHOLDER'}
 
+        SPECIMEN_STATE_30_to_19 = {'particle': 'particle',
+                                   'filament': 'filament',
+                                   'twodarray': 'twoDArray',
+                                   'threedarray': 'threeDArray',
+                                   'helicalarray': 'helicalArray',
+                                   'tissue': 'tissue',
+                                   'cell': 'cell'}
+
     def __init__(self):
         # 0 = min, 3 = max
         self.warning_level = 1
