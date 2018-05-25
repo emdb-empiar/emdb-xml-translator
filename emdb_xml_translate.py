@@ -119,8 +119,10 @@ class EMDBXMLTranslator(object):
                             'FLEXIBLE FIT': 'flexible',
                             'OTHER': 'flexible',
                             'RIGID BODY FIT': 'rigid body'}
+
         FITTING_19_to_30 = {'flexible': 'FLEXIBLE FIT',
                             'rigid body': 'RIGID BODY FIT'}
+
         SPECIMEN_HOLDER_30_to_19 = {'FEI TITAN KRIOS AUTOGRID HOLDER': 'FEI TITAN KRIOS AUTOGRID HOLDER',
                                     'GATAN 626 SINGLE TILT LIQUID NITROGEN CRYO TRANSFER HOLDER': 'GATAN LIQUID NITROGEN',
                                     'GATAN 910 MULTI-SPECIMEN SINGLE TILT CRYO TRANSFER HOLDER': 'GATAN LIQUID NITROGEN',
