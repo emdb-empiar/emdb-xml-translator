@@ -123,11 +123,13 @@ class EMDBXMLTranslator(object):
                                    'helicalarray': 'helicalArray',
                                    'tissue': 'tissue',
                                    'cell': 'cell'}
-        FITTING_20_to_19 = {'AB INITIO MODEL': 'flexible',
+        FITTING_30_to_19 = {'AB INITIO MODEL': 'flexible',
                             'BACKBONE TRACE': 'flexible',
                             'FLEXIBLE FIT': 'flexible',
                             'OTHER': 'flexible',
                             'RIGID BODY FIT': 'rigid body'}
+        FITTING_19_to_30 = {'flexible': 'FLEXIBLE FIT',
+                            'rigid body': 'RIGID BODY FIT'}
         CRYOGEN_20_to_19 = {'ETHANE': 'ETHANE',
                             'FREON 12': 'FREON 12',
                             'FREON 22': 'FREON 22',
@@ -856,7 +858,7 @@ class EMDBXMLTranslator(object):
                     if self.roundtrip:
                         vitr.set_cryogen_name(cryo_name)
                     else:
-                        allowed_cryo_names = {'ETHANE', 'ETHANE-PROPANE MIXTURE', 'METHANE', 'NITROGEN', 'HELIUM', 'PROPANE', 'FREON 12', 'FREON 22', 'NONE', 'OTHER'}
+                        allowed_cryo_names = ['ETHANE', 'ETHANE-PROPANE MIXTURE', 'METHANE', 'NITROGEN', 'HELIUM', 'PROPANE', 'FREON 12', 'FREON 22', 'NONE', 'OTHER']
                         if cryo_name in allowed_cryo_names:
                             vitr.set_cryogen_name(cryo_name)
                         else:
@@ -874,7 +876,7 @@ class EMDBXMLTranslator(object):
                 # element 4 - <xs:complexType name="vitrification_type">
                 # XSD: <xs:element name="instrument" minOccurs="0">
                 vitr_instrument = v_in.get_instrument()
-                # allowed_vitr_instruments = {'FEI VITROBOT MARK I', 'FEI VITROBOT MARK II', 'FEI VITROBOT MARK III', 'FEI VITROBOT MARK IV', 'GATAN CRYOPLUNGE 3', 'HOMEMADE PLUNGER', 'LEICA EM CPC', 'LEICA EM GP', 'LEICA KF80', 'LEICA PLUNGER', 'REICHERT-JUNG PLUNGER', 'OTHER'}
+                # allowed_vitr_instruments = ['FEI VITROBOT MARK I', 'FEI VITROBOT MARK II', 'FEI VITROBOT MARK III', 'FEI VITROBOT MARK IV', 'GATAN CRYOPLUNGE 3', 'HOMEMADE PLUNGER', 'LEICA EM CPC', 'LEICA EM GP', 'LEICA KF80', 'LEICA PLUNGER', 'REICHERT-JUNG PLUNGER', 'OTHER']
                 # if vitr_instrument in allowed_vitr_instruments:
                 vitr.set_instrument(vitr_instrument)
                 #else:
@@ -1132,7 +1134,7 @@ class EMDBXMLTranslator(object):
                             fod.set_valueOf_(detector_in)
                         else:
                             detect_in = detector_in.upper()
-                            allowed_detectors = {'AGFA SCIENTA FILM', 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)', 'DIRECT ELECTRON DE-16 (4k x 4k)', 'DIRECT ELECTRON DE-20 (5k x 3k)', 'DIRECT ELECTRON DE-64 (8k x 8k)', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)', 'FEI EAGLE (4k x 4k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)', 'FEI FALCON III (4k x 4k)', 'GATAN K2 (4k x 4k)', 'GATAN K2 BASE (4k x 4k)', 'GATAN K2 IS (4k x 4k)', 'GATAN K2 QUANTUM (4k x 4k)', 'GATAN K2 SUMMIT (4k x 4k)', 'GATAN MULTISCAN', 'GATAN ORIUS SC1000 (4k x 2.7k)', 'GATAN ORIUS SC200 (2k x 2k)', 'GATAN ORIUS SC600 (2.7k x 2.7k)', 'GATAN ULTRASCAN 1000 (2k x 2k)', 'GATAN ULTRASCAN 10000 (10k x 10k)', 'GATAN ULTRASCAN 4000 (4k x 4k)', 'GENERIC CCD', 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)', 'GENERIC FILM', 'GENERIC GATAN', 'GENERIC GATAN (2k x 2k)', 'GENERIC GATAN (4k x 4k)', 'GENERIC IMAGE PLATES', 'GENERIC TVIPS', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)', 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'OTHER', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F216 (2k x 2k)', 'TVIPS TEMCAM-F224 (2k x 2k)', 'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F816 (8k x 8k)'}
+                            allowed_detectors = ['AGFA SCIENTA FILM', 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)', 'DIRECT ELECTRON DE-16 (4k x 4k)', 'DIRECT ELECTRON DE-20 (5k x 3k)', 'DIRECT ELECTRON DE-64 (8k x 8k)', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)', 'FEI EAGLE (4k x 4k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)', 'FEI FALCON III (4k x 4k)', 'GATAN K2 (4k x 4k)', 'GATAN K2 BASE (4k x 4k)', 'GATAN K2 IS (4k x 4k)', 'GATAN K2 QUANTUM (4k x 4k)', 'GATAN K2 SUMMIT (4k x 4k)', 'GATAN MULTISCAN', 'GATAN ORIUS SC1000 (4k x 2.7k)', 'GATAN ORIUS SC200 (2k x 2k)', 'GATAN ORIUS SC600 (2.7k x 2.7k)', 'GATAN ULTRASCAN 1000 (2k x 2k)', 'GATAN ULTRASCAN 10000 (10k x 10k)', 'GATAN ULTRASCAN 4000 (4k x 4k)', 'GENERIC CCD', 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)', 'GENERIC FILM', 'GENERIC GATAN', 'GENERIC GATAN (2k x 2k)', 'GENERIC GATAN (4k x 4k)', 'GENERIC IMAGE PLATES', 'GENERIC TVIPS', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)', 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'OTHER', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F216 (2k x 2k)', 'TVIPS TEMCAM-F224 (2k x 2k)', 'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F816 (8k x 8k)']
                             if detect_in in allowed_detectors:
                                 fod.set_valueOf_(detect_in)
                             else:
@@ -1186,7 +1188,7 @@ class EMDBXMLTranslator(object):
                             fod.set_valueOf_(detector_in)
                         else:
                             detect_in = detector_in.upper()
-                            allowed_detectors = {'AGFA SCIENTA FILM', 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)', 'DIRECT ELECTRON DE-16 (4k x 4k)', 'DIRECT ELECTRON DE-20 (5k x 3k)', 'DIRECT ELECTRON DE-64 (8k x 8k)', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)', 'FEI EAGLE (4k x 4k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)', 'FEI FALCON III (4k x 4k)', 'GATAN K2 (4k x 4k)', 'GATAN K2 BASE (4k x 4k)', 'GATAN K2 IS (4k x 4k)', 'GATAN K2 QUANTUM (4k x 4k)', 'GATAN K2 SUMMIT (4k x 4k)', 'GATAN MULTISCAN', 'GATAN ORIUS SC1000 (4k x 2.7k)', 'GATAN ORIUS SC200 (2k x 2k)', 'GATAN ORIUS SC600 (2.7k x 2.7k)', 'GATAN ULTRASCAN 1000 (2k x 2k)', 'GATAN ULTRASCAN 10000 (10k x 10k)', 'GATAN ULTRASCAN 4000 (4k x 4k)', 'GENERIC CCD', 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)', 'GENERIC FILM', 'GENERIC GATAN', 'GENERIC GATAN (2k x 2k)', 'GENERIC GATAN (4k x 4k)', 'GENERIC IMAGE PLATES', 'GENERIC TVIPS', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)', 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'OTHER', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F216 (2k x 2k)', 'TVIPS TEMCAM-F224 (2k x 2k)', 'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F816 (8k x 8k)'}
+                            allowed_detectors = ['AGFA SCIENTA FILM', 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)', 'DIRECT ELECTRON DE-16 (4k x 4k)', 'DIRECT ELECTRON DE-20 (5k x 3k)', 'DIRECT ELECTRON DE-64 (8k x 8k)', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)', 'FEI EAGLE (4k x 4k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)', 'FEI FALCON III (4k x 4k)', 'GATAN K2 (4k x 4k)', 'GATAN K2 BASE (4k x 4k)', 'GATAN K2 IS (4k x 4k)', 'GATAN K2 QUANTUM (4k x 4k)', 'GATAN K2 SUMMIT (4k x 4k)', 'GATAN MULTISCAN', 'GATAN ORIUS SC1000 (4k x 2.7k)', 'GATAN ORIUS SC200 (2k x 2k)', 'GATAN ORIUS SC600 (2.7k x 2.7k)', 'GATAN ULTRASCAN 1000 (2k x 2k)', 'GATAN ULTRASCAN 10000 (10k x 10k)', 'GATAN ULTRASCAN 4000 (4k x 4k)', 'GENERIC CCD', 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)', 'GENERIC FILM', 'GENERIC GATAN', 'GENERIC GATAN (2k x 2k)', 'GENERIC GATAN (4k x 4k)', 'GENERIC IMAGE PLATES', 'GENERIC TVIPS', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)', 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'OTHER', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F216 (2k x 2k)', 'TVIPS TEMCAM-F224 (2k x 2k)', 'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F816 (8k x 8k)']
                             if detect_in in allowed_detectors:
                                 fod.set_valueOf_(detect_in)
                             else:
@@ -1687,15 +1689,15 @@ class EMDBXMLTranslator(object):
                 self.check_set(species_in.get_ncbiTaxId, org.set_ncbi)
                 mol_nat_source.set_organism(org)
                 # element 2 - <xs:complexType name="base_source_type">
-                # XSD: <xs:element name="strain" type="organism_type" minOccurs="0"/>
+                # <xs:element name="strain" type="xs:token" minOccurs="0"/>
                 strain_in = spec_component_in.get_sciSpeciesStrain()
                 if strain_in is not None:
-                    strain = emdb30.organism_type()
-                    # XSD: <xs:complexType name="organism_type"> has 1 attribute and is ext of token
-                    strain.set_valueOf_(strain_in)
-                    # attribute 1 - <xs:complexType name="organism_type">
-                    # XSD: <xs:attribute name="ncbi" type="xs:positiveInteger"/>
-                    mol_nat_source.set_strain(strain)
+                    # strain = emdb30.organism_type()
+                    ## XSD: <xs:complexType name="organism_type"> has 1 attribute and is ext of token
+                    #strain.set_valueOf_(strain_in)
+                    ## attribute 1 - <xs:complexType name="organism_type">
+                    ## XSD: <xs:attribute name="ncbi" type="xs:positiveInteger"/>
+                    mol_nat_source.set_strain(strain_in)
                 # element 3 - <xs:complexType name="base_source_type">
                 # XSD: <xs:element name="synonym_organism" type="xs:token" minOccurs="0">
                 self.check_set(spec_component_in.get_synSpeciesName, mol_nat_source.set_synonym_organism)
@@ -2203,7 +2205,7 @@ class EMDBXMLTranslator(object):
                             # XSD: <xs:element name="natural_source" minOccurs="0" type="organelle_natural_source_type" maxOccurs="unbounded"/>
                             # XSD: <xs:complexType name="organelle_natural_source_type"> has base and 5 elements
                             org_nat_source = emdb30.organelle_natural_source_type()
-                            set_mol_natural_source(org_nat_source, component_in, cell_comp_in, organelle=False)
+                            set_mol_natural_source(org_nat_source, component_in, cell_comp_in)#, organelle=False)
                             if org_nat_source.hasContent_():
                                 comp_smol.add_natural_source(org_nat_source)
                         # element 2 - <xs:element name="organelle_or_cellular_component_supramolecule" substitutionGroup="supramolecule" type="organelle_or_cellular_component_supramolecule_type"/>
@@ -2649,7 +2651,7 @@ class EMDBXMLTranslator(object):
                 # element 3 - <xs:complexType name="final_reconstruction_type">
                 # XSD: <xs:element name="algorithm" type="reconstruction_algorithm_type" minOccurs="0">
 #                 add_to_reconstruction_details = ''
-#                 allowed_rec_alg = {'ALGEBRAIC (ARTS)', 'BACK PROJECTION', 'EXACT BACK PROJECTION', 'FOURIER SPACE', 'SIMULTANEOUS ITERATIVE (SIRT)'}
+                allowed_rec_alg = ['ALGEBRAIC (ARTS)', 'BACK PROJECTION', 'EXACT BACK PROJECTION', 'FOURIER SPACE', 'SIMULTANEOUS ITERATIVE (SIRT)']
 #                 add_details = None
 #                 if helical:
 #                     alg = reconstruction.get_algorithm()
@@ -2663,8 +2665,7 @@ class EMDBXMLTranslator(object):
 #                         final_rec.set_algorithm(const.HEL_TAG + (alg or ''))
 #                 else:
                 rec_alg = reconstruction.get_algorithm()
-                #if rec_alg in allowed_rec_alg:
-                if rec_alg is not None:
+                if rec_alg is not None and rec_alg in allowed_rec_alg:
                     final_rec.set_algorithm(rec_alg)
                 #else:
                 #add_to_reconstruction_details = 'Algorithm given: %s. ' % rec_alg
@@ -2682,13 +2683,15 @@ class EMDBXMLTranslator(object):
                     final_rec.set_resolution(res)
                 # element 5 - <xs:complexType name="final_reconstruction_type">
                 # XSD: <xs:element name="resolution_method" minOccurs="0">
-                #allowed_res_methods = {'DIFFRACTION PATTERN/LAYERLINES', 'FSC 0.143 CUT-OFF', 'FSC 0.33 CUT-OFF', 'FSC 0.5 CUT-OFF', 'FSC 1/2 BIT CUT-OFF', 'FSC 3 SIGMA CUT-OFF', 'OTHER'}
+                allowed_res_methods = ['DIFFRACTION PATTERN/LAYERLINES', 'FSC 0.143 CUT-OFF', 'FSC 0.33 CUT-OFF', 'FSC 0.5 CUT-OFF', 'FSC 1/2 BIT CUT-OFF', 'FSC 3 SIGMA CUT-OFF', 'OTHER']
                 res_method = reconstruction.get_resolutionMethod()
-                #if res_method in allowed_res_methods:
+                # add_to_reconstruction_details = ''
                 if reconstruction is not None:
-                    self.check_set(reconstruction.get_resolutionMethod, final_rec.set_resolution_method)
-                #else:
-                    #final_rec.set_resolution_method('OTHER')
+                    if res_method in allowed_res_methods:
+                        self.check_set(reconstruction.get_resolutionMethod, final_rec.set_resolution_method)
+                    else:
+                        # add_to_reconstruction_details = 'resolutionMethod: ' + reconstruction.get_resolutionMethod()
+                        final_rec.set_resolution_method('OTHER')
                 # element 6 - <xs:complexType name="final_reconstruction_type">
                 # XSD: <xs:element name="reconstruction_filtering" type="reconstruction_filtering_type" minOccurs="0">
                 # element 7 - <xs:complexType name="final_reconstruction_type">
@@ -2698,9 +2701,9 @@ class EMDBXMLTranslator(object):
                     final_rec.set_software_list(soft_list)
                 # element 8 - <xs:complexType name="final_reconstruction_type">
                 # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
-#                 if add_to_reconstruction_details == '':
+#                if add_to_reconstruction_details == '':
 #                     self.check_set(reconstruction.get_details, final_rec.set_details)
-#                 else:
+#                else:
                 rec_details = reconstruction.get_details()
                 final_rec.set_details(rec_details)
 #                 all_details = ''
@@ -3161,13 +3164,18 @@ class EMDBXMLTranslator(object):
                 # XSD: <xs:element name="final_model" minOccurs="0">
                 # element 3 - <xs:complexType name="modelling_type">
                 # XSD: <xs:element name="refinement_protocol" minOccurs="0">
-                #allowed_rec_protocols = {'AB INITIO MODEL', 'BACKBONE TRACE', 'FLEXIBLE FIT', 'OTHER', 'RIGID BODY FIT'}
+                allowed_rec_protocols = ['AB INITIO MODEL', 'BACKBONE TRACE', 'FLEXIBLE FIT', 'OTHER', 'RIGID BODY FIT']
                 ref_prot = fit.get_refProtocol()
-                #if ref_prot in allowed_rec_protocols:
                 if ref_prot is not None:
-                    self.check_set(fit.get_refProtocol, modelling.set_refinement_protocol)
-                #else:
-                    #modelling.set_refinement_protocol('OTHER')
+                    if ref_prot in const.FITTING_19_to_30:
+                        ref_prot = const.FITTING_19_to_30.get(ref_prot)
+                    if self.roundtrip:
+                        modelling.set_refinement_protocol(ref_prot)
+                    else:
+                        if ref_prot in allowed_rec_protocols:
+                            self.check_set(fit.get_refProtocol, modelling.set_refinement_protocol)
+                        else:
+                            modelling.set_refinement_protocol('OTHER')
                 # element 4 - <xs:complexType name="modelling_type">
                 # XSD: <xs:element name="software_list" type="software_list_type" minOccurs="0"/>
                 soft_list = make_software_list(fit.get_software())
@@ -3729,19 +3737,15 @@ class EMDBXMLTranslator(object):
                         self.set_value_and_units(hx_par_in.get_delta_z, hx_par.set_deltaZ, emdb_19.lengthType, units='A')
                         # element 3 - <xs:complexType name="helixParamType">
                         # XSD: <xs:element name="hand" type="handType" minOccurs="0"/>
-                        if not self.roundtrip:
-                            hand = 'NOT SPECIFIED'
-                            d_phi = hx_par_in.get_delta_phi()
-                            if d_phi is not None:
-                                if d_phi < 0:
-                                    hand = 'LEFT HANDED'
-                                else:
-                                    hand = 'RIGHT HANDED'
+                        d_phi = hx_par_in.get_delta_phi()
+                        if d_phi is not None:
+                            hand = None
+                            if d_phi < 0:
+                                hand = 'LEFT HANDED'
+                            else:
+                                hand = 'RIGHT HANDED'
+                            if hand is not None:
                                 hx_par.set_hand(hand)
-                        else:
-                            hx_hand = hx_par_in.get_hand()
-                            if hx_hand is not None:
-                                hx_par.set_hand(hx_hand)
 
                         # element 4 - <xs:complexType name="helixParamType">
                         # XSD: <xs:element name="axialSymmetry" type="xs:string" minOccurs="0"/>
@@ -4627,7 +4631,7 @@ class EMDBXMLTranslator(object):
                                 # copy_recombinant_source(smol_in, rib)
                                 # element 8 - <xs:complexType name="riboTypeEu">
                                 # XSD: <xs:element name="natSource" type="natSrcType" minOccurs="0" maxOccurs="1"/>
-                                copy_natural_source(smol_in, rib)#, cell=False, organelle=False, tissue=False, cellular_location=False, organ=False)
+                                copy_natural_source(smol_in, rib, cell=False, organelle=False, tissue=False, cellular_location=False, organ=False)
                                 # element 9 - <xs:complexType name="riboTypeEu">
                                 # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0" maxOccurs="1"/>
                                 eng_src = create_eng_source(smol_in)
@@ -4922,7 +4926,7 @@ class EMDBXMLTranslator(object):
                             if self.roundtrip:
                                 vitr.set_cryogenName(cryogen_out)
                             else:
-                                allowed_cryo_names = {'ETHANE', 'ETHANE-PROPANE MIXTURE', 'METHANE', 'NITROGEN', 'HELIUM', 'PROPANE', 'FREON 12', 'FREON 22', 'NONE', 'OTHER'}
+                                allowed_cryo_names = ['ETHANE', 'ETHANE-PROPANE MIXTURE', 'METHANE', 'NITROGEN', 'HELIUM', 'PROPANE', 'FREON 12', 'FREON 22', 'NONE', 'OTHER']
                                 if cryogen_out in allowed_cryo_names:
                                     vitr.set_cryogenName(cryogen_out)
                                 else:
@@ -4941,7 +4945,7 @@ class EMDBXMLTranslator(object):
                         # element 4 - <xs:complexType name="vitrifType">
                         # XSD: <xs:element name="instrument" type="vitrInstrType" minOccurs="0"/>
                         vitrification_instrument = vitr_in.get_instrument()
-                        # allowed_vitrification_instruments = {'FEI VITROBOT MARK I', 'FEI VITROBOT MARK II', 'FEI VITROBOT MARK III', 'FEI VITROBOT MARK IV', 'GATAN CRYOPLUNGE 3', 'HOMEMADE PLUNGER', 'LEICA EM CPC', 'LEICA EM GP', 'LEICA KF80', 'LEICA PLUNGER', 'REICHERT-JUNG PLUNGER', 'OTHER'}
+                        # allowed_vitrification_instruments = ['FEI VITROBOT MARK I', 'FEI VITROBOT MARK II', 'FEI VITROBOT MARK III', 'FEI VITROBOT MARK IV', 'GATAN CRYOPLUNGE 3', 'HOMEMADE PLUNGER', 'LEICA EM CPC', 'LEICA EM GP', 'LEICA KF80', 'LEICA PLUNGER', 'REICHERT-JUNG PLUNGER', 'OTHER']
                         # if vitrification_instrument in allowed_vitrification_instruments:
                         vitr.set_instrument(vitrification_instrument)
                         #else:
@@ -5038,7 +5042,7 @@ class EMDBXMLTranslator(object):
                         fod = im_rec_in.get_film_or_detector_model()
                         if fod is not None:
                             det_model_in = fod.get_valueOf_()
-                            allowed_detectors = {'AGFA SCIENTA FILM', 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'GENERIC FILM',
+                            allowed_detectors = ['AGFA SCIENTA FILM', 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'GENERIC FILM',
                                                  'GENERIC IMAGE PLATES', 'DIRECT ELECTRON DE-10 (5k x 4k)','DIRECT ELECTRON DE-12 (4k x 3k)',
                                                  'DIRECT ELECTRON DE-16 (4k x 4k)', 'DIRECT ELECTRON DE-20 (5k x 3k)',
                                                  'DIRECT ELECTRON DE-64 (8k x 8k)', 'FALCON II', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)',
@@ -5051,7 +5055,7 @@ class EMDBXMLTranslator(object):
                                                  'GENERIC GATAN', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F816 (8k x 8k)',
                                                  'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F216 (2k x 2k)',
                                                  'TVIPS TEMCAM-F224 (2k x 2k)', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)',
-                                                 'GENERIC TVIPS', 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)', 'GENERIC CCD', 'OTHER'}
+                                                 'GENERIC TVIPS', 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)', 'GENERIC CCD', 'OTHER']
                             if det_model_in in allowed_detectors:
                                 img.set_detector(det_model_in)
                             else:
@@ -5169,13 +5173,13 @@ class EMDBXMLTranslator(object):
 
             # element 3 - <xs:complexType name="expType">
             # XSD: <xs:element name="imageAcquisition" type="imgScanType" maxOccurs="unbounded"/>
-            image_acquasitions = {}
+            image_acquasitions = []
             for mic_in in mic_list_in:
                 im_rec_list_in = mic_in.get_image_recording_list()
                 if im_rec_list_in is not None and im_rec_list_in != []:
                     im_recs = im_rec_list_in.get_image_recording()
                     for im_rec_in in im_recs:
-                        image_acquasition = {}
+                        image_acquasition = []
                         # XSD: <xs:complexType name="imgScanType"> has 7 elements
                         im_ac = emdb_19.imgScanType()
                         # element 1 -<xs:complexType name="imgScanType">
@@ -5215,8 +5219,8 @@ class EMDBXMLTranslator(object):
                         # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
                         self.check_set(im_rec_in.get_details, im_ac.set_details)
                         image_acquasition['details'] = im_rec_in.get_details()
-                        if image_acquasitions != {}:
-                            if image_acquasition != {}:
+                        if image_acquasitions != []:
+                            if image_acquasition != []:
                                 # there are other acquisitions; check if any is the same with the current one
                                 is_same = False
                                 for im_acq in image_acquasitions:
@@ -5233,7 +5237,7 @@ class EMDBXMLTranslator(object):
                                         exp.add_imageAcquisition(im_ac)
                         else:
                             # there are no other image acquisitions
-                            if image_acquasition != {}:
+                            if image_acquasition != []:
                                 # add this acquisition to the list
                                 image_acquasitions[len(image_acquasitions) + 1] = image_acquasition
                             if self.roundtrip:
@@ -5293,16 +5297,13 @@ class EMDBXMLTranslator(object):
                         # XSD: <xs:element name="refProtocol" type="refProtocolType" minOccurs="0"/>
                         ref_prot = fit_in.get_refinement_protocol()
                         if ref_prot is not None:
-                            if self.roundtrip:
-                                fit.set_refProtocol(ref_prot)
-                            else:
-                                ref_prot_low = ref_prot.lower()
-                                allowed_prots = {'rigid body', 'flexible'}
-                                known_issues = {'rigid body fit': 'rigid body'}
-                                if ref_prot_low in allowed_prots:
-                                    fit.set_refProtocol(ref_prot_low)
-                                elif ref_prot_low in known_issues:
-                                    fit.set_refProtocol(known_issues.get(ref_prot_low))
+                            ref_prot_low = ref_prot.lower()
+                            allowed_prots = {'rigid body', 'flexible'}
+                            known_issues = {'rigid body fit': 'rigid body'}
+                            if ref_prot_low in allowed_prots:
+                                fit.set_refProtocol(ref_prot_low)
+                            elif ref_prot_low in known_issues:
+                                fit.set_refProtocol(known_issues.get(ref_prot_low))
                         # element 4 - <xs:complexType name="fittingType">
                         # XSD: <xs:element name="targetCriteria" type="xs:string" minOccurs="0"/>
                         self.check_set(fit_in.get_target_criteria, fit.set_targetCriteria)
