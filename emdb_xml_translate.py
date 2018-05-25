@@ -3803,7 +3803,10 @@ class EMDBXMLTranslator(object):
             # element 2 - <xs:complexType name="mapType">
             # XSD: <xs:element name="dataType" type="mapDataType"/>
             map_in_data_type = map_in.get_data_type()
-            data_type_dict_inv = {v: k for k, v in const.DATA_TYPE_DICT_19_TO_30.iteritems()}
+            #data_type_dict_inv = {v: k for k, v in const.DATA_TYPE_DICT_19_TO_30.iteritems()}
+            data_type_dict_inv = {}
+            for k, v in const.DATA_TYPE_DICT_19_TO_30.iteritems():
+                data_type_dict_inv[v] = k
             map_out_data_type = data_type_dict_inv.get(map_in_data_type)
             map_out.set_dataType(map_out_data_type)
             # element 3 - <xs:complexType name="mapType">
