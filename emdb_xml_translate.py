@@ -5309,7 +5309,7 @@ class EMDBXMLTranslator(object):
                         ref_prot = fit_in.get_refinement_protocol()
                         if ref_prot is not None:
                             ref_prot_low = ref_prot.lower()
-                            allowed_prots = {'rigid body', 'flexible'}
+                            allowed_prots = ['rigid body', 'flexible']
                             known_issues = {'rigid body fit': 'rigid body'}
                             if ref_prot_low in allowed_prots:
                                 fit.set_refProtocol(ref_prot_low)
