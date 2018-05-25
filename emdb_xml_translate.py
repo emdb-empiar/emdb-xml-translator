@@ -5348,7 +5348,7 @@ class EMDBXMLTranslator(object):
                         agg_state_in = sd_in.get_aggregation_state()
                         if agg_state_in is not None:
                             agg_state_in = agg_state_in.lower()
-                            agg_state_out = const.SPECIMEN_STATE_20_to_19[agg_state_in] if agg_state_in in const.SPECIMEN_STATE_20_to_19 else const.SPECIMEN_STATE_20_to_19.itervalues().next()
+                            agg_state_out = const.SPECIMEN_STATE_30_to_19[agg_state_in] if agg_state_in in const.SPECIMEN_STATE_30_to_19 else const.SPECIMEN_STATE_30_to_19.itervalues().next()
                             smpl_prep.set_specimenState(agg_state_out)
                         # element 2 - <xs:complexType name="smplPrepType">
                         # XSD: <xs:element name="specimenConc" type="samplConcType" minOccurs="0"/>

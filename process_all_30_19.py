@@ -88,9 +88,9 @@ def main():
             python process_all_30_19.py
 
             Typical run:
-            python process_all_30_19.py -t '/data/emdb30/emd-*.xml' -o '/data/emdb30_to_19'
-            /data/emdb30/emd-*.xml is the template used to glob all input 3.0 header files
-            /data/emdb30_to_19 is the output directory with the EMDB XML 1.9 files
+            python process_all_30_19.py -t 'data/input/v3.0/EMD-*.xml' -o 'data/output/emdb30_to_19'
+            data/input/v3.0/EMD-*.xml is the template used to glob all input 3.0 header files
+            data/output/emdb30_to_19 is the output directory with the EMDB XML 1.9 files
             """
     version = "0.1"
     parser = OptionParser(usage=usage, version=version)
