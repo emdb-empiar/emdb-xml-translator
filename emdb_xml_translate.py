@@ -112,17 +112,8 @@ class EMDBXMLTranslator(object):
                                    "Image stored as Reals": "IMAGE STORED AS FLOATING POINT NUMBER (4 BYTES)"}
 
         # Cleaning up dictionaries for translation from 20 to 19
-        PROC_SITE_20_TO_19 = {'pdbe': 'PDBe', 'rcsb': 'RCSB', 'pdbj': 'PDBj'}
-        MAP_DATATYPE_20_TO_19 = {'Image stored as signed byte': 'Envelope stored as signed bytes',
-                                 'Image stored as signed integer (2 bytes)': 'Image stored as Integer*2',
-                                 'Image stored as floating point number (4 bytes)': 'Image stored as Reals'}
-        SPECIMEN_STATE_20_to_19 = {'particle': 'particle',
-                                   'filament': 'filament',
-                                   'twodarray': 'twoDArray',
-                                   'threedarray': 'threeDArray',
-                                   'helicalarray': 'helicalArray',
-                                   'tissue': 'tissue',
-                                   'cell': 'cell'}
+        PROC_SITE_30_TO_19 = {'pdbe': 'PDBe', 'rcsb': 'RCSB', 'pdbj': 'PDBj'}
+
         FITTING_30_to_19 = {'AB INITIO MODEL': 'flexible',
                             'BACKBONE TRACE': 'flexible',
                             'FLEXIBLE FIT': 'flexible',
@@ -130,17 +121,7 @@ class EMDBXMLTranslator(object):
                             'RIGID BODY FIT': 'rigid body'}
         FITTING_19_to_30 = {'flexible': 'FLEXIBLE FIT',
                             'rigid body': 'RIGID BODY FIT'}
-        CRYOGEN_20_to_19 = {'ETHANE': 'ETHANE',
-                            'FREON 12': 'FREON 12',
-                            'FREON 22': 'FREON 22',
-                            'HELIUM': 'HELIUM',
-                            'METHANE': 'METHANE',
-                            'NITROGEN': 'NITROGEN',
-                            'PROPANE': 'PROPANE',
-                            'ETHANE-PROPANE': 'ETHANE-PROPANE MIXTURE'}
-        DETECTOR_20_to_19 = {'DIRECT ELECTRON DE-20 (5k x 3k)': 'OTHER',
-                             'GATAN K2 SUMMIT (4k x 4k)': 'GATAN K2 (4k x 4k)'}
-        SPECIMEN_HOLDER_20_to_19 = {'FEI TITAN KRIOS AUTOGRID HOLDER': 'FEI TITAN KRIOS AUTOGRID HOLDER',
+        SPECIMEN_HOLDER_30_to_19 = {'FEI TITAN KRIOS AUTOGRID HOLDER': 'FEI TITAN KRIOS AUTOGRID HOLDER',
                                     'GATAN 626 SINGLE TILT LIQUID NITROGEN CRYO TRANSFER HOLDER': 'GATAN LIQUID NITROGEN',
                                     'GATAN 910 MULTI-SPECIMEN SINGLE TILT CRYO TRANSFER HOLDER': 'GATAN LIQUID NITROGEN',
                                     'GATAN 914 HIGH TILT LIQUID NITROGEN CRYO TRANSFER TOMOGRAPHY HOLDER': 'GATAN LIQUID NITROGEN',
@@ -3814,7 +3795,7 @@ class EMDBXMLTranslator(object):
             # element 2 - <xs:complexType name="mapType">
             # XSD: <xs:element name="dataType" type="mapDataType"/>
             map_in_data_type = map_in.get_data_type()
-            data_type_dict_inv = {v: k for (k, v) in const.DAT_TYPE_DICT_19_TO_30.iteritems()}
+            data_type_dict_inv = {v: k for k, v in const.DATA_TYPE_DICT_19_TO_30.iteritems()}
             map_out_data_type = data_type_dict_inv.get(map_in_data_type)
             map_out.set_dataType(map_out_data_type)
             # element 3 - <xs:complexType name="mapType">
@@ -4043,12 +4024,12 @@ class EMDBXMLTranslator(object):
             # element 3 - <xs:complexType name="depType">
             # XSD: <xs:element name="depositionSite" minOccurs="1" maxOccurs="1">
             sites_in = adm_in.get_sites()
-            dep.set_depositionSite(const.PROC_SITE_20_TO_19[sites_in.get_deposition().lower()])
+            dep.set_depositionSite(const.PROC_SITE_30_TO_19[sites_in.get_deposition().lower()])
             # element 4 - <xs:complexType name="depType">
             # XSD: <xs:element name="processingSite" minOccurs="1" maxOccurs="1">
             proc_site_in = sites_in.get_last_processing()
             if proc_site_in is not None:
-                dep.set_processingSite(const.PROC_SITE_20_TO_19[proc_site_in.lower()])
+                dep.set_processingSite(const.PROC_SITE_30_TO_19[proc_site_in.lower()])
             # element 5 - <xs:complexType name="depType">
             # XSD: <xs:element name="headerReleaseDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
             hdr_rel_date = dates_in.get_header_release()
@@ -5146,7 +5127,7 @@ class EMDBXMLTranslator(object):
                 # element 21 - <xs:complexType name="imgType">
                 # XSD: <xs:element name="specimenHolderModel" type="specimenHolderType"/>
                 specimen_holder_model_in = mic_in.get_specimen_holder_model() or 'OTHER'
-                specimen_holder_model_out = const.SPECIMEN_HOLDER_20_to_19[specimen_holder_model_in] if specimen_holder_model_in in const.SPECIMEN_HOLDER_20_to_19 else specimen_holder_model_in
+                specimen_holder_model_out = const.SPECIMEN_HOLDER_30_to_19[specimen_holder_model_in] if specimen_holder_model_in in const.SPECIMEN_HOLDER_30_to_19 else specimen_holder_model_in
                 img.set_specimenHolderModel(specimen_holder_model_out)
                 # element 22 - <xs:complexType name="imgType">
                 # XSD: <xs:element name="acceleratingVoltage" type="accVoltType" minOccurs="0"/>
