@@ -591,7 +591,7 @@ class EMDBXMLTranslator(object):
                 else:
                     add_reference(x_refs_in, adder_func)
 
-        def copy_map_19_to_30(map_in, map_out, is_map=False, spec_prep_in=None):
+        def copy_map_19_to_30(map_in, map_out, is_map=False):
             """
             Copy map from 1.9 to 3.0
 
@@ -1134,7 +1134,16 @@ class EMDBXMLTranslator(object):
                             fod.set_valueOf_(detector_in)
                         else:
                             detect_in = detector_in.upper()
-                            allowed_detectors = ['AGFA SCIENTA FILM', 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)', 'DIRECT ELECTRON DE-16 (4k x 4k)', 'DIRECT ELECTRON DE-20 (5k x 3k)', 'DIRECT ELECTRON DE-64 (8k x 8k)', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)', 'FEI EAGLE (4k x 4k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)', 'FEI FALCON III (4k x 4k)', 'GATAN K2 (4k x 4k)', 'GATAN K2 BASE (4k x 4k)', 'GATAN K2 IS (4k x 4k)', 'GATAN K2 QUANTUM (4k x 4k)', 'GATAN K2 SUMMIT (4k x 4k)', 'GATAN MULTISCAN', 'GATAN ORIUS SC1000 (4k x 2.7k)', 'GATAN ORIUS SC200 (2k x 2k)', 'GATAN ORIUS SC600 (2.7k x 2.7k)', 'GATAN ULTRASCAN 1000 (2k x 2k)', 'GATAN ULTRASCAN 10000 (10k x 10k)', 'GATAN ULTRASCAN 4000 (4k x 4k)', 'GENERIC CCD', 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)', 'GENERIC FILM', 'GENERIC GATAN', 'GENERIC GATAN (2k x 2k)', 'GENERIC GATAN (4k x 4k)', 'GENERIC IMAGE PLATES', 'GENERIC TVIPS', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)', 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'OTHER', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F216 (2k x 2k)', 'TVIPS TEMCAM-F224 (2k x 2k)', 'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F816 (8k x 8k)']
+                            allowed_detectors = ['AGFA SCIENTA FILM', 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)', 'DIRECT ELECTRON DE-16 (4k x 4k)',
+                                                 'DIRECT ELECTRON DE-20 (5k x 3k)', 'DIRECT ELECTRON DE-64 (8k x 8k)', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)',
+                                                 'FEI EAGLE (4k x 4k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)', 'FEI FALCON III (4k x 4k)', 'GATAN K2 (4k x 4k)',
+                                                 'GATAN K2 BASE (4k x 4k)', 'GATAN K2 IS (4k x 4k)', 'GATAN K2 QUANTUM (4k x 4k)', 'GATAN K2 SUMMIT (4k x 4k)', 'GATAN MULTISCAN',
+                                                 'GATAN ORIUS SC1000 (4k x 2.7k)', 'GATAN ORIUS SC200 (2k x 2k)', 'GATAN ORIUS SC600 (2.7k x 2.7k)',
+                                                 'GATAN ULTRASCAN 1000 (2k x 2k)', 'GATAN ULTRASCAN 10000 (10k x 10k)', 'GATAN ULTRASCAN 4000 (4k x 4k)', 'GENERIC CCD',
+                                                 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)', 'GENERIC FILM', 'GENERIC GATAN', 'GENERIC GATAN (2k x 2k)',
+                                                 'GENERIC GATAN (4k x 4k)', 'GENERIC IMAGE PLATES', 'GENERIC TVIPS', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)',
+                                                 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'OTHER', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F216 (2k x 2k)',
+                                                 'TVIPS TEMCAM-F224 (2k x 2k)', 'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F816 (8k x 8k)']
                             if detect_in in allowed_detectors:
                                 fod.set_valueOf_(detect_in)
                             else:
@@ -1188,7 +1197,16 @@ class EMDBXMLTranslator(object):
                             fod.set_valueOf_(detector_in)
                         else:
                             detect_in = detector_in.upper()
-                            allowed_detectors = ['AGFA SCIENTA FILM', 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)', 'DIRECT ELECTRON DE-16 (4k x 4k)', 'DIRECT ELECTRON DE-20 (5k x 3k)', 'DIRECT ELECTRON DE-64 (8k x 8k)', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)', 'FEI EAGLE (4k x 4k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)', 'FEI FALCON III (4k x 4k)', 'GATAN K2 (4k x 4k)', 'GATAN K2 BASE (4k x 4k)', 'GATAN K2 IS (4k x 4k)', 'GATAN K2 QUANTUM (4k x 4k)', 'GATAN K2 SUMMIT (4k x 4k)', 'GATAN MULTISCAN', 'GATAN ORIUS SC1000 (4k x 2.7k)', 'GATAN ORIUS SC200 (2k x 2k)', 'GATAN ORIUS SC600 (2.7k x 2.7k)', 'GATAN ULTRASCAN 1000 (2k x 2k)', 'GATAN ULTRASCAN 10000 (10k x 10k)', 'GATAN ULTRASCAN 4000 (4k x 4k)', 'GENERIC CCD', 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)', 'GENERIC FILM', 'GENERIC GATAN', 'GENERIC GATAN (2k x 2k)', 'GENERIC GATAN (4k x 4k)', 'GENERIC IMAGE PLATES', 'GENERIC TVIPS', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)', 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'OTHER', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F216 (2k x 2k)', 'TVIPS TEMCAM-F224 (2k x 2k)', 'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F816 (8k x 8k)']
+                            allowed_detectors = ['AGFA SCIENTA FILM', 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)', 'DIRECT ELECTRON DE-16 (4k x 4k)',
+                                                 'DIRECT ELECTRON DE-20 (5k x 3k)', 'DIRECT ELECTRON DE-64 (8k x 8k)', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)',
+                                                 'FEI EAGLE (4k x 4k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)', 'FEI FALCON III (4k x 4k)', 'GATAN K2 (4k x 4k)',
+                                                 'GATAN K2 BASE (4k x 4k)', 'GATAN K2 IS (4k x 4k)', 'GATAN K2 QUANTUM (4k x 4k)', 'GATAN K2 SUMMIT (4k x 4k)', 'GATAN MULTISCAN',
+                                                 'GATAN ORIUS SC1000 (4k x 2.7k)', 'GATAN ORIUS SC200 (2k x 2k)', 'GATAN ORIUS SC600 (2.7k x 2.7k)',
+                                                 'GATAN ULTRASCAN 1000 (2k x 2k)', 'GATAN ULTRASCAN 10000 (10k x 10k)', 'GATAN ULTRASCAN 4000 (4k x 4k)', 'GENERIC CCD',
+                                                 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)', 'GENERIC FILM', 'GENERIC GATAN', 'GENERIC GATAN (2k x 2k)',
+                                                 'GENERIC GATAN (4k x 4k)', 'GENERIC IMAGE PLATES', 'GENERIC TVIPS', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)',
+                                                 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'OTHER', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F216 (2k x 2k)',
+                                                 'TVIPS TEMCAM-F224 (2k x 2k)', 'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F816 (8k x 8k)']
                             if detect_in in allowed_detectors:
                                 fod.set_valueOf_(detect_in)
                             else:
@@ -1589,7 +1607,7 @@ class EMDBXMLTranslator(object):
 
         xml_out.set_crossreferences(cref)
 
-        def set_base_supramolecule(supmol, supmol_id, supmol_in, comp_in=None, rib_cat=None):
+        def set_base_supramolecule(supmol, supmol_id, supmol_in, comp_in=None):
             """
             1.9 -> 3.0: Method that sets the elements that are common to all supramolecules.
 
@@ -1989,10 +2007,10 @@ class EMDBXMLTranslator(object):
                                     rna_mol.set_sequence(seq)
                                 # element 2 - <xs:element name="rna" substitutionGroup="macromolecule" type="rna_macromolecule_type">
                                 # XSD: <xs:element name="classification" minOccurs="0">
-                                naClass = 'OTHER'
+                                na_class = 'OTHER'
                                 if na_class_in == 'T-RNA':
-                                    naClass = 'TRANSFER'
-                                rna_mol.set_classification(naClass)
+                                    na_class = 'TRANSFER'
+                                rna_mol.set_classification(na_class)
                                 # element 3 - <xs:element name="rna" substitutionGroup="macromolecule" type="rna_macromolecule_type">
                                 # XSD: <xs:element name="structure" type="xs:token" minOccurs="0">
                                 self.check_set(na_in.get_structure, rna_mol.set_structure)
@@ -2599,7 +2617,7 @@ class EMDBXMLTranslator(object):
                 # XSD: <xs:element name="details" type="xs:token" minOccurs="0"/>
                 # details are set in separate add ons
 
-            def set_final_reconstruction(final_rec, reconstruction, proc, spec_prep_in=None, no_apply_symm=False, helical=False):
+            def set_final_reconstruction(final_rec, reconstruction, proc, spec_prep_in=None, no_apply_symm=False):
                 """
                 Method that sets final reconstruction elements
 
@@ -3157,7 +3175,6 @@ class EMDBXMLTranslator(object):
                             pdb_model.add_chain(chain)
                         # element 3 - <xs:element name="initial_model" maxOccurs="unbounded" minOccurs="0">
                         # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
- 
                         modelling.add_initial_model(pdb_model)
 
                 # element 2 - <xs:complexType name="modelling_type">
@@ -3345,26 +3362,26 @@ class EMDBXMLTranslator(object):
         if self.relaxed:
             emdb30 = emdb_30relaxed
 
-        def set_el_single_particle(imp_in, final_reconstruct_in, proc_spec):
-            """
-            Helper function - groups calls
-            """
-            # element 1 - <xs:complexType name="singPartType">
-            # XSD: <xs:element name="appliedSymmetry" type="pointGroupSymmetryType" minOccurs="0"/>
-            symm_in = final_reconstruct_in.get_applied_symmetry()
-            if symm_in is not None:
-                self.check_set(symm_in.get_point_group, proc_spec.set_appliedSymmetry)
-            # element 2 - <xs:complexType name="singPartType">
-            # XSD: <xs:element name="numProjections" type="xs:positiveInteger" minOccurs="0"/
-            self.check_set(final_reconstruct_in.get_number_images_used, proc_spec.set_numProjections)
-            # element 3 - <xs:complexType name="singPartType">
-            # XSD: <xs:element name="numClassAverages" type="xs:positiveInteger" minOccurs="0"/>
-            sp_cls_in = imp_in.get_final_two_d_classification()
-            if sp_cls_in is not None:
-                self.check_set(sp_cls_in.get_number_classes, proc_spec.set_numClassAverages)
-            # element 4 - <xs:complexType name="singPartType">
-            # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
-            self.check_set(imp_in.get_details, proc_spec.set_details)
+        # def set_el_single_particle(imp_in, final_reconstruct_in, proc_spec):
+        #     """
+        #     Helper function - groups calls
+        #     """
+        #     # element 1 - <xs:complexType name="singPartType">
+        #     # XSD: <xs:element name="appliedSymmetry" type="pointGroupSymmetryType" minOccurs="0"/>
+        #     symm_in = final_reconstruct_in.get_applied_symmetry()
+        #     if symm_in is not None:
+        #         self.check_set(symm_in.get_point_group, proc_spec.set_appliedSymmetry)
+        #     # element 2 - <xs:complexType name="singPartType">
+        #     # XSD: <xs:element name="numProjections" type="xs:positiveInteger" minOccurs="0"/
+        #     self.check_set(final_reconstruct_in.get_number_images_used, proc_spec.set_numProjections)
+        #     # element 3 - <xs:complexType name="singPartType">
+        #     # XSD: <xs:element name="numClassAverages" type="xs:positiveInteger" minOccurs="0"/>
+        #     sp_cls_in = imp_in.get_final_two_d_classification()
+        #     if sp_cls_in is not None:
+        #         self.check_set(sp_cls_in.get_number_classes, proc_spec.set_numClassAverages)
+        #     # element 4 - <xs:complexType name="singPartType">
+        #     # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
+        #     self.check_set(imp_in.get_details, proc_spec.set_details)
 
         def add_external_references(ref_in, ref_out):
             """
@@ -3670,6 +3687,7 @@ class EMDBXMLTranslator(object):
             cryst_par_in = imp_in.get_crystal_parameters()
             if cryst_par_in is not None:
                 two_dcryst = True
+                cryst_par = None
                 plane_group_in = cryst_par_in.get_plane_group()
                 if plane_group_in is None:
                     space_group_in = cryst_par_in.get_space_group()
@@ -3684,7 +3702,7 @@ class EMDBXMLTranslator(object):
                     cryst_par = emdb_19.threeDxtalParamType()
 
                 unit_cell_in = cryst_par_in.get_unit_cell()
-                if unit_cell_in is not None:
+                if unit_cell_in is not None and cryst_par is not None:
                     # element 1 - <xs:complexType name="twoDxtalParamType"> and <xs:complexType name="threeDxtalParamType">
                     # XSD: <xs:element name="aLength" type="lengthType" minOccurs="0"/>
                     self.set_value_and_units(unit_cell_in.get_a, cryst_par.set_aLength, emdb_19.lengthType, units='A')
@@ -3796,7 +3814,7 @@ class EMDBXMLTranslator(object):
             # element 2 - <xs:complexType name="mapType">
             # XSD: <xs:element name="dataType" type="mapDataType"/>
             map_in_data_type = map_in.get_data_type()
-            data_type_dict_inv = {v: k for k, v in const.DATA_TYPE_DICT_19_TO_30.iteritems()}
+            data_type_dict_inv = {v: k for (k, v) in const.DAT_TYPE_DICT_19_TO_30.iteritems()}
             map_out_data_type = data_type_dict_inv.get(map_in_data_type)
             map_out.set_dataType(map_out_data_type)
             # element 3 - <xs:complexType name="mapType">
@@ -4603,6 +4621,7 @@ class EMDBXMLTranslator(object):
                     if smol_type_in == 'complex_supramolecule':
                         rib_detail = smol_in.get_ribosome_details()
                         if rib_detail is not None:
+                            rib = None
                             if rib_detail.find('eukaryo') != -1:
                                 # element 7 in choice 1 - <xs:complexType name="smplCompType">
                                 # XSD: <xs:element name="ribosome-eukaryote" type="riboTypeEu"/>
@@ -4610,10 +4629,10 @@ class EMDBXMLTranslator(object):
                                 rib = emdb_19.riboTypeEu()
                                 # element 1 - <xs:complexType name="riboTypeEu">
                                 # XSD: <xs:element name="eukaryote" type="xs:string" minOccurs="1"/>
-                                dtls = smol_in.get_ribosome_details()
-                                if dtls.find('ribosome-eukaryote:') != -1:
-                                    dtls = dtls.replace('ribosome-eukaryote: ', '')
-                                rib.set_eukaryote(dtls)
+                                rib_details = smol_in.get_ribosome_details()
+                                if rib_details.find('ribosome-eukaryote:') != -1:
+                                    rib_details = rib_details.replace('ribosome-eukaryote: ', '')
+                                rib.set_eukaryote(rib_details)
                                 # element 2 - <xs:complexType name="riboTypeEu">
                                 # XSD: <xs:element name="sciSpeciesName" type="sciSpeciesType" minOccurs="0" maxOccurs="1"/>
                                 self.check_set(smol_in.get_name, rib.set_sciSpeciesName)
@@ -4653,10 +4672,10 @@ class EMDBXMLTranslator(object):
                                 rib = emdb_19.riboTypePro()
                                 # element 1 - <xs:complexType name="riboTypePro">
                                 # XSD: <xs:element name="prokaryote" type="xs:string" minOccurs="1"/>
-                                dtls = smol_in.get_ribosome_details()
-                                if dtls.find('ribosome-prokaryote:') != -1:
-                                    dtls = dtls.replace('ribosome-prokaryote: ', '')
-                                rib.set_prokaryote(dtls)
+                                rib_details = smol_in.get_ribosome_details()
+                                if rib_details.find('ribosome-prokaryote:') != -1:
+                                    rib_details = rib_details.replace('ribosome-prokaryote: ', '')
+                                rib.set_prokaryote(rib_details)
                                 # element 2 - <xs:complexType name="riboTypePro">
                                 # XSD: <xs:element name="sciSpeciesName" type="sciSpeciesType" minOccurs="0" maxOccurs="1"/>
                                 self.check_set(smol_in.get_name, rib.set_sciSpeciesName)
@@ -5043,7 +5062,7 @@ class EMDBXMLTranslator(object):
                         if fod is not None:
                             det_model_in = fod.get_valueOf_()
                             allowed_detectors = ['AGFA SCIENTA FILM', 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'GENERIC FILM',
-                                                 'GENERIC IMAGE PLATES', 'DIRECT ELECTRON DE-10 (5k x 4k)','DIRECT ELECTRON DE-12 (4k x 3k)',
+                                                 'GENERIC IMAGE PLATES', 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)',
                                                  'DIRECT ELECTRON DE-16 (4k x 4k)', 'DIRECT ELECTRON DE-20 (5k x 3k)',
                                                  'DIRECT ELECTRON DE-64 (8k x 8k)', 'FALCON II', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)',
                                                  'FEI EAGLE (4k x 4k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)',
@@ -5173,13 +5192,13 @@ class EMDBXMLTranslator(object):
 
             # element 3 - <xs:complexType name="expType">
             # XSD: <xs:element name="imageAcquisition" type="imgScanType" maxOccurs="unbounded"/>
-            image_acquasitions = []
+            image_acquasitions = {}
             for mic_in in mic_list_in:
                 im_rec_list_in = mic_in.get_image_recording_list()
                 if im_rec_list_in is not None and im_rec_list_in != []:
                     im_recs = im_rec_list_in.get_image_recording()
                     for im_rec_in in im_recs:
-                        image_acquasition = []
+                        image_acquasition = {}
                         # XSD: <xs:complexType name="imgScanType"> has 7 elements
                         im_ac = emdb_19.imgScanType()
                         # element 1 -<xs:complexType name="imgScanType">
@@ -5219,8 +5238,8 @@ class EMDBXMLTranslator(object):
                         # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
                         self.check_set(im_rec_in.get_details, im_ac.set_details)
                         image_acquasition['details'] = im_rec_in.get_details()
-                        if image_acquasitions != []:
-                            if image_acquasition != []:
+                        if image_acquasitions != {}:
+                            if image_acquasition != {}:
                                 # there are other acquisitions; check if any is the same with the current one
                                 is_same = False
                                 for im_acq in image_acquasitions:
@@ -5237,7 +5256,7 @@ class EMDBXMLTranslator(object):
                                         exp.add_imageAcquisition(im_ac)
                         else:
                             # there are no other image acquisitions
-                            if image_acquasition != []:
+                            if image_acquasition != {}:
                                 # add this acquisition to the list
                                 image_acquasitions[len(image_acquasitions) + 1] = image_acquasition
                             if self.roundtrip:
