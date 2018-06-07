@@ -119,8 +119,10 @@ class EMDBXMLTranslator(object):
                             'FLEXIBLE FIT': 'flexible',
                             'OTHER': 'flexible',
                             'RIGID BODY FIT': 'rigid body'}
+
         FITTING_19_to_30 = {'flexible': 'FLEXIBLE FIT',
                             'rigid body': 'RIGID BODY FIT'}
+
         SPECIMEN_HOLDER_30_to_19 = {'FEI TITAN KRIOS AUTOGRID HOLDER': 'FEI TITAN KRIOS AUTOGRID HOLDER',
                                     'GATAN 626 SINGLE TILT LIQUID NITROGEN CRYO TRANSFER HOLDER': 'GATAN LIQUID NITROGEN',
                                     'GATAN 910 MULTI-SPECIMEN SINGLE TILT CRYO TRANSFER HOLDER': 'GATAN LIQUID NITROGEN',
@@ -145,6 +147,14 @@ class EMDBXMLTranslator(object):
                                     'PHILIPS ROTATION HOLDER': 'PHILIPS ROTATION HOLDER',
                                     'SIDE ENTRY, EUCENTRIC': 'SIDE ENTRY, EUCENTRIC',
                                     'JEOL3200FSC CRYOHOLDER': 'JEOL 3200FSC CRYOHOLDER'}
+
+        SPECIMEN_STATE_30_to_19 = {'particle': 'particle',
+                                   'filament': 'filament',
+                                   'twodarray': 'twoDArray',
+                                   'threedarray': 'threeDArray',
+                                   'helicalarray': 'helicalArray',
+                                   'tissue': 'tissue',
+                                   'cell': 'cell'}
 
     def __init__(self):
         # 0 = min, 3 = max
@@ -3795,7 +3805,10 @@ class EMDBXMLTranslator(object):
             # element 2 - <xs:complexType name="mapType">
             # XSD: <xs:element name="dataType" type="mapDataType"/>
             map_in_data_type = map_in.get_data_type()
-            data_type_dict_inv = {v: k for k, v in const.DATA_TYPE_DICT_19_TO_30.iteritems()}
+            #data_type_dict_inv = {v: k for k, v in const.DATA_TYPE_DICT_19_TO_30.iteritems()}
+            data_type_dict_inv = {}
+            for k, v in const.DATA_TYPE_DICT_19_TO_30.iteritems():
+                data_type_dict_inv[v] = k
             map_out_data_type = data_type_dict_inv.get(map_in_data_type)
             map_out.set_dataType(map_out_data_type)
             # element 3 - <xs:complexType name="mapType">
@@ -5298,7 +5311,7 @@ class EMDBXMLTranslator(object):
                         ref_prot = fit_in.get_refinement_protocol()
                         if ref_prot is not None:
                             ref_prot_low = ref_prot.lower()
-                            allowed_prots = {'rigid body', 'flexible'}
+                            allowed_prots = ['rigid body', 'flexible']
                             known_issues = {'rigid body fit': 'rigid body'}
                             if ref_prot_low in allowed_prots:
                                 fit.set_refProtocol(ref_prot_low)
