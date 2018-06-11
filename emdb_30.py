@@ -2,20 +2,20 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Thu Jun  7 15:30:35 2018 by generateDS.py version 2.29.5.
+# Generated Mon Jun 11 11:39:21 2018 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
 #   ('--root-element', 'emd')
 #   ('-f', '')
-#   ('-o', '../../IdeaProjects/emdb-xml-translator/emdb_30.py')
+#   ('-o', '../../IdeaProjects/cif-emdb-translator/emdb.py')
 #   ('--external-encoding', 'utf-8')
 #
 # Command line arguments:
 #   ../../IdeaProjects/emdb-schemas/v3/v3_0_0_0/emdb.xsd
 #
 # Command line:
-#   /Library/Frameworks/Python.framework/Versions/2.7/bin/generateDS.py --root-element="emd" -f -o "../../IdeaProjects/emdb-xml-translator/emdb_30.py" --external-encoding="utf-8" ../../IdeaProjects/emdb-schemas/v3/v3_0_0_0/emdb.xsd
+#   /Library/Frameworks/Python.framework/Versions/2.7/bin/generateDS.py --root-element="emd" -f -o "../../IdeaProjects/cif-emdb-translator/emdb.py" --external-encoding="utf-8" ../../IdeaProjects/emdb-schemas/v3/v3_0_0_0/emdb.xsd
 #
 # Current working directory (os.getcwd()):
 #   generateDS-2.23a0
@@ -6629,7 +6629,7 @@ class protein_or_peptide_macromolecule_type(base_macromolecule_type):
             if not self.gds_validate_simple_patterns(
                     self.validate_ec_numberType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_ec_numberType_patterns_, ))
-    validate_ec_numberType_patterns_ = [['^\\d+(\\.(\\d+$|^\\-)){3}$']]
+    validate_ec_numberType_patterns_ = [['^([1-6]((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?[0-9]?)$|^(.-)))(([ ]*,[ ]*)([1-6]((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?[0-9]?)$|^(.-))))*$']]
     def hasContent_(self):
         if (
             self.recombinant_expression is not None or
@@ -32486,8 +32486,8 @@ def parseLiteral(inFileName, silence=False):
     # Enable Python to collect the space used by the DOM.
     doc = None
     if not silence:
-        sys.stdout.write('#from emdb_30 import *\n\n')
-        sys.stdout.write('import emdb_30 as model_\n\n')
+        sys.stdout.write('#from emdb import *\n\n')
+        sys.stdout.write('import emdb as model_\n\n')
         sys.stdout.write('rootObj = model_.rootClass(\n')
         rootObj.exportLiteral(sys.stdout, 0, name_=rootTag)
         sys.stdout.write(')\n')
