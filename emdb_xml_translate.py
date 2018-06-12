@@ -3356,6 +3356,9 @@ class EMDBXMLTranslator(object):
         if self.relaxed:
             emdb30 = emdb_30relaxed
 
+        # Validate_simpletypes_ = True in emdb_30.py. To prevent warnings reset the flag
+        emdb30.Validate_simpletypes_ = False
+
         # def set_el_single_particle(imp_in, final_reconstruct_in, proc_spec):
         #     """
         #     Helper function - groups calls
