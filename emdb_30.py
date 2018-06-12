@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Mon Jun 11 13:32:49 2018 by generateDS.py version 2.29.5.
+# Generated Tue Jun 12 11:37:43 2018 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
@@ -19,7 +19,7 @@
 #   /Library/Frameworks/Python.framework/Versions/2.7/bin/generateDS.py --root-element="emd" -f -o "../../IdeaProjects/cif-emdb-translator/emdb.py" --no-warnings --external-encoding="utf-8" ../../IdeaProjects/emdb-schemas/v3/v3_0_0_0/emdb.xsd
 #
 # Current working directory (os.getcwd()):
-#   generateDS-2.23a0
+#   generateDS-2.29.5
 #
 
 import sys
