@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Tue Jun 12 11:37:43 2018 by generateDS.py version 2.29.5.
+# Generated Tue Jun 12 11:41:30 2018 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
@@ -16,7 +16,7 @@
 #   ../../IdeaProjects/emdb-schemas/v3/v3_0_0_0/emdb.xsd
 #
 # Command line:
-#   /Library/Frameworks/Python.framework/Versions/2.7/bin/generateDS.py --root-element="emd" -f -o "../../IdeaProjects/cif-emdb-translator/emdb.py" --no-warnings --external-encoding="utf-8" ../../IdeaProjects/emdb-schemas/v3/v3_0_0_0/emdb.xsd
+#   ./generateDS.py --root-element="emd" -f -o "../../IdeaProjects/cif-emdb-translator/emdb.py" --no-warnings --external-encoding="utf-8" ../../IdeaProjects/emdb-schemas/v3/v3_0_0_0/emdb.xsd
 #
 # Current working directory (os.getcwd()):
 #   generateDS-2.29.5
@@ -768,7 +768,7 @@ class entry_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_emdb_id_type_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_emdb_id_type_patterns_, ))
-    validate_emdb_id_type_patterns_ = [['^EMD-\\d{4,}$']]
+    validate_emdb_id_type_patterns_ = [['EMD-\\d{4,}']]
     def hasContent_(self):
         if (
             self.admin is not None or
@@ -1482,7 +1482,7 @@ class supersedes_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_emdb_id_type_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_emdb_id_type_patterns_, ))
-    validate_emdb_id_type_patterns_ = [['^EMD-\\d{4,}$']]
+    validate_emdb_id_type_patterns_ = [['EMD-\\d{4,}']]
     def hasContent_(self):
         if (
             self.date is not None or
@@ -1763,14 +1763,14 @@ class contact_details_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_middle_nameType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_middle_nameType_patterns_, ))
-    validate_middle_nameType_patterns_ = [['^[A-Z]$']]
+    validate_middle_nameType_patterns_ = [['[A-Z]']]
     def validate_emailType(self, value):
         # Validate type emailType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_emailType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_emailType_patterns_, ))
-    validate_emailType_patterns_ = [['^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$']]
+    validate_emailType_patterns_ = [['[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}']]
     def hasContent_(self):
         if (
             self.role is not None or
@@ -2019,21 +2019,21 @@ class telephone_number_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_countryType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_countryType_patterns_, ))
-    validate_countryType_patterns_ = [['^\\d{1,3}$']]
+    validate_countryType_patterns_ = [['\\d{1,3}']]
     def validate_areaType(self, value):
         # Validate type areaType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_areaType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_areaType_patterns_, ))
-    validate_areaType_patterns_ = [['^\\d{2,5}$']]
+    validate_areaType_patterns_ = [['\\d{2,5}']]
     def validate_localType(self, value):
         # Validate type localType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_localType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_localType_patterns_, ))
-    validate_localType_patterns_ = [['^\\d+( ext. \\d+)?$']]
+    validate_localType_patterns_ = [['\\d+( ext. \\d+)?']]
     def hasContent_(self):
         if (
             self.country is not None or
@@ -3039,7 +3039,7 @@ class emdb_cross_reference_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_emdb_id_type_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_emdb_id_type_patterns_, ))
-    validate_emdb_id_type_patterns_ = [['^EMD-\\d{4,}$']]
+    validate_emdb_id_type_patterns_ = [['EMD-\\d{4,}']]
     def hasContent_(self):
         if (
             self.emdb_id is not None or
@@ -3229,7 +3229,7 @@ class pdb_cross_reference_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_pdb_code_type_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_pdb_code_type_patterns_, ))
-    validate_pdb_code_type_patterns_ = [['^\\d[\\dA-Za-z]{3}$']]
+    validate_pdb_code_type_patterns_ = [['\\d[\\dA-Za-z]{3}']]
     def hasContent_(self):
         if (
             self.pdb_id is not None or
@@ -3352,7 +3352,7 @@ class auxiliary_link_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_linkType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_linkType_patterns_, ))
-    validate_linkType_patterns_ = [['^(https?$|^ftp)://.*$']]
+    validate_linkType_patterns_ = [['(https?$|^ftp)://.*']]
     def hasContent_(self):
         if (
             self.type_ is not None or
@@ -6630,7 +6630,7 @@ class protein_or_peptide_macromolecule_type(base_macromolecule_type):
             if not self.gds_validate_simple_patterns(
                     self.validate_ec_numberType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_ec_numberType_patterns_, ))
-    validate_ec_numberType_patterns_ = [['^([1-6]((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?[0-9]?)$|^(.-)))(([ ]*,[ ]*)([1-6]((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?[0-9]?)$|^(.-))))*$']]
+    validate_ec_numberType_patterns_ = [['([1-6]((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?[0-9]?)$|^(.-)))(([ ]*,[ ]*)([1-6]((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?[0-9]?)$|^(.-))))*']]
     def hasContent_(self):
         if (
             self.recombinant_expression is not None or
@@ -6782,7 +6782,7 @@ class rna_macromolecule_type(base_macromolecule_type):
             if not self.gds_validate_simple_patterns(
                     self.validate_ec_numberType21_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_ec_numberType21_patterns_, ))
-    validate_ec_numberType21_patterns_ = [['^\\d+(\\.(\\d+$|^\\-)){3}$']]
+    validate_ec_numberType21_patterns_ = [['\\d+(\\.(\\d+$|^\\-)){3}']]
     def hasContent_(self):
         if (
             self.sequence is not None or
@@ -11423,7 +11423,7 @@ class applied_symmetry_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_point_groupType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_point_groupType_patterns_, ))
-    validate_point_groupType_patterns_ = [['^C\\d+$|^D\\d+$|^O$|^T$|^I$'], ['^C\\d+$|^D\\d+$|^O$|^T$|^I$']]
+    validate_point_groupType_patterns_ = [['C\\d+$|^D\\d+$|^O$|^T$|^I'], ['C\\d+$|^D\\d+$|^O$|^T$|^I']]
     def hasContent_(self):
         if (
             self.space_group is not None or
@@ -11537,7 +11537,7 @@ class helical_parameters_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_axial_symmetryType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_axial_symmetryType_patterns_, ))
-    validate_axial_symmetryType_patterns_ = [['^[C$|^D][1-9][0-9]*$']]
+    validate_axial_symmetryType_patterns_ = [['[C$|^D][1-9][0-9]*']]
     def hasContent_(self):
         if (
             self.delta_z is not None or
@@ -12315,7 +12315,7 @@ class starting_map_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_emdb_id_type_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_emdb_id_type_patterns_, ))
-    validate_emdb_id_type_patterns_ = [['^EMD-\\d{4,}$']]
+    validate_emdb_id_type_patterns_ = [['EMD-\\d{4,}']]
     def hasContent_(self):
         if (
             self.random_conical_tilt is not None or
@@ -12464,7 +12464,7 @@ class pdb_model_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_pdb_code_type_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_pdb_code_type_patterns_, ))
-    validate_pdb_code_type_patterns_ = [['^\\d[\\dA-Za-z]{3}$']]
+    validate_pdb_code_type_patterns_ = [['\\d[\\dA-Za-z]{3}']]
     def hasContent_(self):
         if (
             self.pdb_id is not None or
@@ -12573,14 +12573,14 @@ class chain_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_chain_pdb_id_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_chain_pdb_id_patterns_, ))
-    validate_chain_pdb_id_patterns_ = [['^\\d$|^[A-Za-z]$']]
+    validate_chain_pdb_id_patterns_ = [['\\d$|^[A-Za-z]']]
     def validate_residue_rangeType(self, value):
         # Validate type residue_rangeType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_residue_rangeType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_residue_rangeType_patterns_, ))
-    validate_residue_rangeType_patterns_ = [['^\\d+-\\d+$']]
+    validate_residue_rangeType_patterns_ = [['\\d+-\\d+']]
     def hasContent_(self):
         if (
             self.chain_id or
@@ -14813,7 +14813,7 @@ class map_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_fileType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_fileType_patterns_, ))
-    validate_fileType_patterns_ = [['^emd_\\d{4,}([A-Za-z0-9_]*)\\.map(\\.gz$|^)$']]
+    validate_fileType_patterns_ = [['emd_\\d{4,}([A-Za-z0-9_]*)\\.map(\\.gz$|^)']]
     def validate_map_data_type(self, value):
         # Validate type map_data_type, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -15668,7 +15668,7 @@ class figure_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_fileType44_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_fileType44_patterns_, ))
-    validate_fileType44_patterns_ = [['^emd_\\d{4,}.+$']]
+    validate_fileType44_patterns_ = [['emd_\\d{4,}.+']]
     def hasContent_(self):
         if (
             self.file is not None or
@@ -15770,7 +15770,7 @@ class validation_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_fileType45_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_fileType45_patterns_, ))
-    validate_fileType45_patterns_ = [['^emd_\\d{4,}_fsc.xml$']]
+    validate_fileType45_patterns_ = [['emd_\\d{4,}_fsc.xml']]
     def hasContent_(self):
         if (
             self.file is not None or
@@ -19363,7 +19363,7 @@ class discrepancy_listType(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_discrepancyType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_discrepancyType_patterns_, ))
-    validate_discrepancyType_patterns_ = [['^[ ARNDCEQGHILKMFPSTWYVUOBZJX\\(\\)]\\d+[ ARNDCEQGHILKMFPSTWYVUOBZJX\\(\\)]$']]
+    validate_discrepancyType_patterns_ = [['[ ARNDCEQGHILKMFPSTWYVUOBZJX\\(\\)]\\d+[ ARNDCEQGHILKMFPSTWYVUOBZJX\\(\\)]']]
     def hasContent_(self):
         if (
             self.discrepancy
@@ -19719,7 +19719,7 @@ class discrepancy_listType9(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_discrepancyType10_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_discrepancyType10_patterns_, ))
-    validate_discrepancyType10_patterns_ = [['^[AGCTRYSWKMBDHVN\\.-]\\d+[AGCTRYSWKMBDHVN\\.-]$']]
+    validate_discrepancyType10_patterns_ = [['[AGCTRYSWKMBDHVN\\.-]\\d+[AGCTRYSWKMBDHVN\\.-]']]
     def hasContent_(self):
         if (
             self.discrepancy
@@ -20004,7 +20004,7 @@ class discrepancy_listType13(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_discrepancyType14_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_discrepancyType14_patterns_, ))
-    validate_discrepancyType14_patterns_ = [['^[ARNDCEQGHILKMFPSTWYVUOBZJX]\\d+[ARNDCEQGHILKMFPSTWYVUOBZJX]$']]
+    validate_discrepancyType14_patterns_ = [['[ARNDCEQGHILKMFPSTWYVUOBZJX]\\d+[ARNDCEQGHILKMFPSTWYVUOBZJX]']]
     def hasContent_(self):
         if (
             self.discrepancy
@@ -20572,7 +20572,7 @@ class discrepancy_listType17(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_discrepancyType18_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_discrepancyType18_patterns_, ))
-    validate_discrepancyType18_patterns_ = [['^[ ARNDCEQGHILKMFPSTWYVUOBZJX\\(\\)]\\d+[ ARNDCEQGHILKMFPSTWYVUOBZJX\\(\\)]$']]
+    validate_discrepancyType18_patterns_ = [['[ ARNDCEQGHILKMFPSTWYVUOBZJX\\(\\)]\\d+[ ARNDCEQGHILKMFPSTWYVUOBZJX\\(\\)]']]
     def hasContent_(self):
         if (
             self.discrepancy
@@ -27754,7 +27754,7 @@ class starting_modelType(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_pdb_code_type_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_pdb_code_type_patterns_, ))
-    validate_pdb_code_type_patterns_ = [['^\\d[\\dA-Za-z]{3}$']]
+    validate_pdb_code_type_patterns_ = [['\\d[\\dA-Za-z]{3}']]
     def hasContent_(self):
         if (
             self.access_code is not None or
@@ -30754,21 +30754,21 @@ class axis_orderType(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_fastType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_fastType_patterns_, ))
-    validate_fastType_patterns_ = [['^X$|^Y$|^Z$']]
+    validate_fastType_patterns_ = [['X$|^Y$|^Z']]
     def validate_mediumType(self, value):
         # Validate type mediumType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_mediumType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_mediumType_patterns_, ))
-    validate_mediumType_patterns_ = [['^X$|^Y$|^Z$']]
+    validate_mediumType_patterns_ = [['X$|^Y$|^Z']]
     def validate_slowType(self, value):
         # Validate type slowType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_slowType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_slowType_patterns_, ))
-    validate_slowType_patterns_ = [['^X$|^Y$|^Z$']]
+    validate_slowType_patterns_ = [['X$|^Y$|^Z']]
     def hasContent_(self):
         if (
             self.fast is not None or
@@ -31427,7 +31427,7 @@ class segmentationType(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_fileType43_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_fileType43_patterns_, ))
-    validate_fileType43_patterns_ = [['^[emd_\\d{4,}]+.*$']]
+    validate_fileType43_patterns_ = [['[emd_\\d{4,}]+.*']]
     def hasContent_(self):
         if (
             self.file is not None or
@@ -31783,7 +31783,7 @@ class initial_modelType(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_access_codeType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_access_codeType_patterns_, ))
-    validate_access_codeType_patterns_ = [['^\\d[\\dA-Za-z]{3}$'], ['^\\d[\\dA-Za-z]{3}$']]
+    validate_access_codeType_patterns_ = [['\\d[\\dA-Za-z]{3}'], ['\\d[\\dA-Za-z]{3}']]
     def hasContent_(self):
         if (
             self.access_code is not None or
@@ -31983,7 +31983,7 @@ class final_modelType(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_pdb_code_type_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_pdb_code_type_patterns_, ))
-    validate_pdb_code_type_patterns_ = [['^\\d[\\dA-Za-z]{3}$']]
+    validate_pdb_code_type_patterns_ = [['\\d[\\dA-Za-z]{3}']]
     def hasContent_(self):
         if (
             self.access_code is not None or
