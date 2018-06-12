@@ -302,6 +302,9 @@ class EMDBXMLTranslator(object):
         if self.relaxed:
             emdb30 = emdb_30relaxed
 
+        # Validate_simpletypes_ = True in emdb_30.py. To prevent warnings reset the flag
+        emdb30.Validate_simpletypes_ = False
+
         def make_software_list(soft_in):
             """
             Takes a string representing software and create a software list (3.0 construct).
