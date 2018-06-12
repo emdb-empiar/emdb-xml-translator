@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Tue Jun 12 11:41:30 2018 by generateDS.py version 2.29.5.
+# Generated Tue Jun 12 11:44:42 2018 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
@@ -3352,7 +3352,7 @@ class auxiliary_link_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_linkType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_linkType_patterns_, ))
-    validate_linkType_patterns_ = [['(https?$|^ftp)://.*']]
+    validate_linkType_patterns_ = [['(https?|ftp)://.*']]
     def hasContent_(self):
         if (
             self.type_ is not None or
@@ -6630,7 +6630,7 @@ class protein_or_peptide_macromolecule_type(base_macromolecule_type):
             if not self.gds_validate_simple_patterns(
                     self.validate_ec_numberType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_ec_numberType_patterns_, ))
-    validate_ec_numberType_patterns_ = [['([1-6]((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?[0-9]?)$|^(.-)))(([ ]*,[ ]*)([1-6]((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?)$|^(.-))((.[1-9][0-9]?[0-9]?)$|^(.-))))*']]
+    validate_ec_numberType_patterns_ = [['([1-6]((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?[0-9]?)|(.-)))(([ ]*,[ ]*)([1-6]((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?[0-9]?)|(.-))))*']]
     def hasContent_(self):
         if (
             self.recombinant_expression is not None or
@@ -6782,7 +6782,7 @@ class rna_macromolecule_type(base_macromolecule_type):
             if not self.gds_validate_simple_patterns(
                     self.validate_ec_numberType21_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_ec_numberType21_patterns_, ))
-    validate_ec_numberType21_patterns_ = [['\\d+(\\.(\\d+$|^\\-)){3}']]
+    validate_ec_numberType21_patterns_ = [['\\d+(\\.(\\d+|\\-)){3}']]
     def hasContent_(self):
         if (
             self.sequence is not None or
@@ -11423,7 +11423,7 @@ class applied_symmetry_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_point_groupType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_point_groupType_patterns_, ))
-    validate_point_groupType_patterns_ = [['C\\d+$|^D\\d+$|^O$|^T$|^I'], ['C\\d+$|^D\\d+$|^O$|^T$|^I']]
+    validate_point_groupType_patterns_ = [['C\\d+|D\\d+|O|T|I'], ['C\\d+|D\\d+|O|T|I']]
     def hasContent_(self):
         if (
             self.space_group is not None or
@@ -11537,7 +11537,7 @@ class helical_parameters_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_axial_symmetryType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_axial_symmetryType_patterns_, ))
-    validate_axial_symmetryType_patterns_ = [['[C$|^D][1-9][0-9]*']]
+    validate_axial_symmetryType_patterns_ = [['[C|D][1-9][0-9]*']]
     def hasContent_(self):
         if (
             self.delta_z is not None or
@@ -12573,7 +12573,7 @@ class chain_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_chain_pdb_id_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_chain_pdb_id_patterns_, ))
-    validate_chain_pdb_id_patterns_ = [['\\d$|^[A-Za-z]']]
+    validate_chain_pdb_id_patterns_ = [['\\d|[A-Za-z]']]
     def validate_residue_rangeType(self, value):
         # Validate type residue_rangeType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
@@ -14813,7 +14813,7 @@ class map_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_fileType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_fileType_patterns_, ))
-    validate_fileType_patterns_ = [['emd_\\d{4,}([A-Za-z0-9_]*)\\.map(\\.gz$|^)']]
+    validate_fileType_patterns_ = [['emd_\\d{4,}([A-Za-z0-9_]*)\\.map(\\.gz|)']]
     def validate_map_data_type(self, value):
         # Validate type map_data_type, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -30754,21 +30754,21 @@ class axis_orderType(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_fastType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_fastType_patterns_, ))
-    validate_fastType_patterns_ = [['X$|^Y$|^Z']]
+    validate_fastType_patterns_ = [['X|Y|Z']]
     def validate_mediumType(self, value):
         # Validate type mediumType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_mediumType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_mediumType_patterns_, ))
-    validate_mediumType_patterns_ = [['X$|^Y$|^Z']]
+    validate_mediumType_patterns_ = [['X|Y|Z']]
     def validate_slowType(self, value):
         # Validate type slowType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_slowType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_slowType_patterns_, ))
-    validate_slowType_patterns_ = [['X$|^Y$|^Z']]
+    validate_slowType_patterns_ = [['X|Y|Z']]
     def hasContent_(self):
         if (
             self.fast is not None or
