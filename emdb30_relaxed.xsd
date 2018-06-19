@@ -357,7 +357,7 @@
         <xs:union memberTypes="author_enums">
             <xs:simpleType>
                 <xs:restriction base="xs:token">
-                    <xs:pattern value="[A-Za-z '\-]+ [A-Z\-]+"/>
+                    <xs:pattern value="[A-Za-z '\-]+(Jr\.|III)? [A-Z\-]+"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:union>
@@ -1205,7 +1205,7 @@
                     <xs:element name="ec_number" minOccurs="0" maxOccurs="unbounded">
                         <xs:simpleType>
                             <xs:restriction base="xs:token">
-                                <xs:pattern value="\d+(\.(\d+|\-)){3}"/>
+                                <xs:pattern value="([1-6]((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?[0-9]?)|(.-)))(([ ]*,[ ]*)([1-6]((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?[0-9]?)|(.-))))*"/>
                             </xs:restriction>
                         </xs:simpleType>
                     </xs:element>
@@ -1552,7 +1552,7 @@
     </xs:simpleType>
     <xs:complexType name="grid_pretreatment_type">
         <xs:sequence>
-            <xs:element name="type" type="xs:token"/>
+            <xs:element name="type" type="xs:token" minOccurs="0"/>
             <xs:element name="time" minOccurs="0">
                 <xs:complexType>
                     <xs:simpleContent>
@@ -1799,7 +1799,7 @@
                                             </xs:element>
                                             <xs:element name="voltage" type="fib_voltage_type"/>
                                             <xs:element name="current" type="fib_current_type"/>
-                                            <xs:element name="dose_rate" type="fib_dose_rate_type"/>
+                                            <xs:element name="dose_rate" type="fib_dose_rate_type" minOccurs="0"/>
                                             <xs:element name="duration" type="fib_duration_type"/>
                                             <xs:element name="temperature" type="temperature_type"/>
                                             <xs:element name="initial_thickness" type="fib_initial_thickness_type"/>
@@ -1833,7 +1833,7 @@
     <xs:simpleType name="allowed_diameter_colloidal_gold">
         <xs:restriction base="xs:float">
             <xs:minInclusive value="0.1"/>
-            <xs:maxInclusive value="20"/>
+            <xs:maxInclusive value="100"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="temperature_type">
@@ -1890,14 +1890,13 @@
     <xs:complexType name="fib_dose_rate_type">
         <xs:simpleContent>
             <xs:extension base="allowed_focus_ion_dose_rate">
-                <xs:attribute name="units" type="xs:token" default="ions/nm^2/s"/>
+                <xs:attribute name="units" type="xs:token" default="ions/(cm^2*s)"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
     <xs:simpleType name="allowed_focus_ion_dose_rate">
         <xs:restriction base="xs:float">
             <xs:minExclusive value="0"/>
-            <xs:maxInclusive value="10"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="fib_duration_type">
@@ -1973,7 +1972,7 @@
                         <xs:enumeration value="FEI/PHILIPS EM400"/>
                         <xs:enumeration value="FEI/PHILIPS EM420"/>
                         <xs:enumeration value="HITACHI EF2000"/>
-                        <xs:enumeration value="HITACHI H-95000SD"/>
+                        <xs:enumeration value="HITACHI H-9500SD"/>
                         <xs:enumeration value="HITACHI H7600"/>
                         <xs:enumeration value="HITACHI HF2000"/>
                         <xs:enumeration value="HITACHI HF3000"/>
@@ -1997,6 +1996,7 @@
                         <xs:enumeration value="JEOL 2200FS"/>
                         <xs:enumeration value="JEOL 2200FSC"/>
                         <xs:enumeration value="JEOL 3000SFF"/>
+                        <xs:enumeration value="JEOL 3100FEF"/>
                         <xs:enumeration value="JEOL 3100FFC"/>
                         <xs:enumeration value="JEOL 3200FS"/>
                         <xs:enumeration value="JEOL 3200FSC"/>
@@ -2330,14 +2330,14 @@
     </xs:simpleType>
     <xs:simpleType name="allowed_c2_aperture_diameter">
         <xs:restriction base="xs:float">
-            <xs:minInclusive value="10"/>
+            <xs:minInclusive value="2"/>
             <xs:maxInclusive value="150"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="allowed_nominal_cs">
         <xs:restriction base="xs:float">
             <xs:minInclusive value="0"/>
-            <xs:maxInclusive value="10"/>
+            <xs:maxInclusive value="20"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="allowed_defocus_min">
@@ -2348,8 +2348,8 @@
     </xs:simpleType>
     <xs:simpleType name="allowed_defocus_max">
         <xs:restriction base="xs:float">
-            <xs:minInclusive value="-20"/>
-            <xs:maxInclusive value="20"/>
+            <xs:minInclusive value="-30"/>
+            <xs:maxInclusive value="30"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="allowed_magnification">
@@ -3022,8 +3022,8 @@
     </xs:complexType>
     <xs:simpleType name="allowed_tilt_angle_random_conical">
         <xs:restriction base="xs:float">
-            <xs:minInclusive value="45"/>
-            <xs:maxInclusive value="70"/>
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="180"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="allowed_tilt_angle1Orthogonal">
@@ -3641,7 +3641,6 @@
     <xs:simpleType name="allowed_pixel_sampling">
         <xs:restriction base="xs:float">
             <xs:minExclusive value="0"/>
-            <xs:maxExclusive value="50"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="interpretation_type">
