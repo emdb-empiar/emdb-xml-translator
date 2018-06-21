@@ -3537,7 +3537,7 @@ class EMDBXMLTranslator(object):
                 for soft in soft_list_in:
                     soft_name = soft.get_name()
                     if soft_name is not None:
-                        soft_name_list.add(soft_name)
+                        soft_name_list.append(soft_name)
                 if not soft_name_list:
                     software_str = ', '.join(soft_name_list)
             return software_str
