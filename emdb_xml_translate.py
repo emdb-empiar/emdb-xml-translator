@@ -3531,11 +3531,17 @@ class EMDBXMLTranslator(object):
             @param soft_list_in: software list as software_list_type (3.0)
             @return: Comma (', ') separated string of software
             """
+            software_str = None
             if soft_list_in is not None and len(soft_list_in) > 0:
-                soft_str = ', '.join([soft.get_name() for soft in soft_list_in])
-                return soft_str
-            else:
-                return None
+                soft_name_list = []
+                for soft in soft_list_in:
+                    soft_name = soft.get_name()
+                    if soft_name is not None:
+                        soft_name_list.add(soft_name)
+                if not soft_name_list:
+                    software_str = ', '.join(soft_name_list)
+            return software_str
+
 
         def copy_natural_source(src_in, src_out, cell=True, organelle=True, tissue=True, cellular_location=True, organ=True, only_common=False):
             """
