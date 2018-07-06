@@ -2,23 +2,24 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Thu Jun  7 10:46:59 2018 by generateDS.py version 2.29.5.
+# Generated Fri Jul  6 15:19:29 2018 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
 #   ('--root-element', 'emd')
 #   ('-f', '')
 #   ('-o', '../../IdeaProjects/emdb-xml-translator/emdb_19.py')
+#   ('--no-warnings', '')
 #   ('--external-encoding', 'utf-8')
 #
 # Command line arguments:
 #   ../../IdeaProjects/emdb-schemas/current/emdb.xsd
 #
 # Command line:
-#   /Library/Frameworks/Python.framework/Versions/2.7/bin/generateDS.py --root-element="emd" -f -o "../../IdeaProjects/emdb-xml-translator/emdb_19.py" --external-encoding="utf-8" ../../IdeaProjects/emdb-schemas/current/emdb.xsd
+#   /Users/sanja/Documents/generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "../../IdeaProjects/emdb-xml-translator/emdb_19.py" --no-warnings --external-encoding="utf-8" ../../IdeaProjects/emdb-schemas/current/emdb.xsd
 #
 # Current working directory (os.getcwd()):
-#   generateDS-2.23a0
+#   generateDS-2.29.5
 #
 
 import sys
@@ -1083,7 +1084,7 @@ class depType(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_emdbEntryIdType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_emdbEntryIdType_patterns_, ))
-    validate_emdbEntryIdType_patterns_ = [['^EMD-\\d{4,}(, EMD-\\d{4,})*$']]
+    validate_emdbEntryIdType_patterns_ = [['EMD-\\d{4,}(, EMD-\\d{4,})*']]
     def hasContent_(self):
         if (
             self.status is not None or
@@ -3860,7 +3861,7 @@ class imgType(GeneratedsSuper):
         # Validate type specimenHolderType, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['FEI TITAN KRIOS AUTOGRID HOLDER', 'GATAN HELIUM', 'GATAN LIQUID NITROGEN', 'HOME BUILD', 'JEOL', 'JEOL 3200FSC CRYOHOLDER', 'PHILIPS ROTATION HOLDER', 'SIDE ENTRY, EUCENTRIC', 'OTHER']
+            enumerations = ['FEI TITAN KRIOS AUTOGRID HOLDER', 'GATAN HELIUM', 'GATAN LIQUID NITROGEN', 'HOME BUILD', 'JEOL', 'JEOL 3200FSC CRYOHOLDER', 'PHILIPS ROTATION HOLDER', 'SIDE ENTRY, EUCENTRIC', 'JEOL CRYOSPECPORTER', 'OTHER']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
@@ -5054,7 +5055,7 @@ class singPartType(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_pointGroupSymmetryType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_pointGroupSymmetryType_patterns_, ))
-    validate_pointGroupSymmetryType_patterns_ = [['^C\\d+$|^D\\d+$|^O$|^T$|^I$']]
+    validate_pointGroupSymmetryType_patterns_ = [['C\\d+|D\\d+|O|T|I']]
     def hasContent_(self):
         if (
             self.appliedSymmetry is not None or
@@ -5306,7 +5307,7 @@ class tomogrType(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_pointGroupSymmetryType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_pointGroupSymmetryType_patterns_, ))
-    validate_pointGroupSymmetryType_patterns_ = [['^C\\d+$|^D\\d+$|^O$|^T$|^I$']]
+    validate_pointGroupSymmetryType_patterns_ = [['C\\d+|D\\d+|O|T|I']]
     def hasContent_(self):
         if (
             self.appliedSymmetry is not None or
@@ -8213,21 +8214,21 @@ class externalReferencesType(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_uniProtType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_uniProtType_patterns_, ))
-    validate_uniProtType_patterns_ = [['^[A-Z][\\dA-Z]{5}$']]
+    validate_uniProtType_patterns_ = [['[A-Z][\\dA-Z]{5}']]
     def validate_goIdType(self, value):
         # Validate type goIdType, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_goIdType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_goIdType_patterns_, ))
-    validate_goIdType_patterns_ = [['^GO:\\d{7}$']]
+    validate_goIdType_patterns_ = [['GO:\\d{7}']]
     def validate_iprIdType(self, value):
         # Validate type iprIdType, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_iprIdType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_iprIdType_patterns_, ))
-    validate_iprIdType_patterns_ = [['^IPR\\d{6}$']]
+    validate_iprIdType_patterns_ = [['IPR\\d{6}']]
     def hasContent_(self):
         if (
             self.refUniProt or
@@ -11756,7 +11757,7 @@ class emdbListType(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_emdbType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_emdbType_patterns_, ))
-    validate_emdbType_patterns_ = [['^EMD-\\d{4,}$']]
+    validate_emdbType_patterns_ = [['EMD-\\d{4,}']]
     def hasContent_(self):
         if (
             self.entry
@@ -11845,7 +11846,7 @@ class pdbidListType(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_pdbidType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_pdbidType_patterns_, ))
-    validate_pdbidType_patterns_ = [['^\\d[0-9a-zA-Z]{3}$']]
+    validate_pdbidType_patterns_ = [['\\d[0-9a-zA-Z]{3}']]
     def hasContent_(self):
         if (
             self.fittedPDBEntryId
@@ -11943,7 +11944,7 @@ class pdbidList2Type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_pdbidType_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_pdbidType_patterns_, ))
-    validate_pdbidType_patterns_ = [['^\\d[0-9a-zA-Z]{3}$']]
+    validate_pdbidType_patterns_ = [['\\d[0-9a-zA-Z]{3}']]
     def hasContent_(self):
         if (
             self.pdbEntryId or
