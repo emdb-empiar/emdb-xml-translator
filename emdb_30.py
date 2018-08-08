@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Tue Jul 31 12:24:46 2018 by generateDS.py version 2.29.5.
+# Generated Tue Aug  7 16:30:27 2018 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
@@ -16,10 +16,10 @@
 #   ../../IdeaProjects/emdb-schemas/v3/v3_0_0_1/emdb.xsd
 #
 # Command line:
-#   /Users/sanja/Documents/generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "../../IdeaProjects/cif-emdb-translator/emdb.py" --no-warnings --external-encoding="utf-8" ../../IdeaProjects/emdb-schemas/v3/v3_0_0_1/emdb.xsd
+#   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "../../IdeaProjects/cif-emdb-translator/emdb.py" --no-warnings --external-encoding="utf-8" ../../IdeaProjects/emdb-schemas/v3/v3_0_0_1/emdb.xsd
 #
 # Current working directory (os.getcwd()):
-#   generateDS-2.29.5
+#   modified_generateDS-2.29.5
 #
 
 import sys
@@ -807,7 +807,7 @@ class entry_type(GeneratedsSuper):
         if self.emdb_id is not None and 'emdb_id' not in already_processed:
             already_processed.add('emdb_id')
             outfile.write(' emdb_id=%s' % (quote_attrib(self.emdb_id), ))
-        if self.version != "3.0.0.1" and 'version' not in already_processed:
+        if self.version is not None and 'version' not in already_processed:
             already_processed.add('version')
             outfile.write(' version=%s' % (self.gds_encode(self.gds_format_string(quote_attrib(self.version), input_name='version')), ))
     def exportChildren(self, outfile, level, namespace_='', name_='entry_type', fromsubclass_=False, pretty_print=True):
@@ -9217,7 +9217,7 @@ class ultramicrotomy_final_thickness_type(GeneratedsSuper):
         else:
             outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='ultramicrotomy_final_thickness_type'):
-        if self.units != "nm" and 'units' not in already_processed:
+        if self.units is not None and 'units' not in already_processed:
             already_processed.add('units')
             outfile.write(' units=%s' % (self.gds_encode(self.gds_format_string(quote_attrib(self.units), input_name='units')), ))
     def exportChildren(self, outfile, level, namespace_='', name_='ultramicrotomy_final_thickness_type', fromsubclass_=False, pretty_print=True):
@@ -9440,7 +9440,7 @@ class fib_dose_rate_type(GeneratedsSuper):
         else:
             outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='fib_dose_rate_type'):
-        if self.units != "ions/(cm^2*s)" and 'units' not in already_processed:
+        if self.units is not None and 'units' not in already_processed:
             already_processed.add('units')
             outfile.write(' units=%s' % (self.gds_encode(self.gds_format_string(quote_attrib(self.units), input_name='units')), ))
     def exportChildren(self, outfile, level, namespace_='', name_='fib_dose_rate_type', fromsubclass_=False, pretty_print=True):
@@ -9590,7 +9590,7 @@ class fib_initial_thickness_type(GeneratedsSuper):
         else:
             outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='fib_initial_thickness_type'):
-        if self.units != "nm" and 'units' not in already_processed:
+        if self.units is not None and 'units' not in already_processed:
             already_processed.add('units')
             outfile.write(' units=%s' % (self.gds_encode(self.gds_format_string(quote_attrib(self.units), input_name='units')), ))
     def exportChildren(self, outfile, level, namespace_='', name_='fib_initial_thickness_type', fromsubclass_=False, pretty_print=True):
@@ -9665,7 +9665,7 @@ class fib_final_thickness_type(GeneratedsSuper):
         else:
             outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='fib_final_thickness_type'):
-        if self.units != "nm" and 'units' not in already_processed:
+        if self.units is not None and 'units' not in already_processed:
             already_processed.add('units')
             outfile.write(' units=%s' % (self.gds_encode(self.gds_format_string(quote_attrib(self.units), input_name='units')), ))
     def exportChildren(self, outfile, level, namespace_='', name_='fib_final_thickness_type', fromsubclass_=False, pretty_print=True):
