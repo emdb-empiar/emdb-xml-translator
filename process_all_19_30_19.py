@@ -46,45 +46,53 @@ def process_all_19_30_19(file_path_template_v19, out_dir_19_to_30, out_dir_30_to
     num_errors = 0
     num_success = 0
     error_list = []
-    i = 1
+    i = 0
     for emdb_19_file in emdb_19_files:
-        # print i
         i += 1
         if i > 0:
-            print i
+            #print i
             in_19_file = os.path.basename(emdb_19_file)
-            print in_19_file
-            out_30_file = os.path.join(out_dir_19_to_30, in_19_file)
-            # print 'out_30_file %s ' % out_30_file
-            # logging.info("Input file: %s, output file: %s", emdb_19_file, out_30_file)
-            command_list = list(command_list_19_to_30)
-            command_list.append(out_30_file)
-            command_list.append(emdb_19_file)
-            # cmd_text = ' '.join(command_list)
-            # logging.info('Executing: %s', cmd_text)
-            exit_code = subprocess.call(command_list)
-            if exit_code != 0:
-                num_errors += 1
-                error_list.append(in_19_file)
-            else:
-                num_success += 1
+            if in_19_file == 'emd-0051.xml':
+                print 'IN 1.9 FILE %s ' % emdb_19_file
 
-            # REVERSE
-            in_30_file = out_30_file
-            # print 'in_30_file %s' % in_30_file
-            out_19_file = os.path.join(out_dir_30_to_19, in_19_file)
-            # print 'out_19_file %s' % out_19_file
-            command_list = list(command_list_30_to_19)
-            command_list.append(out_19_file)
-            command_list.append(in_30_file)
-            cmd_text = ' '.join(command_list)
-            # print cmd_text
-            exit_code = subprocess.call(command_list)
+                out_30_file = os.path.join(out_dir_19_to_30, in_19_file)
+                print 'OUT 3.0 FILE %s ' % out_30_file
 
+                command_list = list(command_list_19_to_30)
+                command_list.append(out_30_file)
+                command_list.append(emdb_19_file)
+                cmd_text = ' '.join(command_list)
+                print 'EXECUTING %s ' % cmd_text
+
+                exit_code = subprocess.call(command_list)
+                if exit_code != 0:
+                    num_errors += 1
+                    error_list.append(in_19_file)
+                else:
+                    num_success += 1
+
+                # REVERSE
+                in_30_file = out_30_file
+                print 'IN 3.0 FILE %s' % in_30_file
+
+                out_19_file = os.path.join(out_dir_30_to_19, in_19_file)
+                print 'OUT 19 FILE %s' % out_19_file
+                command_list = list(command_list_30_to_19)
+                command_list.append(out_19_file)
+                command_list.append(in_30_file)
+                cmd_text = ' '.join(command_list)
+                print 'EXECUTING %s ' % cmd_text
+                exit_code = subprocess.call(command_list)
+
+                if exit_code != 0:
+                    num_errors += 1
+                    error_list.append(in_30_file)
+                else:
+                    num_success += 1
 
 def main():
     """
-    Convert all EMDB XML 3.0 header files to XML 1.9 files
+    Convert all EMDB XML 1.9 files to XML 3.0 relaxed header files and back to XML 1.9 files
     """
     file_path_template_v19 = EMDBSettings.header_19_19_template
     out_19_to_30_dir = EMDBSettings.emdb_19_to_30relax_dir_out
@@ -92,16 +100,12 @@ def main():
 
     # Handle command line options
     usage = """
-            python process_all_30_19.py [options]
+            python process_all_19_30_19.py [options]
             Convert all EMDB XML 3.0 header files to XML 1.9 files.
 
             Examples:
-            python process_all_30_19.py
+            python process_all_19_30_19.py
 
-            Typical run:
-            python process_all_30_19.py -t '/data/emdb30/emd-*.xml' -o '/data/emdb30_to_19'
-            /data/emdb30/emd-*.xml is the template used to glob all input 3.0 header files
-            /data/emdb30_to_19 is the output directory with the EMDB XML 1.9 files
             """
     version = "0.1"
     parser = OptionParser(usage=usage, version=version)
