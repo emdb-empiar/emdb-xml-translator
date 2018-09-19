@@ -24,7 +24,7 @@
             </xs:element>
         </xs:sequence>
         <xs:attribute name="emdb_id" type="emdb_id_type" use="required"/>
-        <xs:attribute name="version" type="xs:token" default="3.0.0.1"/>
+        <xs:attribute name="version" type="xs:token" default="3.0.1.1"/>
         <!-- <xs:attribute name="composite_structure" type="xs:boolean"/> -->
     </xs:complexType>
     <xs:complexType name="admin_type">
@@ -356,12 +356,11 @@
         <xs:union memberTypes="author_enums">
             <xs:simpleType>
                 <xs:restriction base="xs:token">
-                    <xs:pattern value="[A-Za-z '\-]+(Jr\.|III)? [A-Z\-]+"/>
+                    <xs:pattern value="[A-Za-z']+(( |-)[A-Za-z]+)*(Jr|III)?"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:union>
     </xs:simpleType>
-    
     <xs:complexType name="crossreferences_type">
         <xs:sequence>
             <xs:element name="citation_list">
@@ -393,22 +392,6 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <!-- 
-            <xs:element name="component_maps" minOccurs="0">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="component_map" maxOccurs="unbounded">
-                            <xs:complexType>
-                                <xs:sequence>
-                                    <xs:element name="comp_map_id" type="emdb_id_type" minOccurs="0"/>
-                                    <xs:element name="details" type="xs:string" minOccurs="0"/>
-                                </xs:sequence>
-                            </xs:complexType>
-                        </xs:element>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            -->
         </xs:sequence>
     </xs:complexType>
     <xs:element name="citation_type" abstract="true"/>
@@ -740,7 +723,14 @@
     </xs:complexType>
     <xs:complexType name="complex_natural_source_type">
         <xs:complexContent>
-            <xs:extension base="base_source_type"/>
+            <xs:extension base="base_source_type">
+                <xs:sequence>
+                    <xs:element name="tissue" type="xs:token" minOccurs="0"/>
+                    <xs:element name="cell" type="xs:token" minOccurs="0"/>
+                    <xs:element name="organelle" type="xs:token" minOccurs="0"/>
+                    <xs:element name="cellular_location" type="xs:token" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="recombinant_source_type">
@@ -2191,7 +2181,7 @@
             <xs:element name="software_list" type="software_list_type" minOccurs="0"/>
             <xs:element name="details" type="xs:string" minOccurs="0"/>
             <xs:element name="date" type="xs:date" minOccurs="0"/>
-            <xs:element name="image_recording_list">
+            <xs:element name="image_recording_list" minOccurs="0">
                 <xs:complexType>
                     <xs:sequence maxOccurs="unbounded">
                         <xs:element name="image_recording">
@@ -2729,6 +2719,7 @@
             <xs:enumeration value="EXACT BACK PROJECTION"/>
             <xs:enumeration value="FOURIER SPACE"/>
             <xs:enumeration value="SIMULTANEOUS ITERATIVE (SIRT)"/>
+            <xs:enumeration value="OTHER"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="resolution_type">
@@ -3784,7 +3775,7 @@
             <xs:element name="file">
                 <xs:simpleType>
                     <xs:restriction base="xs:token">
-                        <xs:pattern value="emd_\d{4,}_fsc.xml"/>
+                        <xs:pattern value="emd_\d{4,}_fsc(_[1-9]{1})*.xml"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>

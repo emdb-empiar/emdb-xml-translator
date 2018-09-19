@@ -2,21 +2,21 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Tue Aug  7 16:30:27 2018 by generateDS.py version 2.29.5.
+# Generated Wed Sep 19 13:36:15 2018 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
 #   ('--root-element', 'emd')
 #   ('-f', '')
-#   ('-o', '../../IdeaProjects/cif-emdb-translator/emdb.py')
+#   ('-o', '/Users/sanja/IdeaProjects/emdb-xml-translator/emdb_30.py')
 #   ('--no-warnings', '')
 #   ('--external-encoding', 'utf-8')
 #
 # Command line arguments:
-#   ../../IdeaProjects/emdb-schemas/v3/v3_0_0_1/emdb.xsd
+#   /Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_0_1/emdb.xsd
 #
 # Command line:
-#   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "../../IdeaProjects/cif-emdb-translator/emdb.py" --no-warnings --external-encoding="utf-8" ../../IdeaProjects/emdb-schemas/v3/v3_0_0_1/emdb.xsd
+#   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "/Users/sanja/IdeaProjects/emdb-xml-translator/emdb_30.py" --no-warnings --external-encoding="utf-8" /Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_0_1/emdb.xsd
 #
 # Current working directory (os.getcwd()):
 #   modified_generateDS-2.29.5
@@ -140,7 +140,10 @@ except ImportError as exp:
                     raise_parse_error(node, 'Requires sequence of integers')
             return values
         def gds_format_float(self, input_data, input_name=''):
-            return ('%.15f' % input_data).rstrip('0')
+            if (str(input_data)).endswith('.0'):
+                return ('%.1f' % input_data)
+            else:
+                return ('%.15f' % input_data).rstrip('0')
         def gds_validate_float(self, input_data, node=None, input_name=''):
             return input_data
         def gds_format_float_list(self, input_data, input_name=''):
@@ -32487,8 +32490,8 @@ def parseLiteral(inFileName, silence=False):
     # Enable Python to collect the space used by the DOM.
     doc = None
     if not silence:
-        sys.stdout.write('#from emdb import *\n\n')
-        sys.stdout.write('import emdb as model_\n\n')
+        sys.stdout.write('#from emdb_30 import *\n\n')
+        sys.stdout.write('import emdb_30 as model_\n\n')
         sys.stdout.write('rootObj = model_.rootClass(\n')
         rootObj.exportLiteral(sys.stdout, 0, name_=rootTag)
         sys.stdout.write(')\n')

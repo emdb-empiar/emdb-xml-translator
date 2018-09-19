@@ -2,24 +2,24 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Fri Jul  6 15:19:29 2018 by generateDS.py version 2.29.5.
+# Generated Wed Sep 19 13:34:40 2018 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
 #   ('--root-element', 'emd')
 #   ('-f', '')
-#   ('-o', '../../IdeaProjects/emdb-xml-translator/emdb_19.py')
+#   ('-o', '/Users/sanja/IdeaProjects/emdb-xml-translator/emdb_19.py')
 #   ('--no-warnings', '')
 #   ('--external-encoding', 'utf-8')
 #
 # Command line arguments:
-#   ../../IdeaProjects/emdb-schemas/current/emdb.xsd
+#   /Users/sanja/IdeaProjects/emdb-schemas/current/emdb.xsd
 #
 # Command line:
-#   /Users/sanja/Documents/generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "../../IdeaProjects/emdb-xml-translator/emdb_19.py" --no-warnings --external-encoding="utf-8" ../../IdeaProjects/emdb-schemas/current/emdb.xsd
+#   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "/Users/sanja/IdeaProjects/emdb-xml-translator/emdb_19.py" --no-warnings --external-encoding="utf-8" /Users/sanja/IdeaProjects/emdb-schemas/current/emdb.xsd
 #
 # Current working directory (os.getcwd()):
-#   generateDS-2.29.5
+#   modified_generateDS-2.29.5
 #
 
 import sys
@@ -140,7 +140,10 @@ except ImportError as exp:
                     raise_parse_error(node, 'Requires sequence of integers')
             return values
         def gds_format_float(self, input_data, input_name=''):
-            return ('%.15f' % input_data).rstrip('0')
+            if (str(input_data)).endswith('.0'):
+                return ('%.1f' % input_data)
+            else:
+                return ('%.15f' % input_data).rstrip('0')
         def gds_validate_float(self, input_data, node=None, input_name=''):
             return input_data
         def gds_format_float_list(self, input_data, input_name=''):

@@ -41,35 +41,40 @@ def process_all_19_30(file_path_template, out_dir):
     """
     TO DO
     """
-    command_list_base = ['python', './emdb_xml_translate.py', '-f']
+    command_list_base = ['python', './emdb_xml_translate.py', '-v', '-r', '-f']
     emdb_files = glob.glob(file_path_template)
     num_errors = 0
     num_success = 0
     error_list = []
     i = 1
     for emdb_file in emdb_files:
-        print i
-        i = i + 1
         inf = os.path.basename(emdb_file)
-        outf = os.path.join(out_dir, inf)
-        logging.info("Input file: %s, output file: %s", emdb_file, outf)
-        command_list = list(command_list_base)
-        command_list.append(outf)
-        command_list.append(emdb_file)
-        cmd_text = ' '.join(command_list)
-        logging.info('Executing: %s', cmd_text)
-        exit_code = subprocess.call(command_list)
-        if exit_code != 0:
-            num_errors += 1
-            error_list.append(inf)
-        else:
-            num_success += 1
-    logging.warning('%d files successfully processed!', num_success)
-    if num_errors > 0:
-        logging.warning('%d errors!', num_errors)
-        logging.warning('List of entries that were not translated')
-        for entry in error_list:
-            logging.warning(entry)
+        if True: # inf.find("EMD-1001") != -1:
+            print i
+            i = i + 1
+            print inf
+            #print "IN: %s" % emdb_file
+            outf = os.path.join(out_dir, inf)
+            #print "OUT: %s" % outf
+            # logging.info("Input file: %s, output file: %s", emdb_file, outf)
+            command_list = list(command_list_base)
+            command_list.append(outf)
+            command_list.append(emdb_file)
+            cmd_text = ' '.join(command_list)
+            #print "EXEC: %s" % cmd_text
+            #logging.info('Executing: %s', cmd_text)
+            exit_code = subprocess.call(command_list)
+            if exit_code != 0:
+                num_errors += 1
+                error_list.append(inf)
+            else:
+                num_success += 1
+                # logging.warning('%d files successfully processed!', num_success)
+                # if num_errors > 0:
+                #     logging.warning('%d errors!', num_errors)
+                #     logging.warning('List of entries that were not translated')
+                #     for entry in error_list:
+                #         logging.warning(entry)
 
 
 def main():
@@ -88,17 +93,16 @@ def main():
             python process_all_19_30.py
 
             Typical run:
-            python process_all_19_30.py -t '/data/emstaging/EMD-*/header/emd-*.xml' -o '/data/emdb30'
-            /data/emstaging/EMD-*/header/emd-*.xml is the template used to glob all input 1.9 header files
-            /data/emdb20 is the output directory with the EMDB XML 3.0 files
-
-            python process_all_19_30.py -t '../emdb_xml_translator/emdb_xml_translator/data/output/v2.0_strict_to_1.9/EMD-*.xml' -o '../emdb_xml_translator/emdb_xml_translator/data/output/tmp/'
+            python process_all_19_30.py -t 'data/input/v1.9/EMD-*.xml' -o 'data/output/emdb19_to_30'
+            
+            # /data/input/v1.9/emd-*.xml is the template used to glob all input 1.9 header files
+            # /data/output/emdb19_to_30 is the output directory with the translated EMDB XML 3.0 files
 
             """
     version = "0.1"
     parser = OptionParser(usage=usage, version=version)
     parser.add_option("-t", "--template", action="store", type="string", metavar="TEMPLATE", dest="filePathTemplate", default=default_file_path_template, help="Template used to glob all input 1.9 header files [default: %default]")
-    parser.add_option("-o", "--out-dir", action="store", type="string", metavar="DIR", dest="outDir", default=default_out_dir, help="Directory for EMDB XML 2.0 files [default: %default]")
+    parser.add_option("-o", "--out-dir", action="store", type="string", metavar="DIR", dest="outDir", default=default_out_dir, help="Directory for EMDB XML 3.0 files [default: %default]")
     (options, args) = parser.parse_args()
     process_all_19_30(options.filePathTemplate, options.outDir)
 

@@ -53,23 +53,24 @@ def diff_all(v_19_dir, v_30_to_19_dir, out_dir):
     error_list = []
     for emdb_file in emdb_files:
         inf = os.path.basename(emdb_file)
-        outf_base = inf[0:-4] + '.txt'
-        outf = os.path.join(out_dir, outf_base)
-        v_19_file = os.path.join(v_19_dir, inf)
-        v_30_to_19_file = os.path.join(v_30_to_19_dir, inf)
-        logging.info("v1.9 file: %s, v3.0 to 1.9 file: %s, output file: %s", v_19_file, v_30_to_19_file, outf)
-        command_list = list(command_list_base)
-        command_list.append(v_19_file)
-        command_list.append(v_30_to_19_file)
-        cmd_text = ' '.join(command_list)
-        logging.info('Executing: %s', cmd_text)
-        with open(outf, 'w') as out_f:
-            exit_code = subprocess.call(command_list, stdout=out_f)
-            if exit_code > 1:
-                num_errors += 1
-                error_list.append(inf)
-            else:
-                num_success += 1
+        if inf.find("emd-6") != -1: # or inf.find("emd-2") != -1:
+            outf_base = inf[0:-4] + '.txt'
+            outf = os.path.join(out_dir, outf_base)
+            v_19_file = os.path.join(v_19_dir, inf)
+            v_30_to_19_file = os.path.join(v_30_to_19_dir, inf)
+            logging.info("v1.9 file: %s, v3.0 to 1.9 file: %s, output file: %s", v_19_file, v_30_to_19_file, outf)
+            command_list = list(command_list_base)
+            command_list.append(v_19_file)
+            command_list.append(v_30_to_19_file)
+            cmd_text = ' '.join(command_list)
+            logging.info('Executing: %s', cmd_text)
+            with open(outf, 'w') as out_f:
+                exit_code = subprocess.call(command_list, stdout=out_f)
+                if exit_code > 1:
+                    num_errors += 1
+                    error_list.append(inf)
+                else:
+                    num_success += 1
     logging.warning('%d files successfully processed!', num_success)
     if num_errors > 0:
         logging.warning('%d errors!', num_errors)

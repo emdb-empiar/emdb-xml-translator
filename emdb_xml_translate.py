@@ -47,7 +47,7 @@ class EMDBXMLTranslator(object):
         There are many constants in use for the translation. They have been collected here for  ease of use.
         """
         # Global constants
-        LATEST_XML_VERSION = '3.0.0.0'
+        LATEST_XML_VERSION = '3.0.1.1'
         # Used to identify sample supramolecule
         EM_SAMPLE_ID = 1000
         EM_DATE_FORMAT = '%d-%b-%Y'
@@ -119,9 +119,6 @@ class EMDBXMLTranslator(object):
                             'FLEXIBLE FIT': 'flexible',
                             'OTHER': 'flexible',
                             'RIGID BODY FIT': 'rigid body'}
-
-        FITTING_19_to_30 = {'flexible': 'FLEXIBLE FIT',
-                            'rigid body': 'RIGID BODY FIT'}
 
         SPECIMEN_HOLDER_30_to_19 = {'FEI TITAN KRIOS AUTOGRID HOLDER': 'FEI TITAN KRIOS AUTOGRID HOLDER',
                                     'GATAN 626 SINGLE TILT LIQUID NITROGEN CRYO TRANSFER HOLDER': 'GATAN LIQUID NITROGEN',
@@ -354,15 +351,27 @@ class EMDBXMLTranslator(object):
                 index = 1
                 for auth_str_in in auth_in:
                     if auth_str_in != '':
+                        known_issues = {'D Lindner': 'Lindner D',
+                                        'MJ Tarry': 'Tarry MJ',
+                                        'E Schaefer': 'Schaefer E',
+                                        'S Chen': 'Chen S',
+                                        'G Buchanan': 'Buchanan G',
+                                        'SM Lea': 'Lea SM',
+                                        'T Palmer': 'Palmer T',
+                                        'HR Saibil': 'Saibil HR',
+                                        'BC Berks': 'Berks BC'}
+                        auth_str = auth_str_in
+                        if auth_str_in in known_issues:
+                            auth_str = known_issues.get(auth_str_in)
                         if simple is False:
                             author = emdb30.author_order_type()
-                            author.set_valueOf_(auth_str_in)
+                            author.set_valueOf_(auth_str)
                             author.set_order(index)
                             if author.hasContent_():
                                 add_author(author)
                                 index += 1
                         else:
-                            add_author(auth_str_in)
+                            add_author(auth_str)
 
         def copy_citation(cit_in, cit_out):
             """
@@ -400,22 +409,22 @@ class EMDBXMLTranslator(object):
                 # XSD: <xs:element name="volume" type="xs:string" nillable="true" minOccurs="0"/>
                 # This is a fix because of bad data - emd-1648.xml has an empty volume tag!
                 vol = jrnl_in.get_volume()
-                if vol is not None and len(vol) > 0:
+                if vol is not None and len(vol) > 0 and vol != 'n/a':
                     jrnl.set_volume(vol)
                 # element 8 - <xs:element name="journal_citation" substitutionGroup="citation_type">
                 # XSD: <xs:element name="first_page" type="page_type" nillable="false" minOccurs="0"/>
                 first_page = jrnl_in.get_firstPage()
-                if first_page is not None and len(first_page) > 0:
+                if first_page is not None and len(first_page) > 0 and first_page != 'n/a':
                     jrnl.set_first_page(first_page)
                 # element 9 - <xs:element name="journal_citation" substitutionGroup="citation_type">
                 # XSD: <xs:element name="last_page" type="page_type" minOccurs="0"/>
                 last_page = jrnl_in.get_lastPage()
-                if last_page is not None and len(last_page) > 0:
+                if last_page is not None and len(last_page) > 0 and last_page != 'n/a':
                     jrnl.set_last_page(last_page)
                 # element 10 - <xs:element name="journal_citation" substitutionGroup="citation_type">
                 # XSD: <xs:element name="year" minOccurs="0">
                 year = jrnl_in.get_year()
-                if year is not None and len(year) > 0:
+                if year is not None and len(year) > 0 and year != 'n/a':
                     jrnl.set_year(year)
                 # element 11 - <xs:element name="journal_citation" substitutionGroup="citation_type">
                 # XSD: <xs:element name="language" type="xs:language" minOccurs="0"/>
@@ -439,7 +448,8 @@ class EMDBXMLTranslator(object):
                 copy_authors(non_jrnl_in.get_authors, non_jrnl.add_author)
                 # element 2 - <xs:element name="non_journal_citation" substitutionGroup="citation_type">
                 # XSD: <xs:element name="editor" type="author_order_type" minOccurs="0" maxOccurs="unbounded"/>
-                copy_authors(non_jrnl_in.get_editor, non_jrnl.add_editor)
+                if non_jrnl_in.get_editor() != 'n/a':
+                    copy_authors(non_jrnl_in.get_editor, non_jrnl.add_editor)
                 # element 3 - <xs:element name="non_journal_citation" substitutionGroup="citation_type">
                 # XSD: <xs:element name="title" type="xs:token"/>
                 self.check_set(non_jrnl_in.get_book, non_jrnl.set_title)
@@ -544,15 +554,20 @@ class EMDBXMLTranslator(object):
             @param wt_exp_in: Experimental molecular weight
             @param wt_meth_in: Method used for calculating experimental weight
             """
-            if wt_theo_in is not None or wt_exp_in is not None or wt_meth_in is not None:
-                mol_wt = emdb30.molecular_weight_type()
+            mol_wt = emdb30.molecular_weight_type()
+            if wt_exp_in is not None:
+                wt_exp = wt_exp_in.get_valueOf_()
+                if wt_exp != '0':
+                    mol_wt.set_experimental(emdb30.experimentalType(valueOf_=wt_exp, units=wt_exp_in.get_units()))
+            if wt_theo_in is not None:
+                wt_theo = wt_theo_in.get_valueOf_()
+                if wt_theo != '0':
+                    mol_wt.set_theoretical(emdb30.theoreticalType(valueOf_=wt_theo, units=wt_theo_in.get_units()))
+            if wt_meth_in is not None:
+                mol_wt.set_method(wt_meth_in)
+
+            if mol_wt.hasContent_():
                 setter_func(mol_wt)
-                if wt_exp_in is not None:
-                    mol_wt.set_experimental(emdb30.experimentalType(valueOf_=wt_exp_in.get_valueOf_(), units=wt_exp_in.get_units()))
-                if wt_theo_in is not None:
-                    mol_wt.set_theoretical(emdb30.theoreticalType(valueOf_=wt_theo_in.get_valueOf_(), units=wt_theo_in.get_units()))
-                if wt_meth_in is not None:
-                    mol_wt.set_method(wt_meth_in)
 
         def add_reference(x_ref_in, adder_func):
             """
@@ -620,29 +635,29 @@ class EMDBXMLTranslator(object):
             grp_num = map_in.get_spaceGroupNumber()
             if grp_num is not None:
                 sym.set_space_group(grp_num)
-            # choice 2 - <xs:element name="symmetry" type="applied_symmetry_type" minOccurs="0">
-            # XSD: <xs:element name="point_group">
-            # choice 3 - <xs:element name="symmetry" type="applied_symmetry_type" minOccurs="0">
-            # XSD: <xs:element name="helical_parameters" type="helical_parameters_type">
-#             if spec_prep_in is not None:
-#                 # XSD: <xs:complexType name="helical_parameters_type"> has 3 elements
-#                 hel = emdb30.helical_parameters_type()
-#                 hel_in = spec_prep_in.get_helicalParameters()
-#                 if hel_in is not None:
-#                     # sym = emdb30.applied_symmetry_type()
-#                     # element 1 - <xs:complexType name="helical_parameters_type">
-#                     # XSD: <xs:element name="delta_z">
-#                     self.set_value_and_units(hel_in.get_deltaZ, hel.set_delta_z, emdb30.delta_zType, units=const.U_ANG)
-#                     # element 2 - <xs:complexType name="helical_parameters_type">
-#                     # XSD: <xs:element name="delta_phi">
-#                     self.set_value_and_units(hel_in.get_deltaPhi, hel.set_delta_phi, emdb30.delta_phiType, units=const.U_DEG)
-#                     # element 3 - <xs:complexType name="helical_parameters_type">
-#                     # XSD: <xs:element name="axial_symmetry">
-#                     self.check_set(hel_in.get_axialSymmetry, hel.set_axial_symmetry)
-#                     # not in the schema anymore
-#                     # self.check_set(hel_in.get_hand, hel.set_hand)
-#                     if hel.hasContent_():
-#                         sym.set_helical_parameters(hel)
+                # choice 2 - <xs:element name="symmetry" type="applied_symmetry_type" minOccurs="0">
+                # XSD: <xs:element name="point_group">
+                # choice 3 - <xs:element name="symmetry" type="applied_symmetry_type" minOccurs="0">
+                # XSD: <xs:element name="helical_parameters" type="helical_parameters_type">
+            #             if spec_prep_in is not None:
+            #                 # XSD: <xs:complexType name="helical_parameters_type"> has 3 elements
+            #                 hel = emdb30.helical_parameters_type()
+            #                 hel_in = spec_prep_in.get_helicalParameters()
+            #                 if hel_in is not None:
+            #                     # sym = emdb30.applied_symmetry_type()
+            #                     # element 1 - <xs:complexType name="helical_parameters_type">
+            #                     # XSD: <xs:element name="delta_z">
+            #                     self.set_value_and_units(hel_in.get_deltaZ, hel.set_delta_z, emdb30.delta_zType, units=const.U_ANG)
+            #                     # element 2 - <xs:complexType name="helical_parameters_type">
+            #                     # XSD: <xs:element name="delta_phi">
+            #                     self.set_value_and_units(hel_in.get_deltaPhi, hel.set_delta_phi, emdb30.delta_phiType, units=const.U_DEG)
+            #                     # element 3 - <xs:complexType name="helical_parameters_type">
+            #                     # XSD: <xs:element name="axial_symmetry">
+            #                     self.check_set(hel_in.get_axialSymmetry, hel.set_axial_symmetry)
+            #                     # not in the schema anymore
+            #                     # self.check_set(hel_in.get_hand, hel.set_hand)
+            #                     if hel.hasContent_():
+            #                         sym.set_helical_parameters(hel)
 
             map_out.set_symmetry(sym)
             # element 3 - <xs:complexType name="map_type">
@@ -760,9 +775,12 @@ class EMDBXMLTranslator(object):
             map_details = map_in.get_details()
             all_details = add_contour_level_details
             if map_details is not None:
-                all_details = map_details + add_contour_level_details
-            if all_details != '':
-                map_out.set_details(all_details)
+                if self.roundtrip:
+                    all_details = map_details + add_contour_level_details
+                    if all_details != '':
+                        map_out.set_details(all_details)
+                else:
+                    map_out.set_details(map_details)
 
         def set_base_preparation(prep, spec_prep_in, vitr_in):
             """
@@ -849,14 +867,11 @@ class EMDBXMLTranslator(object):
                 # XSD: <xs:element name="cryogen_name">
                 cryo_name = v_in.get_cryogenName()
                 if cryo_name is not None:
-                    if self.roundtrip:
+                    allowed_cryo_names = ['ETHANE', 'ETHANE-PROPANE MIXTURE', 'METHANE', 'NITROGEN', 'HELIUM', 'PROPANE', 'FREON 12', 'FREON 22', 'NONE', 'OTHER']
+                    if cryo_name in allowed_cryo_names:
                         vitr.set_cryogen_name(cryo_name)
                     else:
-                        allowed_cryo_names = ['ETHANE', 'ETHANE-PROPANE MIXTURE', 'METHANE', 'NITROGEN', 'HELIUM', 'PROPANE', 'FREON 12', 'FREON 22', 'NONE', 'OTHER']
-                        if cryo_name in allowed_cryo_names:
-                            vitr.set_cryogen_name(cryo_name)
-                        else:
-                            vitr.set_cryogen_name('OTHER')
+                        vitr.set_cryogen_name('OTHER')
                 # element 2 - <xs:complexType name="vitrification_type">
                 # XSD: <xs:element name="chamber_humidity" minOccurs="0">
                 humidity_in = v_in.get_humidity()
@@ -870,11 +885,15 @@ class EMDBXMLTranslator(object):
                 # element 4 - <xs:complexType name="vitrification_type">
                 # XSD: <xs:element name="instrument" minOccurs="0">
                 vitr_instrument = v_in.get_instrument()
-                # allowed_vitr_instruments = ['FEI VITROBOT MARK I', 'FEI VITROBOT MARK II', 'FEI VITROBOT MARK III', 'FEI VITROBOT MARK IV', 'GATAN CRYOPLUNGE 3', 'HOMEMADE PLUNGER', 'LEICA EM CPC', 'LEICA EM GP', 'LEICA KF80', 'LEICA PLUNGER', 'REICHERT-JUNG PLUNGER', 'OTHER']
-                # if vitr_instrument in allowed_vitr_instruments:
-                vitr.set_instrument(vitr_instrument)
-                #else:
-                # vitr.set_instrument('OTHER')
+                allowed_vitrification_instruments = ['EMS-002 RAPID IMMERSION FREEZER', 'FEI VITROBOT MARK I', 'FEI VITROBOT MARK II', 'FEI VITROBOT MARK III', 'FEI VITROBOT MARK IV', 'GATAN CRYOPLUNGE 3', 'HOMEMADE PLUNGER', 'LEICA EM CPC', 'LEICA EM GP', 'LEICA KF80', 'LEICA PLUNGER', 'REICHERT-JUNG PLUNGER', 'SPOTITON', 'OTHER']
+                if vitr_instrument is not None:
+                    if self.roundtrip:
+                        vitr.set_instrument(vitr_instrument)
+                    else:
+                        if vitr_instrument in allowed_vitrification_instruments:
+                            vitr.set_instrument(vitr_instrument)
+                        else:
+                            vitr.set_instrument('OTHER')
                 # element 5 - <xs:complexType name="vitrification_type">
                 # XSD: <xs:element name="details" type="xs:string" minOccurs="0">
                 self.check_set(v_in.get_details, vitr.set_details)
@@ -891,7 +910,10 @@ class EMDBXMLTranslator(object):
             if spec_prep_in is not None:
                 cryst_grow_details = spec_prep_in.get_crystalGrowDetails()
                 if cryst_grow_details is not None and cryst_grow_details != '':
-                    prep.set_details('crystalGrowDetails: %s :crystalGrowDetails' % cryst_grow_details)
+                    if self.roundtrip:
+                        prep.set_details('crystalGrowDetails: %s :crystalGrowDetails' % cryst_grow_details)
+                    else:
+                        prep.set_details(cryst_grow_details)
 
         def set_base_microscopy(mic, img, im_ac_in):
             """
@@ -939,12 +961,13 @@ class EMDBXMLTranslator(object):
                 if units_def_min is not None:
                     if units_def_min == const.U_NM:
                         nominal_defoc_min_val = nominal_defoc_min.valueOf_
-                        if nominal_defoc_min_val.find('.') == -1:
-                            # the number is integer; write this into details as a note for round trip
-                            add_to_details_nom_defocus_min = '{nominal defocus min is int}'
+                        if self.roundtrip:
+                            if nominal_defoc_min_val.find('.') == -1:
+                                # the number is integer; write this into details as a note for round trip
+                                add_to_details_nom_defocus_min = '{nominal defocus min is int}'
                         mic.set_nominal_defocus_min(emdb30.nominal_defocus_minType(valueOf_=float(nominal_defoc_min_val) * 0.001, units=const.U_MICROM))
                     elif units_def_min == const.U_MICROM:
-                        mic.set_nominal_defocus_min(emdb30.nominal_defocus_minType(valueOf_=nominal_defoc_min_val, units=const.U_MICROM))
+                        mic.set_nominal_defocus_min(emdb30.nominal_defocus_minType(valueOf_=nominal_defoc_min.valueOf_, units=const.U_MICROM))
             # element 10 - <xs:complexType name="base_microscopy_type">
             # XSD: <xs:element name="calibrated_defocus_min" minOccurs="0">
             # element 11 - <xs:complexType name="base_microscopy_type">
@@ -956,12 +979,13 @@ class EMDBXMLTranslator(object):
                 if units_def_max is not None:
                     if units_def_max == const.U_NM:
                         nominal_defoc_max_val = nominal_defoc_max.valueOf_
-                        if nominal_defoc_max_val.find('.') == -1:
-                            # the number is integer; write this into details as a note for round trip
-                            add_to_details_nom_defocus_max = '{nominal defocus max is int}'
+                        if self.roundtrip:
+                            if nominal_defoc_max_val.find('.') == -1:
+                                # the number is integer; write this into details as a note for round trip
+                                add_to_details_nom_defocus_max = '{nominal defocus max is int}'
                         mic.set_nominal_defocus_max(emdb30.nominal_defocus_maxType(valueOf_=float(nominal_defoc_max_val) * 0.001, units=const.U_MICROM))
                     else:
-                        mic.set_nominal_defocus_max(emdb30.nominal_defocus_maxType(valueOf_=nominal_defoc_max_val, units=const.U_MICROM))
+                        mic.set_nominal_defocus_max(emdb30.nominal_defocus_maxType(valueOf_=nominal_defoc_max.valueOf_, units=const.U_MICROM))
             # element 12 - <xs:complexType name="base_microscopy_type">
             # XSD: <xs:element name="calibrated_defocus_max" minOccurs="0">
             # element 13 - <xs:complexType name="base_microscopy_type">
@@ -969,7 +993,10 @@ class EMDBXMLTranslator(object):
             self.check_set(img.get_nominalMagnification, mic.set_nominal_magnification)
             # element 14 - <xs:complexType name="base_microscopy_type">
             # XSD: <xs:element name="calibrated_magnification" type="allowed_magnification" minOccurs="0">
-            self.check_set(img.get_calibratedMagnification, mic.set_calibrated_magnification)
+            cal_mag = img.get_calibratedMagnification()
+            if cal_mag is not None:
+                if cal_mag >= 1000 and cal_mag <= 500000:
+                    mic.set_calibrated_magnification(cal_mag)
             # element 15 - <xs:complexType name="base_microscopy_type">
             # XSD: <xs:element name="specimen_holder_model" minOccurs="0">
             self.check_set(img.get_specimenHolderModel, mic.set_specimen_holder_model)
@@ -993,7 +1020,8 @@ class EMDBXMLTranslator(object):
             temp_av_in = img.get_temperature()
             if temp_av_in is not None:
                 temp.set_temperature_average(emdb30.temperature_type(valueOf_=temp_av_in.get_valueOf_(), units=const.U_KEL))
-            mic.set_temperature(temp)
+            if temp.hasContent_():
+                mic.set_temperature(temp)
             # element 18 - <xs:complexType name="base_microscopy_type">
             # XSD: <xs:element name="alignment_procedure" minOccurs="0"> has 1 element of 6 choices
             align = emdb30.alignment_procedureType()
@@ -1089,24 +1117,22 @@ class EMDBXMLTranslator(object):
             # XSD: <xs:element name="date" type="xs:date" minOccurs="0">
             date_in = img.get_date()
             if date_in is not None:
-                if self.roundtrip:
-                    known_date_issues = {'2001-19-12': '2001-12-19'}
-                    if date_in in known_date_issues:
-                        date_corr = known_date_issues.get(date_in)
-                        date_corr_prs = dtp.parse(date_corr)
-                        mic.set_date(date_corr_prs)
-                    else:
-                        try:
-                            date_prs = dtp.parse(date_in)
-                            mic.set_date(date_prs)
-                        except:
-                            self.warn(1, "Unrecognized date format: %s" % date_in)
+                known_date_issues = {'2001-19-12': '2001-12-19', '2004-17-11': '2004-11-17', '2006-15-06': '2006-06-15'}
+                #                      '2003-00-00': '2003-01-01','2004-09-00': '2004-09-01', '2005-08-00': '2005-08-01',
+                if date_in in known_date_issues:
+                    date_corr = known_date_issues.get(date_in)
+                    date_corr_prs = dtp.parse(date_corr)
+                    mic.set_date(date_corr_prs)
                 else:
+                    parsed = True
                     try:
                         date_prs = dtp.parse(date_in)
-                        mic.set_date(date_prs)
                     except:
+                        parsed = False
                         self.warn(1, "Unrecognized date format: %s" % date_in)
+                    if parsed:
+                        mic.set_date(date_prs)
+
             # element 23 - <xs:complexType name="base_microscopy_type">
             # XSD: <xs:element name="image_recording_list"> has 1 element
             im_rec_list = emdb30.image_recording_listType()
@@ -1127,7 +1153,6 @@ class EMDBXMLTranslator(object):
                         if self.roundtrip:
                             fod.set_valueOf_(detector_in)
                         else:
-                            detect_in = detector_in.upper()
                             allowed_detectors = ['AGFA SCIENTA FILM', 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)', 'DIRECT ELECTRON DE-16 (4k x 4k)',
                                                  'DIRECT ELECTRON DE-20 (5k x 3k)', 'DIRECT ELECTRON DE-64 (8k x 8k)', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)',
                                                  'FEI EAGLE (4k x 4k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)', 'FEI FALCON III (4k x 4k)', 'GATAN K2 (4k x 4k)',
@@ -1138,8 +1163,9 @@ class EMDBXMLTranslator(object):
                                                  'GENERIC GATAN (4k x 4k)', 'GENERIC IMAGE PLATES', 'GENERIC TVIPS', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)',
                                                  'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'OTHER', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F216 (2k x 2k)',
                                                  'TVIPS TEMCAM-F224 (2k x 2k)', 'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F816 (8k x 8k)']
-                            if detect_in in allowed_detectors:
-                                fod.set_valueOf_(detect_in)
+
+                            if detector_in in allowed_detectors:
+                                fod.set_valueOf_(detector_in)
                             else:
                                 fod.set_valueOf_('OTHER')
                     if fod.hasContent_():
@@ -1148,7 +1174,8 @@ class EMDBXMLTranslator(object):
                 # XSD: <xs:element name="average_electron_dose_per_image" minOccurs="0">
                 dose_in = img.get_electronDose()
                 if dose_in is not None:
-                    im_rec.set_average_electron_dose_per_image(emdb30.average_electron_dose_per_imageType(valueOf_=dose_in.get_valueOf_(), units=const.U_EOVERANGSQR))
+                    dose_value = dose_in.get_valueOf_()
+                    im_rec.set_average_electron_dose_per_image(emdb30.average_electron_dose_per_imageType(valueOf_=dose_value, units=const.U_EOVERANGSQR))
                 # element 9 - <xs:element name="image_recording">
                 # XSD: <xs:element name="detector_distance" type="xs:string" minOccurs="0"/>
                 self.check_set(img.get_detectorDistance, im_rec.set_detector_distance)
@@ -1190,7 +1217,6 @@ class EMDBXMLTranslator(object):
                         if self.roundtrip:
                             fod.set_valueOf_(detector_in)
                         else:
-                            detect_in = detector_in.upper()
                             allowed_detectors = ['AGFA SCIENTA FILM', 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)', 'DIRECT ELECTRON DE-16 (4k x 4k)',
                                                  'DIRECT ELECTRON DE-20 (5k x 3k)', 'DIRECT ELECTRON DE-64 (8k x 8k)', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)',
                                                  'FEI EAGLE (4k x 4k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)', 'FEI FALCON III (4k x 4k)', 'GATAN K2 (4k x 4k)',
@@ -1201,8 +1227,8 @@ class EMDBXMLTranslator(object):
                                                  'GENERIC GATAN (4k x 4k)', 'GENERIC IMAGE PLATES', 'GENERIC TVIPS', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)',
                                                  'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'OTHER', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F216 (2k x 2k)',
                                                  'TVIPS TEMCAM-F224 (2k x 2k)', 'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F816 (8k x 8k)']
-                            if detect_in in allowed_detectors:
-                                fod.set_valueOf_(detect_in)
+                            if detector_in in allowed_detectors:
+                                fod.set_valueOf_(detector_in)
                             else:
                                 fod.set_valueOf_('OTHER')
                     # attribute 1 - <xs:element name="film_or_detector_model">
@@ -1224,7 +1250,11 @@ class EMDBXMLTranslator(object):
                     # element 1 - <xs:element name="digitization_details" minOccurs="0">
                     # XSD: <xs:element name="scanner" minOccurs="0">
                     if scanner_in is not None:
-                        dig.set_scanner(scanner_in)
+                        allowed_scanners = ['EIKONIX IEEE 488', 'EMIL 10', 'IMACON', 'NIKON COOLSCAN', 'NIKON SUPER COOLSCAN 9000', 'OPTRONICS', 'OTHER', 'PATCHWORK DENSITOMETER', 'PERKIN ELMER', 'PRIMESCAN', 'TEMSCAN', 'ZEISS SCAI']
+                        if scanner_in in allowed_scanners:
+                            dig.set_scanner(scanner_in)
+                        else:
+                            dig.set_scanner('OTHER')
                     # element 2 - <xs:element name="digitization_details" minOccurs="0">
                     # XSD: <xs:element name="dimensions" minOccurs="0">
                     # element 3 - <xs:element name="digitization_details" minOccurs="0">
@@ -1249,7 +1279,8 @@ class EMDBXMLTranslator(object):
                     # XSD: <xs:element name="average_electron_dose_per_image" minOccurs="0">
                     dose_in = img.get_electronDose()
                     if dose_in is not None:
-                        im_rec.set_average_electron_dose_per_image(emdb30.average_electron_dose_per_imageType(valueOf_=dose_in.get_valueOf_(), units=const.U_EOVERANGSQR))
+                        dose = dose_in.get_valueOf_()
+                        im_rec.set_average_electron_dose_per_image(emdb30.average_electron_dose_per_imageType(valueOf_=dose, units=const.U_EOVERANGSQR))
                     # element 9 - <xs:element name="image_recording">
                     # XSD: <xs:element name="detector_distance" type="xs:string" minOccurs="0"/>
                     self.check_set(img.get_detectorDistance, im_rec.set_detector_distance)
@@ -1601,7 +1632,7 @@ class EMDBXMLTranslator(object):
 
         xml_out.set_crossreferences(cref)
 
-        def set_base_supramolecule(supmol, supmol_id, supmol_in, comp_in=None):
+        def set_base_supramolecule(supmol, supmol_id, supmol_in, comp_in=None, rib_cat=None):
             """
             1.9 -> 3.0: Method that sets the elements that are common to all supramolecules.
 
@@ -1905,13 +1936,13 @@ class EMDBXMLTranslator(object):
                             l_ext_refs = l_in.get_externalReferences()
                             if l_ext_refs is not None and l_ext_refs.hasContent_():
                                 add_mol_references(ligand_mol.add_external_references, l_ext_refs)
-#                                 for ext_ref in ext_refs:
-#                                     if ext_ref.original_tagname_ == 'refUniProt':
-#                                         ligand_mol.add_external_references(valueOf_=ext_ref.valueOf_, type='')
-#                                     if ext_ref.original_tagname_ == 'refGo':
-#                                         ligand_mol.add_external_references(valueOf_=ext_ref.valueOf_, type='')
-#                                     if ext_ref.original_tagname_ == 'refInterpro':
-#                                         ligand_mol.add_external_references(valueOf_=ext_ref.valueOf_, type='')
+                            #                                 for ext_ref in ext_refs:
+                            #                                     if ext_ref.original_tagname_ == 'refUniProt':
+                            #                                         ligand_mol.add_external_references(valueOf_=ext_ref.valueOf_, type='')
+                            #                                     if ext_ref.original_tagname_ == 'refGo':
+                            #                                         ligand_mol.add_external_references(valueOf_=ext_ref.valueOf_, type='')
+                            #                                     if ext_ref.original_tagname_ == 'refInterpro':
+                            #                                         ligand_mol.add_external_references(valueOf_=ext_ref.valueOf_, type='')
                             # element 3 - <xs:element name="ligand" substitutionGroup="macromolecule" type="ligand_macromolecule_type">
                             # XSD: <xs:element name="recombinant_expression" type="recombinant_source_type" minOccurs="0"/>
                             eng_source = l_in.get_engSource()
@@ -2103,10 +2134,9 @@ class EMDBXMLTranslator(object):
                                     if strain_in is not None:
                                         strain = emdb30.organism_type()
                                         # XSD: <xs:complexType name="organism_type"> has 1 attribute and is ext of token
-                                        strain.set_valueOf_(strain_in)
                                         # attribute 1 - <xs:complexType name="organism_type">
                                         # XSD: <xs:attribute name="ncbi" type="xs:positiveInteger"/>
-                                        vir_nat_source.set_strain(strain)
+                                        vir_nat_source.set_strain(strain_in)
                                     # element 3 - <xs:complexType name="base_source_type">
                                     # XSD: <xs:element name="synonym_organism" type="xs:token" minOccurs="0">
                                     self.check_set(vir_ns_in.get_hostCategory, vir_nat_source.set_synonym_organism)
@@ -2255,7 +2285,7 @@ class EMDBXMLTranslator(object):
                             # element 1 - <xs:complexType name="complex_supramolecule_type">
                             # XSD: <xs:element name="natural_source" type="complex_natural_source_type" minOccurs="0" maxOccurs="unbounded"/>
                             complex_smol_nat_source = emdb30.complex_natural_source_type()
-                            set_mol_natural_source(complex_smol_nat_source, component_in, complex_smol_in, tissue=False, cell=False, organelle=False, cell_loc=False)
+                            set_mol_natural_source(complex_smol_nat_source, component_in, complex_smol_in, tissue=True, cell=True, organelle=True, cell_loc=True)
                             if complex_smol_nat_source.hasContent_():
                                 complex_smol.add_natural_source(complex_smol_nat_source)
                             # element 2 - <xs:complexType name="complex_supramolecule_type">
@@ -2579,18 +2609,32 @@ class EMDBXMLTranslator(object):
                         self.set_value_and_units(hx_par_in.get_deltaZ, hx_par.set_delta_z, emdb30.delta_zType, units=const.U_ANG)
                         # element 2 - <xs:complexType name="helical_parameters_type">
                         # XSD: <xs:element name="delta_phi" minOccurs="0">
-                        self.set_value_and_units(hx_par_in.get_deltaPhi, hx_par.set_delta_phi, emdb30.delta_phiType, units=const.U_DEG)
+                        if self.roundtrip:
+                            d_phi = hx_par_in.get_deltaPhi()
+                            if d_phi is None:
+                                hnd = hx_par_in.get_hand()
+                                if hnd is not None:
+                                    if hnd == 'LEFT HANDED':
+                                        hx_par.set_delta_phi(emdb30.delta_phiType(valueOf_=-999999999, units=const.U_DEG))
+                                    if hnd == 'RIGHT HANDED':
+                                        hx_par.set_delta_phi(emdb30.delta_phiType(valueOf_=999999999, units=const.U_DEG))
+                            else:
+                                self.set_value_and_units(hx_par_in.get_deltaPhi, hx_par.set_delta_phi, emdb30.delta_phiType, units=const.U_DEG)
+                        else:
+                            self.set_value_and_units(hx_par_in.get_deltaPhi, hx_par.set_delta_phi, emdb30.delta_phiType, units=const.U_DEG)
                         # element 3 - <xs:complexType name="helical_parameters_type">
                         # XSD: <xs:element name="axial_symmetry" minOccurs="0">
-                        self.check_set(hx_par_in.get_axialSymmetry, hx_par.set_axial_symmetry)
-                        # element 3 - <xs:complexType name="helical_parameters_type">
-                        # REMOVED - XSD: <xs:element name="hand" minOccurs="0"> added as required by old v1.9s
-                        #hnd = hx_par_in.get_hand()
-                        #hx_par.set_hand(hnd)
+                        axial_symm = hx_par_in.get_axialSymmetry()
+                        if axial_symm is not None and axial_symm != 'sr':
+                            hx_par.set_axial_symmetry(axial_symm)
+                            # element 3 - <xs:complexType name="helical_parameters_type">
+                            # REMOVED - XSD: <xs:element name="hand" minOccurs="0"> added as required by old v1.9s
+                            #hnd = hx_par_in.get_hand()
+                            #hx_par.set_hand(hnd)
 
                     if hx_par.hasContent_():
                         symm.set_helical_parameters(hx_par)
-                    rec.set_applied_symmetry(symm)
+                        rec.set_applied_symmetry(symm)
 
             def set_base_image_processing(im_proc, i):
                 """
@@ -2616,9 +2660,9 @@ class EMDBXMLTranslator(object):
                 Method that sets final reconstruction elements
 
                 Parameters:
-                @params: final_rec - final reconstruction object
-                @params: reconstruction - reconstruction object from v1.9
-                @params: proc - processing object from v1.9
+                @params: final_rec - final reconstruction object v3.0 to set
+                @params: reconstruction - reconstruction object from v1.9 (input)
+                @params: proc - processing object from v1.9 (input)
                 """
                 # XSD: <xs:complexType name="final_reconstruction_type"> has 8 elements
                 # element 1 - <xs:complexType name="final_reconstruction_type">
@@ -2662,25 +2706,16 @@ class EMDBXMLTranslator(object):
                     final_rec.set_applied_symmetry(symm)
                 # element 3 - <xs:complexType name="final_reconstruction_type">
                 # XSD: <xs:element name="algorithm" type="reconstruction_algorithm_type" minOccurs="0">
-#                 add_to_reconstruction_details = ''
                 allowed_rec_alg = ['ALGEBRAIC (ARTS)', 'BACK PROJECTION', 'EXACT BACK PROJECTION', 'FOURIER SPACE', 'SIMULTANEOUS ITERATIVE (SIRT)']
-#                 add_details = None
-#                 if helical:
-#                     alg = reconstruction.get_algorithm()
-#                     if proc is None:
-#                         h_proc = process_in.get_singleParticle()
-#                         self.check_set(h_proc.get_numProjections, final_rec.set_number_images_used)
-#                         self.check_set(h_proc.get_numClassAverages, final_rec.set_number_classes_used)
-#                         final_rec.set_algorithm(const.SP_TAG + (alg or ''))
-#                         add_details = const.SP_TAG + ' ' + h_proc.get_details()
-#                     else:
-#                         final_rec.set_algorithm(const.HEL_TAG + (alg or ''))
-#                 else:
                 rec_alg = reconstruction.get_algorithm()
-                if rec_alg is not None and rec_alg in allowed_rec_alg:
-                    final_rec.set_algorithm(rec_alg)
-                #else:
-                #add_to_reconstruction_details = 'Algorithm given: %s. ' % rec_alg
+                if rec_alg is not None:
+                    if self.roundtrip:
+                        final_rec.set_algorithm(rec_alg)
+                    else:
+                        if rec_alg in allowed_rec_alg:
+                            final_rec.set_algorithm(rec_alg)
+                        else:
+                            final_rec.set_algorithm('OTHER')
                 # element 4 - <xs:complexType name="final_reconstruction_type">
                 # XSD: <xs:element name="resolution" minOccurs="0">
                 resolution_in = reconstruction.get_resolutionByAuthor()
@@ -2696,14 +2731,21 @@ class EMDBXMLTranslator(object):
                 # element 5 - <xs:complexType name="final_reconstruction_type">
                 # XSD: <xs:element name="resolution_method" minOccurs="0">
                 allowed_res_methods = ['DIFFRACTION PATTERN/LAYERLINES', 'FSC 0.143 CUT-OFF', 'FSC 0.33 CUT-OFF', 'FSC 0.5 CUT-OFF', 'FSC 1/2 BIT CUT-OFF', 'FSC 3 SIGMA CUT-OFF', 'OTHER']
+                known_issues_res_methods = {'FSC 0.5': 'FSC 0.5 CUT-OFF',
+                                            'FSC 3 SIGMA': 'FSC 3 SIGMA CUT-OFF',
+                                            'FSC 0.143': 'FSC 0.143 CUT-OFF',
+                                            'FSC 0.333': 'FSC 0.33 CUT-OFF'}
                 res_method = reconstruction.get_resolutionMethod()
-                # add_to_reconstruction_details = ''
-                if reconstruction is not None:
-                    if res_method in allowed_res_methods:
+                if res_method is not None:
+                    if self.roundtrip:
                         self.check_set(reconstruction.get_resolutionMethod, final_rec.set_resolution_method)
                     else:
-                        # add_to_reconstruction_details = 'resolutionMethod: ' + reconstruction.get_resolutionMethod()
-                        final_rec.set_resolution_method('OTHER')
+                        if res_method in allowed_res_methods:
+                            self.check_set(reconstruction.get_resolutionMethod, final_rec.set_resolution_method)
+                        elif res_method in known_issues_res_methods:
+                            final_rec.set_resolution_method(known_issues_res_methods.get(res_method))
+                        else:
+                            final_rec.set_resolution_method('OTHER')
                 # element 6 - <xs:complexType name="final_reconstruction_type">
                 # XSD: <xs:element name="reconstruction_filtering" type="reconstruction_filtering_type" minOccurs="0">
                 # element 7 - <xs:complexType name="final_reconstruction_type">
@@ -2711,24 +2753,24 @@ class EMDBXMLTranslator(object):
                 soft_list = make_software_list(reconstruction.get_software())
                 if soft_list is not None:
                     final_rec.set_software_list(soft_list)
-                # element 8 - <xs:complexType name="final_reconstruction_type">
-                # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
-#                if add_to_reconstruction_details == '':
-#                     self.check_set(reconstruction.get_details, final_rec.set_details)
-#                else:
+                    # element 8 - <xs:complexType name="final_reconstruction_type">
+                    # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
+                #                if add_to_reconstruction_details == '':
+                #                     self.check_set(reconstruction.get_details, final_rec.set_details)
+                #                else:
                 rec_details = reconstruction.get_details()
                 final_rec.set_details(rec_details)
-#                 all_details = ''
-#                 if rec_details is not None:
-#                     all_details += rec_details
-#                 if add_details is not None:
-#                     all_details += add_details
-#                 if all_details is not None:
-#                    final_rec.set_details(all_details)
-#                     all_details = add_to_reconstruction_details
-#                     if rec_details is not None:
-#                         all_details = all_details + 'Other details given: ' + rec_details
-#                     final_rec.set_details(all_details)
+            #                 all_details = ''
+            #                 if rec_details is not None:
+            #                     all_details += rec_details
+            #                 if add_details is not None:
+            #                     all_details += add_details
+            #                 if all_details is not None:
+            #                    final_rec.set_details(all_details)
+            #                     all_details = add_to_reconstruction_details
+            #                     if rec_details is not None:
+            #                         all_details = all_details + 'Other details given: ' + rec_details
+            #                     final_rec.set_details(all_details)
 
             def set_final_angle_assignment(im_proc, reconstruction):
                 """
@@ -2844,7 +2886,7 @@ class EMDBXMLTranslator(object):
                 # base - <xs:complexType name="non_subtom_final_reconstruction_type">
                 # XSD: <xs:complexType name="final_reconstruction_type"> has 8 elements
                 # final_rec = emdb30.final_reconstruction_type()
-                set_final_reconstruction(non_subtom_rec, reconstruction, h_proc, spec_prep_in, no_apply_symm=True, helical=True)
+                set_final_reconstruction(non_subtom_rec, reconstruction, h_proc, spec_prep_in, no_apply_symm=True) # , helical=True)
                 # element 1 - <xs:complexType name="non_subtom_final_reconstruction_type">
                 # XSD: <xs:element name="number_images_used" type="xs:positiveInteger" minOccurs="0">
                 im_proc.set_final_reconstruction(non_subtom_rec)
@@ -3083,7 +3125,7 @@ class EMDBXMLTranslator(object):
         map_in = xml_in.get_map()
         spec_prep_in = exp_in.get_specimenPreparation()
         if map_in is not None:
-            copy_map_19_to_30(map_in, map_out, is_map=True, spec_prep_in=spec_prep_in)
+            copy_map_19_to_30(map_in, map_out, is_map=True) # , spec_prep_in=spec_prep_in)
         xml_out.set_map(map_out)
         # element 6 - <xs:complexType name="entry_type">
         # XSD: <xs:element name="interpretation" type="interpretation_type" minOccurs="0"/>
@@ -3175,18 +3217,17 @@ class EMDBXMLTranslator(object):
                 # XSD: <xs:element name="final_model" minOccurs="0">
                 # element 3 - <xs:complexType name="modelling_type">
                 # XSD: <xs:element name="refinement_protocol" minOccurs="0">
-                allowed_rec_protocols = ['AB INITIO MODEL', 'BACKBONE TRACE', 'FLEXIBLE FIT', 'OTHER', 'RIGID BODY FIT']
+                allowed_ref_protocols = ['AB INITIO MODEL', 'BACKBONE TRACE', 'FLEXIBLE FIT', 'OTHER', 'RIGID BODY FIT']
+                known_issues_ref_protocols = {'flexible': 'FLEXIBLE FIT', 'rigid body': 'RIGID BODY FIT'}
                 ref_prot = fit.get_refProtocol()
                 if ref_prot is not None:
-                    if ref_prot in const.FITTING_19_to_30:
-                        ref_prot = const.FITTING_19_to_30.get(ref_prot)
-                    if self.roundtrip:
-                        modelling.set_refinement_protocol(ref_prot)
+                    if ref_prot in allowed_ref_protocols:
+                        self.check_set(fit.get_refProtocol, modelling.set_refinement_protocol)
+                    elif ref_prot in known_issues_ref_protocols:
+                        modelling.set_refinement_protocol(known_issues_ref_protocols.get(ref_prot))
                     else:
-                        if ref_prot in allowed_rec_protocols:
-                            self.check_set(fit.get_refProtocol, modelling.set_refinement_protocol)
-                        else:
-                            modelling.set_refinement_protocol('OTHER')
+                        modelling.set_refinement_protocol('OTHER')
+
                 # element 4 - <xs:complexType name="modelling_type">
                 # XSD: <xs:element name="software_list" type="software_list_type" minOccurs="0"/>
                 soft_list = make_software_list(fit.get_software())
@@ -3212,9 +3253,10 @@ class EMDBXMLTranslator(object):
                 # element 8 - <xs:complexType name="modelling_type">
                 # XSD: <xs:element name="overall_bvalue" type="xs:float" minOccurs="0">
                 self.check_set(fit.get_overallBValue, modelling.set_overall_bvalue)
-
-                modelling_list.add_modelling(modelling)
-            intrp.set_modelling_list(modelling_list)
+                if modelling.hasContent_():
+                    modelling_list.add_modelling(modelling)
+            if modelling_list.hasContent_():
+                intrp.set_modelling_list(modelling_list)
 
         # element 2 - <xs:complexType name="interpretation_type">
         # XSD: <xs:element name="figure_list" minOccurs="0"> has 1 element
@@ -3233,11 +3275,14 @@ class EMDBXMLTranslator(object):
                     fig = emdb30.figure_type()
                     # element 1 - <xs:complexType name="figure_type">
                     # XSD: <xs:element name="file">
-                    fig.set_file(fig_in.get_file())
+                    figure_file = fig_in.get_file()
+                    if figure_file != 'ADP-image-for-deposition':
+                        fig.set_file(figure_file)
                     # element 2 - <xs:complexType name="figure_type">
                     # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
                     fig.set_details(fig_in.get_details())
-                    fig_list.add_figure(fig)
+                    if fig.hasContent_():
+                        fig_list.add_figure(fig)
                 if fig_list.hasContent_():
                     intrp.set_figure_list(fig_list)
             # element 3 - <xs:complexType name="interpretation_type">
@@ -3280,10 +3325,10 @@ class EMDBXMLTranslator(object):
                         slc_list.add_slice(slice_map)
                 if slc_list.hasContent_():
                     intrp.set_slices_list(slc_list)
-            # element 5 - <xs:complexType name="interpretation_type">
-            # XSD: <xs:element name="additional_map_list" minOccurs="0">
-            # element 6 - <xs:complexType name="interpretation_type">
-            # XSD: <xs:element name="half_map_list" minOccurs="0">
+                    # element 5 - <xs:complexType name="interpretation_type">
+                    # XSD: <xs:element name="additional_map_list" minOccurs="0">
+                    # element 6 - <xs:complexType name="interpretation_type">
+                    # XSD: <xs:element name="half_map_list" minOccurs="0">
         if intrp is not None and intrp.hasContent_():
             xml_out.set_interpretation(intrp)
         # element 7 - <xs:complexType name="entry_type">
@@ -3301,7 +3346,10 @@ class EMDBXMLTranslator(object):
                         fsc.original_tagname_ = 'fsc_curve'
                         # element 1 - <xs:complexType name="validation_type">
                         # XSD: <xs:element name="file">
-                        fsc.set_file(fsc_in.get_file())
+                        fsc_file = fsc_in.get_file()
+                        if fsc_file.startswith('EMD-'):
+                            fsc_file = fsc_file.replace('EMD-', 'emd_')
+                        fsc.set_file(fsc_file)
                         # element 2 - <xs:complexType name="validation_type">
                         # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
                         self.check_set(fsc_in.get_details, fsc.set_details)
@@ -3414,12 +3462,12 @@ class EMDBXMLTranslator(object):
                 else:
                     ang_in_details = auth_in.get_valueOf_()
                 auth_list.append(ang_in_details)
-#                 authCompIn = ang_in_details.split(', ')
-#                 lenAuthCompIn = len(authCompIn)
-#                 if lenAuthCompIn < 2:
-#                     self.warn(1, "Author name has more (or less) than two comma separated strings (%d) - will be ignored!" % lenAuthCompIn)
-#                 else:
-#                     auth_list.append('%slc_in %slc_in' % (authCompIn[0], authCompIn[1].strip('.')))
+            #                 authCompIn = ang_in_details.split(', ')
+            #                 lenAuthCompIn = len(authCompIn)
+            #                 if lenAuthCompIn < 2:
+            #                     self.warn(1, "Author name has more (or less) than two comma separated strings (%d) - will be ignored!" % lenAuthCompIn)
+            #                 else:
+            #                     auth_list.append('%slc_in %slc_in' % (authCompIn[0], authCompIn[1].strip('.')))
             if len(auth_list) > 0:
                 auth_str = ', '.join(auth_list)
             else:
@@ -3538,12 +3586,12 @@ class EMDBXMLTranslator(object):
                     soft_name = soft.get_name()
                     if soft_name is not None:
                         soft_name_list.append(soft_name)
-                if not soft_name_list:
+                if soft_name_list:
                     software_str = ', '.join(soft_name_list)
             return software_str
 
 
-        def copy_natural_source(src_in, src_out, cell=True, organelle=True, tissue=True, cellular_location=True, organ=True, only_common=False):
+        def copy_natural_source(src_in, src_out, cell=False, organelle=False, tissue=False, cellular_location=False, organ=False, create_ns=True):
             """
             Copy natural source from 3.0 to 1.9
 
@@ -3554,6 +3602,7 @@ class EMDBXMLTranslator(object):
             @param organelle: Whether to generate organelle field
             @param tissue: Whether to generate tissue field
             @param cellular_location: Whether to generate cellular_location field
+            @param create_ns: src_out can have a natural source
             """
             ns_in = src_in.get_natural_source()
             # Natural source can have any number of elements
@@ -3580,7 +3629,7 @@ class EMDBXMLTranslator(object):
                 # XSD: <xs:element name="synSpeciesName" type="xs:string" minOccurs="0"/>
                 self.check_set(ns_1_in.get_synonym_organism, src_out.set_synSpeciesName)
 
-                if not only_common:
+                if create_ns:
                     nat_src = emdb_19.natSrcType()
                     if cell or organelle or tissue or organ or cellular_location:
                         # XSD: <xs:complexType name="natSrcType"> has 4 elements
@@ -3602,8 +3651,11 @@ class EMDBXMLTranslator(object):
                         # XSD: <xs:element name="cellLocation" type="xs:string" minOccurs="0"/>
                         if cellular_location:
                             self.check_set(ns_1_in.get_cellular_location, nat_src.set_cellLocation)
-
-                    src_out.set_natSource(nat_src)
+                    if self.roundtrip:
+                        src_out.set_natSource(nat_src)
+                    else:
+                        if nat_src.hasContent_():
+                            src_out.set_natSource(nat_src)
 
         def copy_ctf_and_euler_angles(im_proc_in, rec_obj, im_proc_out):
             """
@@ -3651,10 +3703,14 @@ class EMDBXMLTranslator(object):
             if wt_in is not None:
                 exp_weight = wt_in.get_experimental()
                 if exp_weight is not None:
-                    comp.set_molWtExp(emdb_19.mwType(valueOf_=exp_weight.get_valueOf_(), units=const.U_MDA))
+                    mw_exp = exp_weight.get_valueOf_()
+                    if mw_exp > 0 or mw_exp != '0':
+                        comp.set_molWtExp(emdb_19.mwType(valueOf_=mw_exp, units=const.U_MDA))
                 theo_weight = wt_in.get_theoretical()
                 if theo_weight is not None:
-                    comp.set_molWtTheo(emdb_19.mwType(valueOf_=theo_weight.get_valueOf_(), units=const.U_MDA))
+                    mw_th = theo_weight.get_valueOf_()
+                    if mw_th > 0 or mw_th != '0':
+                        comp.set_molWtTheo(emdb_19.mwType(valueOf_=mw_th, units=const.U_MDA))
                 if meth:
                     self.check_set(wt_in.get_method, comp.set_molWtMethod)
 
@@ -3752,21 +3808,27 @@ class EMDBXMLTranslator(object):
                         hx_par = emdb_19.helixParamType()
                         # element 1 - <xs:complexType name="helixParamType">
                         # XSD: <xs:element name="deltaPhi" type="anglType" minOccurs="0"/>
-                        self.set_value_and_units(hx_par_in.get_delta_phi, hx_par.set_deltaPhi, emdb_19.anglType, units=const.U_DEGF)
+                        if self.roundtrip:
+                            d_phi = hx_par_in.get_delta_phi().valueOf_
+                            if d_phi.find("999999999") == -1: # value for roundtrip
+                                self.set_value_and_units(hx_par_in.get_delta_phi, hx_par.set_deltaPhi, emdb_19.anglType, units=const.U_DEGF)
+                        else:
+                            self.set_value_and_units(hx_par_in.get_delta_phi, hx_par.set_deltaPhi, emdb_19.anglType, units=const.U_DEGF)
                         # element 2 - <xs:complexType name="helixParamType">
                         # XSD: <xs:element name="deltaZ" type="lengthType" minOccurs="0"/>
                         self.set_value_and_units(hx_par_in.get_delta_z, hx_par.set_deltaZ, emdb_19.lengthType, units='A')
                         # element 3 - <xs:complexType name="helixParamType">
                         # XSD: <xs:element name="hand" type="handType" minOccurs="0"/>
-                        d_phi = hx_par_in.get_delta_phi()
-                        if d_phi is not None:
-                            hand = None
-                            if d_phi < 0:
-                                hand = 'LEFT HANDED'
-                            else:
-                                hand = 'RIGHT HANDED'
-                            if hand is not None:
-                                hx_par.set_hand(hand)
+                        if self.roundtrip:
+                            d_phi = hx_par_in.get_delta_phi().valueOf_
+                            if d_phi is not None:
+                                hand = None
+                                if d_phi.find("-") == -1:
+                                    hand = 'RIGHT HANDED'
+                                else:
+                                    hand = 'LEFT HANDED'
+                                if hand is not None:
+                                    hx_par.set_hand(hand)
 
                         # element 4 - <xs:complexType name="helixParamType">
                         # XSD: <xs:element name="axialSymmetry" type="xs:string" minOccurs="0"/>
@@ -3839,15 +3901,18 @@ class EMDBXMLTranslator(object):
                 origin_row = -1
                 orig_row = orig_in.get_row()
                 if orig_row is not None:
-                    origin_row = int(orig_row)
+                    origin_row = float(orig_row) #int(orig_row)
                 origin_col = -1
                 orig_col = orig_in.get_col()
                 if orig_col is not None:
-                    origin_col = int(orig_col)
+                    origin_col = float(orig_col) #int(orig_col)
                 orig_sec = orig_in.get_sec()
                 origin_sec = -1
                 if orig_sec is not None:
-                    origin_sec = int(orig_sec)
+                    origin_sec = float(orig_sec) #int(orig_sec)
+                # print "origin row %s" % origin_row
+                # print "origin col %s" % origin_col
+                # print "origin sec %s" % origin_sec
                 orig = emdb_19.originType(originRow=origin_row, originCol=origin_col, originSec=origin_sec)
                 map_out.set_origin(orig)
             # element 5 - <xs:complexType name="mapType">
@@ -3856,7 +3921,8 @@ class EMDBXMLTranslator(object):
                 limit_row = origin_row + num_rows - 1
                 limit_col = origin_col + num_columns - 1
                 limit_sec = origin_sec + num_sections - 1
-                lim = emdb_19.limitType(limitRow=int(limit_row), limitCol=int(limit_col), limitSec=int(limit_sec))
+                lim = emdb_19.limitType(limitRow=limit_row, limitCol=limit_col, limitSec=limit_sec)
+                #lim = emdb_19.limitType(limitRow=int(limit_row), limitCol=int(limit_col), limitSec=int(limit_sec))
                 map_out.set_limit(lim)
             # element 6 - <xs:complexType name="mapType">
             # XSD: <xs:element name="spacing" type="spacingType"/>
@@ -3957,15 +4023,15 @@ class EMDBXMLTranslator(object):
                     rec_org = rec_exp.get_recombinant_organism()
                     if rec_org is not None:
                         eng_src.set_expSystem(emdb_19.sciSpeciesType(valueOf_=rec_org.valueOf_, ncbiTaxId=rec_org.get_ncbi()))
-                        # element 2 - <xs:complexType name="engSrcType">
-                        # XSD: <xs:element name="expSystemStrain" type="xs:string" minOccurs="0"/>
-                        eng_src.set_expSystemStrain(rec_exp.get_recombinant_strain())
-                        # element 3 - <xs:complexType name="engSrcType">
-                        # XSD: <xs:element name="expSystemCell" type="xs:string" minOccurs="0"/>
-                        eng_src.set_expSystemCell(rec_exp.get_recombinant_cell())
-                        # element 4 - <xs:complexType name="engSrcType">
-                        # XSD: <xs:element name="vector" type="xs:string" minOccurs="0"/>
-                        eng_src.set_vector(rec_exp.get_recombinant_plasmid())
+                    # element 2 - <xs:complexType name="engSrcType">
+                    # XSD: <xs:element name="expSystemStrain" type="xs:string" minOccurs="0"/>
+                    eng_src.set_expSystemStrain(rec_exp.get_recombinant_strain())
+                    # element 3 - <xs:complexType name="engSrcType">
+                    # XSD: <xs:element name="expSystemCell" type="xs:string" minOccurs="0"/>
+                    eng_src.set_expSystemCell(rec_exp.get_recombinant_cell())
+                    # element 4 - <xs:complexType name="engSrcType">
+                    # XSD: <xs:element name="vector" type="xs:string" minOccurs="0"/>
+                    eng_src.set_vector(rec_exp.get_recombinant_plasmid())
 
                 return eng_src
 
@@ -4382,8 +4448,7 @@ class EMDBXMLTranslator(object):
                             if smol_type_in not in ['tissue_supramolecule', 'cell_supramolecule']:
                                 weight = smol_in.get_molecular_weight()
                                 #set_mol_weight(sample, weight, meth=False)
-                        if smol_type_in in ['virus_supramolecule', 'organelle_or_cellular_component_supramolecule',
-                                            'complex_supramolecule']:
+                        if smol_type_in in ['virus_supramolecule', 'organelle_or_cellular_component_supramolecule', 'complex_supramolecule']:
                             weight = smol_in.get_molecular_weight()
                             set_mol_weight(comp, weight, meth=False)
                         # element 6 - <xs:complexType name="smplCompType">
@@ -4392,9 +4457,8 @@ class EMDBXMLTranslator(object):
                             self.check_set(smol_in.get_details, sample.set_details)
                         if smol_type_in in ['sample_supramolecule', 'virus_supramolecule']:
                             self.check_set(smol_in.get_details, comp.set_details)
-#                         if smol_type_in in ['organelle_or_cellular_component_supramolecule',
-#                                             'cell_supramolecule', 'complex_supramolecule']:
-#                             unpack_odd_details(smol_in, comp, protein)
+                        #                         if smol_type_in in ['organelle_or_cellular_component_supramolecule', 'cell_supramolecule', 'complex_supramolecule']:
+                        #                             unpack_odd_details(smol_in, comp, protein)
 
                     # choice 1 - <xs:complexType name="smplCompType"> of 8 elements
                     # element 1 in choice 1 - <xs:complexType name="smplCompType">
@@ -4429,10 +4493,7 @@ class EMDBXMLTranslator(object):
                             # copy_recombinant_source(smol_in, protein)
                             # element 7 - <xs:complexType name="proteinType">
                             # XSD: <xs:element name="natSource" type="natSrcType" minOccurs="0"/>
-                            if self.relaxed:
-                                copy_natural_source(smol_in, protein)
-                            else:
-                                copy_natural_source(smol_in, protein, cell=False, organelle=False, tissue=False, cellular_location=False, organ=False)
+                            copy_natural_source(smol_in, protein)
                             # element 8 - <xs:complexType name="proteinType">
                             # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0"/>
                             eng_src = create_eng_source(smol_in)
@@ -4471,9 +4532,9 @@ class EMDBXMLTranslator(object):
                         # element 7 - <xs:complexType name="cellCompType">
                         # XSD: <xs:element name="natSource" type="natSrcType" minOccurs="0"/>
                         if smol_type_in == 'organelle_or_cellular_component_supramolecule':
-                            copy_natural_source(smol_in, cell)
+                            copy_natural_source(smol_in, cell, cell=True, organelle=True, tissue=True, cellular_location=True, organ=True)
                         if smol_type_in == 'cell_supramolecule':
-                            copy_natural_source(smol_in, cell, organelle=False, cellular_location=False)
+                            copy_natural_source(smol_in, cell, cell=True, organelle=False, tissue=True, cellular_location=False, organ=True)
                         # element 8 - <xs:complexType name="cellCompType">
                         # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0"/>
                         # XSD: <xs:complexType name="engSrcType"> has 4 elements
@@ -4656,7 +4717,7 @@ class EMDBXMLTranslator(object):
                                 # copy_recombinant_source(smol_in, rib)
                                 # element 8 - <xs:complexType name="riboTypeEu">
                                 # XSD: <xs:element name="natSource" type="natSrcType" minOccurs="0" maxOccurs="1"/>
-                                copy_natural_source(smol_in, rib, cell=False, organelle=False, tissue=False, cellular_location=False, organ=False)
+                                copy_natural_source(smol_in, rib, cell=True, organelle=True, tissue=True, cellular_location=True, organ=False)
                                 # element 9 - <xs:complexType name="riboTypeEu">
                                 # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0" maxOccurs="1"/>
                                 eng_src = create_eng_source(smol_in)
@@ -4699,7 +4760,7 @@ class EMDBXMLTranslator(object):
                                 # copy_recombinant_source(smol_in, rib)
                                 # element 8 - <xs:complexType name="riboTypePro">
                                 # XSD: <xs:element name="natSource" type="natSrcType" minOccurs="0" maxOccurs="1"/>
-                                copy_natural_source(smol_in, rib)#, cell=False, organelle=False, tissue=False, cellular_location=False, organ=False)
+                                copy_natural_source(smol_in, rib, cell=True, organelle=True, tissue=True, cellular_location=True, organ=False)
                                 # element 9 - <xs:complexType name="riboTypePro">
                                 # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0" maxOccurs="1"/>
                                 eng_src = create_eng_source(smol_in)
@@ -4788,7 +4849,7 @@ class EMDBXMLTranslator(object):
                         # copy_recombinant_source(smol_in, protein)
                         # element 7 - <xs:complexType name="proteinType">
                         # XSD: <xs:element name="natSource" type="natSrcType" minOccurs="0"/>
-                        copy_natural_source(mol_in, protein)#, cell=False, organelle=False, tissue=False, cellular_location=False, organ=False)
+                        copy_natural_source(mol_in, protein, cell=True, organelle=True, tissue=True, cellular_location=True, organ=True)
                         # element 8 - <xs:complexType name="proteinType">
                         # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0"/>
                         eng_src = create_eng_source(mol_in)
@@ -4814,7 +4875,7 @@ class EMDBXMLTranslator(object):
                         # XSD: <xs:complexType name="nuclAcidType"> has 7 elements
                         nuc_acid = emdb_19.nuclAcidType()
                         unpack_odd_details(mol_in, comp, nuc_acid)
-                        copy_natural_source(mol_in, nuc_acid, cell=False, organelle=False, tissue=False, cellular_location=False, organ=False, only_common=True)
+                        copy_natural_source(mol_in, nuc_acid, cell=True, organelle=True, tissue=True, cellular_location=True, organ=True, create_ns=False)
                         # element 1 - <xs:complexType name="nuclAcidType">
                         # XSD: <xs:element name="sciSpeciesName" type="sciSpeciesType" minOccurs="0"/>
                         # element 2 - <xs:complexType name="nuclAcidType">
@@ -4880,7 +4941,7 @@ class EMDBXMLTranslator(object):
                         # copy_recombinant_source(mol_in, lig)
                         # element 7 - <xs:complexType name="ligandType">
                         # XSD: <xs:element name="natSource" type="natSrcType" minOccurs="0"/>
-                        copy_natural_source(mol_in, lig)
+                        copy_natural_source(mol_in, lig, cell=True, organelle=True, tissue=True, cellular_location=True, organ=True)
                         # element 8 - <xs:complexType name="ligandType">
                         # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0"/>
                         eng_src = create_eng_source(mol_in)
@@ -4948,14 +5009,11 @@ class EMDBXMLTranslator(object):
                         # XSD: <xs:element name="cryogenName" type="cryogenType"/>
                         cryogen_out = vitr_in.get_cryogen_name()
                         if cryogen_out is not None:
-                            if self.roundtrip:
+                            allowed_cryo_names = ['ETHANE', 'ETHANE-PROPANE MIXTURE', 'METHANE', 'NITROGEN', 'HELIUM', 'PROPANE', 'FREON 12', 'FREON 22', 'NONE', 'OTHER']
+                            if cryogen_out in allowed_cryo_names:
                                 vitr.set_cryogenName(cryogen_out)
                             else:
-                                allowed_cryo_names = ['ETHANE', 'ETHANE-PROPANE MIXTURE', 'METHANE', 'NITROGEN', 'HELIUM', 'PROPANE', 'FREON 12', 'FREON 22', 'NONE', 'OTHER']
-                                if cryogen_out in allowed_cryo_names:
-                                    vitr.set_cryogenName(cryogen_out)
-                                else:
-                                    vitr.set_cryogenName('OTHER')
+                                vitr.set_cryogenName('OTHER')
                         # element 2 - <xs:complexType name="vitrifType">
                         # XSD: <xs:element name="humidity" type="xs:string" minOccurs="0"/>
                         chamber_humidity = vitr_in.get_chamber_humidity()
@@ -4970,11 +5028,8 @@ class EMDBXMLTranslator(object):
                         # element 4 - <xs:complexType name="vitrifType">
                         # XSD: <xs:element name="instrument" type="vitrInstrType" minOccurs="0"/>
                         vitrification_instrument = vitr_in.get_instrument()
-                        # allowed_vitrification_instruments = ['FEI VITROBOT MARK I', 'FEI VITROBOT MARK II', 'FEI VITROBOT MARK III', 'FEI VITROBOT MARK IV', 'GATAN CRYOPLUNGE 3', 'HOMEMADE PLUNGER', 'LEICA EM CPC', 'LEICA EM GP', 'LEICA KF80', 'LEICA PLUNGER', 'REICHERT-JUNG PLUNGER', 'OTHER']
-                        # if vitrification_instrument in allowed_vitrification_instruments:
-                        vitr.set_instrument(vitrification_instrument)
-                        #else:
-                        # vitr.set_instrument('OTHER')
+                        if vitrification_instrument is not None:
+                            vitr.set_instrument(vitrification_instrument)
                         # element 5 - <xs:complexType name="vitrifType">
                         # XSD: <xs:element name="method" type="xs:string" minOccurs="0"/>
                         self.check_set(vitr_in.get_method, vitr.set_method)
@@ -5081,10 +5136,13 @@ class EMDBXMLTranslator(object):
                                                  'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F216 (2k x 2k)',
                                                  'TVIPS TEMCAM-F224 (2k x 2k)', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)',
                                                  'GENERIC TVIPS', 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)', 'GENERIC CCD', 'OTHER']
-                            if det_model_in in allowed_detectors:
+                            if self.roundtrip:
                                 img.set_detector(det_model_in)
                             else:
-                                img.set_detector('OTHER')
+                                if det_model_in in allowed_detectors:
+                                    img.set_detector(det_model_in)
+                                else:
+                                    img.set_detector('OTHER')
                 # element 12 - <xs:complexType name="imgType">
                 # XSD: <xs:element name="nominalCs" type="csType" minOccurs="0"/>
                 ang_in_details = mic_in.get_nominal_cs()
@@ -5143,7 +5201,16 @@ class EMDBXMLTranslator(object):
 
                 # element 19 - <xs:complexType name="imgType">
                 # XSD: <xs:element name="microscope" type="microscopeType"/>
-                img.set_microscope(mic_in.get_microscope())
+                if mic_in is not None:
+                    the_mic = mic_in.get_microscope()
+                    if self.roundtrip:
+                        img.set_microscope(the_mic)
+                    else:
+                        known_microscopes=['FEI MORGAGNI', 'FEI POLARA 300', 'FEI TECNAI 10', 'FEI TECNAI 12', 'FEI TECNAI 20', 'FEI TECNAI F20', 'FEI TECNAI F30', 'FEI TECNAI SPHERA', 'FEI TECNAI SPIRIT', 'FEI TITAN', 'FEI TITAN KRIOS', 'FEI/PHILIPS CM10', 'FEI/PHILIPS CM12', 'FEI/PHILIPS CM120T', 'FEI/PHILIPS CM200FEG', 'FEI/PHILIPS CM200FEG/SOPHIE', 'FEI/PHILIPS CM200FEG/ST', 'FEI/PHILIPS CM200FEG/UT', 'FEI/PHILIPS CM200T', 'FEI/PHILIPS CM300FEG/HE', 'FEI/PHILIPS CM300FEG/ST', 'FEI/PHILIPS CM300FEG/T', 'FEI/PHILIPS EM400', 'FEI/PHILIPS EM420', 'FEI TALOS ARCTICA', 'FEI TECNAI ARCTICA', 'HITACHI EF2000', 'HITACHI H7600', 'HITACHI HF2000', 'HITACHI HF3000', 'HITACHI H-9500SD', 'JEOL 100CX', 'JEOL 1010', 'JEOL 1200', 'JEOL 1200EX', 'JEOL 1200EXII', 'JEOL 1230', 'JEOL 1400', 'JEOL 2000EX', 'JEOL 2000EXII', 'JEOL 2010', 'JEOL 2010F', 'JEOL 2010HT', 'JEOL 2010HC', 'JEOL 2010UHR', 'JEOL 2011', 'JEOL 2100', 'JEOL 2100F', 'JEOL 2200FS', 'JEOL 2200FSC', 'JEOL 3000SFF', 'JEOL 3100FEF', 'JEOL 3100FFC', 'JEOL 3200FS', 'JEOL 3200FSC', 'JEOL KYOTO-3000SFF', 'JEOL 3200FSC', 'JEOL 4000', 'JEOL 4000EX', 'ZEISS LEO912', 'ZEISS LIBRA120PLUS', 'OTHER']
+                        if the_mic in known_microscopes:
+                            img.set_microscope(the_mic)
+                        else:
+                            img.set_microscope('OTHER')
                 # element 20 - <xs:complexType name="imgType">
                 # XSD: <xs:element name="date" type="xs:string" minOccurs="0"/>
                 self.check_set(mic_in.get_date, img.set_date)
@@ -5315,7 +5382,8 @@ class EMDBXMLTranslator(object):
                         # XSD: <xs:element name="software" type="xs:string" minOccurs="0"/>
                         soft_list_in = fit_in.get_software_list()
                         if soft_list_in is not None:
-                            soft_str = make_software_from_list(soft_list_in.get_software())
+                            soft = soft_list_in.get_software()
+                            soft_str = make_software_from_list(soft)
                             if soft_str is not None:
                                 fit.set_software(soft_str)
                         # element 3 - <xs:complexType name="fittingType">
@@ -5324,7 +5392,8 @@ class EMDBXMLTranslator(object):
                         if ref_prot is not None:
                             ref_prot_low = ref_prot.lower()
                             allowed_prots = ['rigid body', 'flexible']
-                            known_issues = {'rigid body fit': 'rigid body'}
+                            known_issues = {'rigid body fit': 'rigid body',
+                                            'flexible fit': 'flexible'}
                             if ref_prot_low in allowed_prots:
                                 fit.set_refProtocol(ref_prot_low)
                             elif ref_prot_low in known_issues:
@@ -5559,7 +5628,7 @@ class EMDBXMLTranslator(object):
                                 self.check_set(imp_in.get_details, hel.set_details)
                                 # set_crystal_parameters(imp_in, spec_prep_1)
                                 proc.set_helical(hel)
-                            # set_helical_symmetry(final_reconstruct_in, spec_prep_1)
+                                # set_helical_symmetry(final_reconstruct_in, spec_prep_1)
                     # choice 3
                     # XSD: <xs:element name="subtomogramAveraging" type="subTomType" maxOccurs="1"/>
                     elif em_method == const.EMM_STOM:
@@ -5638,14 +5707,14 @@ class EMDBXMLTranslator(object):
                         # element 4 - <xs:complexType name="singPartType">
                         # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
                         self.check_set(imp_in.get_details, proc_spec.set_details)
-#                         set_helical_symmetry(final_reconstruct_in, spec_prep_1)
+                        #                         set_helical_symmetry(final_reconstruct_in, spec_prep_1)
                         proc.set_singleParticle(proc_spec)
 
                 # Euler angles and ctf have to be set for all reconstruction objects
                 copy_ctf_and_euler_angles(imp_in, rec, proc_spec)
 
-#         if spec_prep_1.hasContent_():
-#             exp.set_specimenPreparation(spec_prep_1)
+            #         if spec_prep_1.hasContent_():
+            #             exp.set_specimenPreparation(spec_prep_1)
         xml_out.set_processing(proc)
         # ---------------------------------
         # Write XML to file

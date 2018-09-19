@@ -48,28 +48,32 @@ def process_all_30_19(file_path_template, out_dir):
     for emdb_file in emdb_files:
         i += 1
         if i > 0:
-            print i
             inf = os.path.basename(emdb_file)
-            print inf
-            outf = os.path.join(out_dir, inf)
-            #logging.info("Input file: %s, output file: %s", emdb_file, outf)
-            command_list = list(command_list_base)
-            command_list.append(outf)
-            command_list.append(emdb_file)
-            cmd_text = ' '.join(command_list)
-            #logging.info('Executing: %s', cmd_text)
-            exit_code = subprocess.call(command_list)
-            if exit_code != 0:
-                num_errors += 1
-                error_list.append(inf)
-            else:
-                num_success += 1
-            # logging.warning('%d files successfully processed!', num_success)
-            if num_errors > 0:
-                logging.warning('%d errors!', num_errors)
-                logging.warning('List of entries that were not translated')
-                for entry in error_list:
-                    logging.warning(entry)
+            if True: # inf.find("8481") != -1:
+                print i
+                # print 'IN: %s' % inf
+                print inf
+                outf = os.path.join(out_dir, inf)
+                # print 'OUT: %s' % outf
+                #logging.info("Input file: %s, output file: %s", emdb_file, outf)
+                command_list = list(command_list_base)
+                command_list.append(outf)
+                command_list.append(emdb_file)
+                cmd_text = ' '.join(command_list)
+                # print 'EXECUTING: %s' % cmd_text
+                #logging.info('Executing: %s', cmd_text)
+                exit_code = subprocess.call(command_list)
+                if exit_code != 0:
+                    num_errors += 1
+                    error_list.append(inf)
+                else:
+                    num_success += 1
+                # logging.warning('%d files successfully processed!', num_success)
+                if num_errors > 0:
+                    logging.warning('%d errors!', num_errors)
+                    logging.warning('List of entries that were not translated')
+                    for entry in error_list:
+                        logging.warning(entry)
 
 
 def main():

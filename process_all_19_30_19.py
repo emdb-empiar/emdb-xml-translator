@@ -40,7 +40,8 @@ def process_all_19_30_19(file_path_template_v19, out_dir_19_to_30, out_dir_30_to
     Method for converting existing v1.9 files into v3.0 files and back into v1.9
     """
     # resulted v3.0 files should be validated with the relaxed schema (-v -r)
-    command_list_19_to_30 = ['python', './emdb_xml_translate.py', '-v', '-r', '-p', '-f']
+    command_list_19_to_30 = ['python', './emdb_xml_translate.py', '-r', '-p', '-f']
+    # command_list_30_to_19 = ['python', './emdb_xml_translate.py', '-v', '-r', '-p', '-i', '3.0', '-o', '1.9', '-f']
     command_list_30_to_19 = ['python', './emdb_xml_translate.py', '-v', '-r', '-p', '-i', '3.0', '-o', '1.9', '-f']
     emdb_19_files = glob.glob(file_path_template_v19)
     num_errors = 0
@@ -50,19 +51,35 @@ def process_all_19_30_19(file_path_template_v19, out_dir_19_to_30, out_dir_30_to
     for emdb_19_file in emdb_19_files:
         i += 1
         if i > 0:
-            #print i
             in_19_file = os.path.basename(emdb_19_file)
-            if in_19_file == 'emd-0051.xml':
-                print 'IN 1.9 FILE %s ' % emdb_19_file
+            if in_19_file.find("emd-1") != -1 or in_19_file.find("emd-2") != -1 or \
+                            in_19_file.find("emd-30") != -1 or in_19_file.find("emd-31") != -1 or \
+                            in_19_file.find("emd-32") != -1 or in_19_file.find("emd-33") != -1 or \
+                            in_19_file.find("emd-340") != -1 or in_19_file.find("emd-341") != -1 or \
+                            in_19_file.find("emd-342") != -1 or in_19_file.find("emd-343") != -1 or \
+                            in_19_file.find("emd-3440") != -1 or in_19_file.find("emd-3441") != -1 or \
+                            in_19_file.find("emd-3442") != -1 or in_19_file.find("emd-3443") != -1 or \
+                            in_19_file.find("emd-5") != -1 or in_19_file.find("emd-60") != -1 or in_19_file.find("emd-61") != -1 or \
+                            in_19_file.find("emd-62") != -1 or in_19_file.find("emd-63") != -1 or \
+                            in_19_file.find("emd-64") != -1 or in_19_file.find("emd-65") != -1 or \
+                            in_19_file.find("emd-660") != -1 or in_19_file.find("emd-661") != -1 or \
+                            in_19_file.find("emd-662") != -1 or in_19_file.find("emd-663") != -1 or \
+                            in_19_file.find("emd-664") != -1 or in_19_file.find("emd-6650") != -1 or \
+                            in_19_file.find("emd-6651") != -1 or in_19_file.find("emd-6651") != -1 or \
+                            in_19_file.find("emd-6652") != -1 or in_19_file.find("emd-6653") != -1 or \
+                            in_19_file.find("emd-6654") != -1 or in_19_file.find("emd-6655") != -1:
+                # if in_19_file.find("emd-6002") != -1:
+                print i
+                print in_19_file
 
                 out_30_file = os.path.join(out_dir_19_to_30, in_19_file)
-                print 'OUT 3.0 FILE %s ' % out_30_file
+                #print 'OUT 3.0 FILE %s ' % out_30_file
 
                 command_list = list(command_list_19_to_30)
                 command_list.append(out_30_file)
                 command_list.append(emdb_19_file)
                 cmd_text = ' '.join(command_list)
-                print 'EXECUTING %s ' % cmd_text
+                # print 'EXECUTING %s ' % cmd_text
 
                 exit_code = subprocess.call(command_list)
                 if exit_code != 0:
@@ -73,15 +90,15 @@ def process_all_19_30_19(file_path_template_v19, out_dir_19_to_30, out_dir_30_to
 
                 # REVERSE
                 in_30_file = out_30_file
-                print 'IN 3.0 FILE %s' % in_30_file
+                #print 'IN 3.0 FILE %s' % in_30_file
 
                 out_19_file = os.path.join(out_dir_30_to_19, in_19_file)
-                print 'OUT 19 FILE %s' % out_19_file
+                #print 'OUT 19 FILE %s' % out_19_file
                 command_list = list(command_list_30_to_19)
                 command_list.append(out_19_file)
                 command_list.append(in_30_file)
                 cmd_text = ' '.join(command_list)
-                print 'EXECUTING %s ' % cmd_text
+                #print 'EXECUTING %s ' % cmd_text
                 exit_code = subprocess.call(command_list)
 
                 if exit_code != 0:
