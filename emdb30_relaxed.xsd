@@ -725,6 +725,7 @@
         <xs:complexContent>
             <xs:extension base="base_source_type">
                 <xs:sequence>
+                    <xs:element name="organ" type="xs:token" minOccurs="0"/>
                     <xs:element name="tissue" type="xs:token" minOccurs="0"/>
                     <xs:element name="cell" type="xs:token" minOccurs="0"/>
                     <xs:element name="organelle" type="xs:token" minOccurs="0"/>
@@ -3775,7 +3776,7 @@
             <xs:element name="file">
                 <xs:simpleType>
                     <xs:restriction base="xs:token">
-                        <xs:pattern value="emd_\d{4,}_fsc(_[1-9]{1})*.xml"/>
+                        <xs:pattern value="emd_\d{4,}_fsc(_[1-9]{1,})*.xml"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>

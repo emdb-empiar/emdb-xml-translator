@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Wed Sep 19 12:45:15 2018 by generateDS.py version 2.29.5.
+# Generated Fri Oct  5 16:58:20 2018 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
@@ -813,6 +813,9 @@ class entry_type(GeneratedsSuper):
         if self.version is not None and 'version' not in already_processed:
             already_processed.add('version')
             outfile.write(' version=%s' % (self.gds_encode(self.gds_format_string(quote_attrib(self.version), input_name='version')), ))
+        outfile.write(' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"')
+        outfile.write(' xsi:schemaLocation="https://github.com/emdb-empiar/emdb-xml-translator/blob/master/emdb30_relaxed.xsd"')
+
     def exportChildren(self, outfile, level, namespace_='', name_='entry_type', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -4247,9 +4250,10 @@ class complex_supramolecule_type(base_supramolecule_type):
 class complex_natural_source_type(base_source_type):
     subclass = None
     superclass = base_source_type
-    def __init__(self, database=None, organism=None, strain=None, synonym_organism=None, tissue=None, cell=None, organelle=None, cellular_location=None):
+    def __init__(self, database=None, organism=None, strain=None, synonym_organism=None, organ=None, tissue=None, cell=None, organelle=None, cellular_location=None):
         self.original_tagname_ = None
         super(complex_natural_source_type, self).__init__(database, organism, strain, synonym_organism, )
+        self.organ = organ
         self.tissue = tissue
         self.cell = cell
         self.organelle = organelle
@@ -4265,6 +4269,8 @@ class complex_natural_source_type(base_source_type):
         else:
             return complex_natural_source_type(*args_, **kwargs_)
     factory = staticmethod(factory)
+    def get_organ(self): return self.organ
+    def set_organ(self, organ): self.organ = organ
     def get_tissue(self): return self.tissue
     def set_tissue(self, tissue): self.tissue = tissue
     def get_cell(self): return self.cell
@@ -4275,6 +4281,7 @@ class complex_natural_source_type(base_source_type):
     def set_cellular_location(self, cellular_location): self.cellular_location = cellular_location
     def hasContent_(self):
         if (
+            self.organ is not None or
             self.tissue is not None or
             self.cell is not None or
             self.organelle is not None or
@@ -4313,6 +4320,9 @@ class complex_natural_source_type(base_source_type):
             eol_ = '\n'
         else:
             eol_ = ''
+        if self.organ is not None:
+            showIndent(outfile, level, pretty_print)
+            outfile.write('<organ>%s</organ>%s' % (self.gds_encode(self.gds_format_string(quote_xml(self.organ), input_name='organ')), eol_))
         if self.tissue is not None:
             showIndent(outfile, level, pretty_print)
             outfile.write('<tissue>%s</tissue>%s' % (self.gds_encode(self.gds_format_string(quote_xml(self.tissue), input_name='tissue')), eol_))
@@ -4335,7 +4345,15 @@ class complex_natural_source_type(base_source_type):
     def buildAttributes(self, node, attrs, already_processed):
         super(complex_natural_source_type, self).buildAttributes(node, attrs, already_processed)
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
-        if nodeName_ == 'tissue':
+        if nodeName_ == 'organ':
+            organ_ = child_.text
+            if organ_:
+                organ_ = re_.sub(String_cleanup_pat_, " ", organ_).strip()
+            else:
+                organ_ = ""
+            organ_ = self.gds_validate_string(organ_, node, 'organ')
+            self.organ = organ_
+        elif nodeName_ == 'tissue':
             tissue_ = child_.text
             if tissue_:
                 tissue_ = re_.sub(String_cleanup_pat_, " ", tissue_).strip()
@@ -15833,7 +15851,7 @@ class validation_type(GeneratedsSuper):
             if not self.gds_validate_simple_patterns(
                     self.validate_fileType45_patterns_, value):
                 warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_fileType45_patterns_, ))
-    validate_fileType45_patterns_ = [['emd_\\d{4,}_fsc(_[1-9]{1})*.xml']]
+    validate_fileType45_patterns_ = [['emd_\\d{4,}_fsc(_[1-9]{1,})*.xml']]
     def hasContent_(self):
         if (
             self.file is not None or

@@ -4493,7 +4493,7 @@ class EMDBXMLTranslator(object):
                             # copy_recombinant_source(smol_in, protein)
                             # element 7 - <xs:complexType name="proteinType">
                             # XSD: <xs:element name="natSource" type="natSrcType" minOccurs="0"/>
-                            copy_natural_source(smol_in, protein)
+                            copy_natural_source(smol_in, protein, cell=True, organelle=True, tissue=True, cellular_location=True, organ=True)
                             # element 8 - <xs:complexType name="proteinType">
                             # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0"/>
                             eng_src = create_eng_source(smol_in)
