@@ -2,24 +2,24 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Fri Oct  5 16:58:20 2018 by generateDS.py version 2.29.5.
+# Generated Fri Nov 23 18:14:50 2018 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
 #   ('--root-element', 'emd')
 #   ('-f', '')
-#   ('-o', '/Users/sanja/IdeaProjects/emdb-xml-translator/emdb_30relaxed.py')
+#   ('-o', 'emdb_30relaxed.py')
 #   ('--no-warnings', '')
 #   ('--external-encoding', 'utf-8')
 #
 # Command line arguments:
-#   /Users/sanja/IdeaProjects/emdb-xml-translator/emdb30_relaxed.xsd
+#   emdb30_relaxed.xsd
 #
 # Command line:
-#   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "/Users/sanja/IdeaProjects/emdb-xml-translator/emdb_30relaxed.py" --no-warnings --external-encoding="utf-8" /Users/sanja/IdeaProjects/emdb-xml-translator/emdb30_relaxed.xsd
+#   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "emdb_30relaxed.py" --no-warnings --external-encoding="utf-8" emdb30_relaxed.xsd
 #
 # Current working directory (os.getcwd()):
-#   modified_generateDS-2.29.5
+#   emdb-xml-translator
 #
 
 import sys
@@ -725,7 +725,7 @@ def _cast(typ, value):
 class entry_type(GeneratedsSuper):
     subclass = None
     superclass = None
-    def __init__(self, emdb_id=None, version='3.0.1.1', admin=None, crossreferences=None, sample=None, structure_determination_list=None, map=None, interpretation=None, validation=None):
+    def __init__(self, emdb_id=None, version='3.0.1.2', admin=None, crossreferences=None, sample=None, structure_determination_list=None, map=None, interpretation=None, validation=None):
         self.original_tagname_ = None
         self.emdb_id = _cast(None, emdb_id)
         self.version = _cast(None, version)
@@ -813,9 +813,6 @@ class entry_type(GeneratedsSuper):
         if self.version is not None and 'version' not in already_processed:
             already_processed.add('version')
             outfile.write(' version=%s' % (self.gds_encode(self.gds_format_string(quote_attrib(self.version), input_name='version')), ))
-        outfile.write(' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"')
-        outfile.write(' xsi:schemaLocation="https://github.com/emdb-empiar/emdb-xml-translator/blob/master/emdb30_relaxed.xsd"')
-
     def exportChildren(self, outfile, level, namespace_='', name_='entry_type', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -8307,7 +8304,7 @@ class vitrification_type(GeneratedsSuper):
         # Validate type cryogen_nameType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['ETHANE', 'ETHANE-PROPANE', 'ETHANE-PROPANE MIXTURE', 'FREON 12', 'FREON 22', 'HELIUM', 'METHANE', 'NITROGEN', 'NONE', 'OTHER', 'PROPANE']
+            enumerations = ['ETHANE', 'ETHANE-PROPANE', 'FREON 12', 'FREON 22', 'HELIUM', 'METHANE', 'NITROGEN', 'OTHER', 'PROPANE', 'ETHANE-PROPANE MIXTURE', 'NONE']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
