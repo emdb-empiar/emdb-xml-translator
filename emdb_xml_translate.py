@@ -4791,7 +4791,7 @@ class EMDBXMLTranslator(object):
                     # XSD: <xs:element name="entry" type="cmpntClassType"/>
                     if mol_type_in == 'protein_or_peptide':
                         comp.set_entry('protein')
-                    elif mol_type_in == 'ligand':
+                    elif mol_type_in in ['ligand', 'saccharide']:
                         comp.set_entry('ligand')
                     elif mol_type_in == 'em_label':
                         comp.set_entry('label')
@@ -4918,7 +4918,7 @@ class EMDBXMLTranslator(object):
 
                     # element 5 in choice 1 - <xs:complexType name="smplCompType">
                     # XSD: <xs:element name="ligand" type="ligandType"/>
-                    if mol_type_in == 'ligand':
+                    if mol_type_in in ['ligand', 'saccharide']:
                         # XSD: <xs:complexType name="ligandType"> has 10 elements
                         lig = emdb_19.ligandType()
                         unpack_odd_details(mol_in, comp, lig)
