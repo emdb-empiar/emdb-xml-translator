@@ -4944,9 +4944,10 @@ class EMDBXMLTranslator(object):
                         copy_natural_source(mol_in, lig, cell=True, organelle=True, tissue=True, cellular_location=True, organ=True)
                         # element 8 - <xs:complexType name="ligandType">
                         # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0"/>
-                        eng_src = create_eng_source(mol_in)
-                        if eng_src is not None and eng_src.hasContent_:
-                            lig.set_engSource(eng_src)
+                        if mol_type_in == 'ligand':
+                            eng_src = create_eng_source(mol_in)
+                            if eng_src is not None and eng_src.hasContent_:
+                                lig.set_engSource(eng_src)
                         # element 9 - <xs:complexType name="ligandType">
                         # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
                         # element 10 - <xs:complexType name="ligandType">
