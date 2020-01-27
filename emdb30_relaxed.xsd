@@ -24,7 +24,7 @@
             </xs:element>
         </xs:sequence>
         <xs:attribute name="emdb_id" type="emdb_id_type" use="required" />
-        <xs:attribute default="3.0.1.2" name="version" type="xs:token" />
+        <xs:attribute default="3.0.1.8" name="version" type="xs:token" />
         
     </xs:complexType>
     <xs:complexType name="admin_type">
@@ -87,6 +87,30 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element minOccurs="0" name="microscopy_center">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="name">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:token">
+                                    <xs:enumeration value="MICRO_CENTER_1" />
+                                    <xs:enumeration value="MICRO_CENTER_2" />
+                                    <xs:enumeration value="MICRO_CENTER_3" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="country">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:token">
+                                    <xs:enumeration value="UK" />
+                                    <xs:enumeration value="USA" />
+                                    <xs:enumeration value="Japan" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+             </xs:element>
             <xs:element maxOccurs="unbounded" minOccurs="0" name="contact_author">
                 <xs:complexType>
                     <xs:complexContent>
@@ -196,8 +220,8 @@
     <xs:complexType name="grant_reference_type">
         <xs:sequence>
             <xs:element name="funding_body" type="xs:token" />
-            <xs:element name="code" type="xs:token" />
-            <xs:element name="country" type="xs:token" />
+            <xs:element minOccurs="0" name="code" type="xs:token" />
+            <xs:element minOccurs="0" name="country" type="xs:token" />
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="contact_details_type">
@@ -356,12 +380,12 @@
         <xs:union memberTypes="author_enums">
             <xs:simpleType>
                 <xs:restriction base="xs:token">
-                    <xs:pattern value="([A-Za-z' \-]+ (Jr.?|II|III)?) ?([A-Za-z\-]*)" />
+                    <xs:pattern value="([A-Za-z' \-]+ (Jr.?|II|III|3rd|4th)?) ?([A-Za-z\-]*)" />
                 </xs:restriction>
             </xs:simpleType>
         </xs:union>
     </xs:simpleType>
-    
+
     <xs:complexType name="crossreferences_type">
         <xs:sequence>
             <xs:element name="citation_list">
@@ -1196,7 +1220,7 @@
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="ec_number">
                         <xs:simpleType>
                             <xs:restriction base="xs:token">
-                                <xs:pattern value="([1-6]((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?[0-9]?)|(.-)))(([ ]*,[ ]*)([1-6]((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?[0-9]?)|(.-))))*" />
+                                <xs:pattern value="([1-7]((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?[0-9]?)|(.-)))(([ ]*,[ ]*)([1-6]((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?)|(.-))((.[1-9][0-9]?[0-9]?)|(.-))))*" />
                             </xs:restriction>
                         </xs:simpleType>
                     </xs:element>
@@ -1994,6 +2018,11 @@
                         <xs:enumeration value="JEOL CRYO ARM 200" />
                         <xs:enumeration value="JEOL CRYO ARM 300" />
                         <xs:enumeration value="JEOL KYOTO-3000SFF" />
+                        <xs:enumeration value="TFS GLACIOS" />
+                        <xs:enumeration value="TFS KRIOS" />
+                        <xs:enumeration value="TFS TALOS" />
+                        <xs:enumeration value="TFS TALOS L120C" />
+                        <xs:enumeration value="TFS TALOS F200C" />
                         <xs:enumeration value="ZEISS LEO912" />
                         <xs:enumeration value="ZEISS LIBRA120PLUS" />
                     <xs:enumeration value="OTHER" /></xs:restriction>
@@ -2096,6 +2125,7 @@
             <xs:element minOccurs="0" name="specimen_holder_model">
                 <xs:simpleType>
                     <xs:restriction base="xs:token">
+                        <xs:enumeration value="FISCHIONE 2550" />
                         <xs:enumeration value="FEI TITAN KRIOS AUTOGRID HOLDER" />
                         <xs:enumeration value="GATAN 626 SINGLE TILT LIQUID NITROGEN CRYO TRANSFER HOLDER" />
                         <xs:enumeration value="GATAN 910 MULTI-SPECIMEN SINGLE TILT CRYO TRANSFER HOLDER" />
@@ -2104,6 +2134,7 @@
                         <xs:enumeration value="GATAN CHDT 3504 DOUBLE TILT HIGH RESOLUTION NITROGEN COOLING HOLDER" />
                         <xs:enumeration value="GATAN CT3500 SINGLE TILT LIQUID NITROGEN CRYO TRANSFER HOLDER" />
                         <xs:enumeration value="GATAN CT3500TR SINGLE TILT ROTATION LIQUID NITROGEN CRYO TRANSFER HOLDER" />
+                        <xs:enumeration value="GATAN ELSA 698 SINGLE TILT LIQUID NITROGEN CRYO TRANSFER HOLDER" />
                         <xs:enumeration value="GATAN HC 3500 SINGLE TILT HEATING/NITROGEN COOLING HOLDER" />
                         <xs:enumeration value="GATAN HCHDT 3010 DOUBLE TILT HIGH RESOLUTION HELIUM COOLING HOLDER" />
                         <xs:enumeration value="GATAN HCHST 3008 SINGLE TILT HIGH RESOLUTION HELIUM COOLING HOLDER" />
@@ -2356,7 +2387,15 @@
     </xs:complexType>
     <xs:complexType name="specialist_optics_type">
         <xs:sequence>
-            <xs:element minOccurs="0" name="phase_plate" type="xs:token" />
+            <xs:element minOccurs="0" name="phase_plate">
+                <xs:simpleType>
+                    <xs:restriction base="xs:token">
+                        <xs:enumeration value="ZERNIKE PHASE PLATE" />
+                        <xs:enumeration value="VOLTA PHASE PLATE" />
+                        <xs:enumeration value="OTHER" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
             <xs:element minOccurs="0" name="sph_aberration_corrector" type="xs:token" />
             <xs:element minOccurs="0" name="chr_aberration_corrector" type="xs:token" />
             <xs:element minOccurs="0" name="energy_filter">
@@ -2438,6 +2477,8 @@
             <xs:enumeration value="GATAN K2 IS (4k x 4k)" />
             <xs:enumeration value="GATAN K2 QUANTUM (4k x 4k)" />
             <xs:enumeration value="GATAN K2 SUMMIT (4k x 4k)" />
+            <xs:enumeration value="GATAN K3 (6k x 4k)" />
+            <xs:enumeration value="GATAN K3 BIOQUANTUM (6k x 4k)" />
             <xs:enumeration value="GATAN MULTISCAN" />
             <xs:enumeration value="GATAN ORIUS SC1000 (4k x 2.7k)" />
             <xs:enumeration value="GATAN ORIUS SC200 (2k x 2k)" />
@@ -3052,7 +3093,7 @@
     </xs:complexType>
     <xs:simpleType name="chain_pdb_id">
         <xs:restriction base="xs:token">
-            <xs:pattern value="\d|[A-Za-z]" />
+            <xs:pattern value="\d|[A-Za-z]{1,2}" />
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="ctf_correction_type">

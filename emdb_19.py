@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Wed Sep 19 13:34:40 2018 by generateDS.py version 2.29.5.
+# Generated Mon Jan 27 16:35:02 2020 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
 #   ('--root-element', 'emd')
 #   ('-f', '')
-#   ('-o', '/Users/sanja/IdeaProjects/emdb-xml-translator/emdb_19.py')
+#   ('-o', '/Users/sanja/IdeaProjects/emdb-schemas/current/emdb.py')
 #   ('--no-warnings', '')
 #   ('--external-encoding', 'utf-8')
 #
@@ -16,10 +16,10 @@
 #   /Users/sanja/IdeaProjects/emdb-schemas/current/emdb.xsd
 #
 # Command line:
-#   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "/Users/sanja/IdeaProjects/emdb-xml-translator/emdb_19.py" --no-warnings --external-encoding="utf-8" /Users/sanja/IdeaProjects/emdb-schemas/current/emdb.xsd
+#   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "/Users/sanja/IdeaProjects/emdb-schemas/current/emdb.py" --no-warnings --external-encoding="utf-8" /Users/sanja/IdeaProjects/emdb-schemas/current/emdb.xsd
 #
 # Current working directory (os.getcwd()):
-#   modified_generateDS-2.29.5
+#   v3
 #
 
 import sys
@@ -140,10 +140,21 @@ except ImportError as exp:
                     raise_parse_error(node, 'Requires sequence of integers')
             return values
         def gds_format_float(self, input_data, input_name=''):
-            if (str(input_data)).endswith('.0'):
-                return ('%.1f' % input_data)
-            else:
-                return ('%.15f' % input_data).rstrip('0')
+            # changed on 17/10/2019
+            #if (str(input_data)).endswith('.0'):
+            #    return ('%.1f' % input_data)
+            #else:
+            #    return ('%.2f' % input_data).rstrip('0')
+            decimal_places = 1
+            fl_input_data = float(input_data)
+            if "." in str(input_data):
+                stripped_input = str(input_data).rstrip("0") 
+                index = stripped_input.index(".")
+                len_stripped = len(stripped_input)
+                decimal_places = len_stripped - (index + 1)
+                fl_input_data = float(stripped_input)
+            return '%.*f' % (decimal_places, fl_input_data)
+    
         def gds_validate_float(self, input_data, node=None, input_name=''):
             return input_data
         def gds_format_float_list(self, input_data, input_name=''):
@@ -3852,7 +3863,7 @@ class imgType(GeneratedsSuper):
         # Validate type microscopeType, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['FEI MORGAGNI', 'FEI POLARA 300', 'FEI TECNAI 10', 'FEI TECNAI 12', 'FEI TECNAI 20', 'FEI TECNAI F20', 'FEI TECNAI F30', 'FEI TECNAI SPHERA', 'FEI TECNAI SPIRIT', 'FEI TITAN', 'FEI TITAN KRIOS', 'FEI/PHILIPS CM10', 'FEI/PHILIPS CM12', 'FEI/PHILIPS CM120T', 'FEI/PHILIPS CM200FEG', 'FEI/PHILIPS CM200FEG/SOPHIE', 'FEI/PHILIPS CM200FEG/ST', 'FEI/PHILIPS CM200FEG/UT', 'FEI/PHILIPS CM200T', 'FEI/PHILIPS CM300FEG/HE', 'FEI/PHILIPS CM300FEG/ST', 'FEI/PHILIPS CM300FEG/T', 'FEI/PHILIPS EM400', 'FEI/PHILIPS EM420', 'FEI TALOS ARCTICA', 'FEI TECNAI ARCTICA', 'HITACHI EF2000', 'HITACHI H7600', 'HITACHI HF2000', 'HITACHI HF3000', 'HITACHI H-9500SD', 'JEOL 100CX', 'JEOL 1010', 'JEOL 1200', 'JEOL 1200EX', 'JEOL 1200EXII', 'JEOL 1230', 'JEOL 1400', 'JEOL 2000EX', 'JEOL 2000EXII', 'JEOL 2010', 'JEOL 2010F', 'JEOL 2010HT', 'JEOL 2010HC', 'JEOL 2010UHR', 'JEOL 2011', 'JEOL 2100', 'JEOL 2100F', 'JEOL 2200FS', 'JEOL 2200FSC', 'JEOL 3000SFF', 'JEOL 3100FEF', 'JEOL 3100FFC', 'JEOL 3200FS', 'JEOL 3200FSC', 'JEOL KYOTO-3000SFF', 'JEOL 3200FSC', 'JEOL 4000', 'JEOL 4000EX', 'ZEISS LEO912', 'ZEISS LIBRA120PLUS', 'OTHER']
+            enumerations = ['FEI MORGAGNI', 'FEI POLARA 300', 'FEI TALOS ARCTICA', 'FEI TECNAI 10', 'FEI TECNAI 12', 'FEI TECNAI 20', 'FEI TECNAI ARCTICA', 'FEI TECNAI F20', 'FEI TECNAI F30', 'FEI TECNAI SPHERA', 'FEI TECNAI SPIRIT', 'FEI TITAN', 'FEI TITAN KRIOS', 'FEI/PHILIPS CM10', 'FEI/PHILIPS CM12', 'FEI/PHILIPS CM120T', 'FEI/PHILIPS CM200FEG', 'FEI/PHILIPS CM200FEG/SOPHIE', 'FEI/PHILIPS CM200FEG/ST', 'FEI/PHILIPS CM200FEG/UT', 'FEI/PHILIPS CM200T', 'FEI/PHILIPS CM300FEG/HE', 'FEI/PHILIPS CM300FEG/ST', 'FEI/PHILIPS CM300FEG/T', 'FEI/PHILIPS EM400', 'FEI/PHILIPS EM420', 'HITACHI EF2000', 'HITACHI H-9500SD', 'HITACHI H7600', 'HITACHI HF2000', 'HITACHI HF3000', 'JEOL 100CX', 'JEOL 1010', 'JEOL 1200', 'JEOL 1200EX', 'JEOL 1200EXII', 'JEOL 1230', 'JEOL 1400', 'JEOL 2000EX', 'JEOL 2000EXII', 'JEOL 2010', 'JEOL 2010F', 'JEOL 2010HC', 'JEOL 2010HT', 'JEOL 2010UHR', 'JEOL 2011', 'JEOL 2100', 'JEOL 2100F', 'JEOL 2200FS', 'JEOL 2200FSC', 'JEOL 3000SFF', 'JEOL 3100FEF', 'JEOL 3100FFC', 'JEOL 3200FS', 'JEOL 3200FSC', 'JEOL 4000', 'JEOL 4000EX', 'JEOL CRYO ARM 200', 'JEOL CRYO ARM 300', 'JEOL KYOTO-3000SFF', 'TFS GLACIOS', 'TFS KRIOS', 'TFS TALOS', 'TFS TALOS L120C', 'TFS TALOS F200C', 'ZEISS LEO912', 'ZEISS LIBRA120PLUS', 'OTHER']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
@@ -12281,8 +12292,8 @@ def parseLiteral(inFileName, silence=False):
     # Enable Python to collect the space used by the DOM.
     doc = None
     if not silence:
-        sys.stdout.write('#from emdb_19 import *\n\n')
-        sys.stdout.write('import emdb_19 as model_\n\n')
+        sys.stdout.write('#from emdb import *\n\n')
+        sys.stdout.write('import emdb as model_\n\n')
         sys.stdout.write('rootObj = model_.rootClass(\n')
         rootObj.exportLiteral(sys.stdout, 0, name_=rootTag)
         sys.stdout.write(')\n')

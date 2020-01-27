@@ -49,7 +49,7 @@ def process_all_30_19(file_path_template, out_dir):
         i += 1
         if i > 0:
             inf = os.path.basename(emdb_file)
-            if True: # inf.find("8481") != -1:
+            if inf.find("10575") != -1:
                 print i
                 # print 'IN: %s' % inf
                 print inf

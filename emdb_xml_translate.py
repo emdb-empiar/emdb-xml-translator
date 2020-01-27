@@ -754,6 +754,13 @@ class EMDBXMLTranslator(object):
                         if level.find('.') == -1:
                             # this is a whole number; note in details
                             add_contour_level_details = '{level is a whole number}'
+                        #level_split = level.split('.')
+                        #print level_split
+                        #if len(level_split) > 1:
+                        #    if len(level_split[1]) < 2:
+                        #        level_adj = level.ljust(len(level) + 1,'0')
+                        #        print 'level adj %s' % level_adj
+                        #print 'level is %s of %s will be %s' % (level_adj, type(level_adj), float(level_adj))
                         cntr.set_level(float(level))
                     # element 2 - <xs:element name="contour" maxOccurs="unbounded">
                     # XSD: <xs:element name="source" minOccurs="0">
@@ -4131,6 +4138,8 @@ class EMDBXMLTranslator(object):
             self.check_set(dates_in.get_map_release, dep.set_mapReleaseDate)
             # element 7 - <xs:complexType name="depType">
             # XSD: <xs:element name="obsoletedDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+            obs_date = dates_in.get_obsolete()
+            print 'date obs %s' % obs_date
             self.check_set(dates_in.get_obsolete, dep.set_obsoletedDate)
             # element 8 - <xs:complexType name="depType">
             # XSD: <xs:element name="supersededByList" type="emdbListType" minOccurs="0" maxOccurs="1"/>
@@ -4791,7 +4800,7 @@ class EMDBXMLTranslator(object):
                     # XSD: <xs:element name="entry" type="cmpntClassType"/>
                     if mol_type_in == 'protein_or_peptide':
                         comp.set_entry('protein')
-                    elif mol_type_in in ['ligand', 'saccharide']:
+                    elif mol_type_in == 'ligand':
                         comp.set_entry('ligand')
                     elif mol_type_in == 'em_label':
                         comp.set_entry('label')
@@ -4918,7 +4927,7 @@ class EMDBXMLTranslator(object):
 
                     # element 5 in choice 1 - <xs:complexType name="smplCompType">
                     # XSD: <xs:element name="ligand" type="ligandType"/>
-                    if mol_type_in in ['ligand', 'saccharide']:
+                    if mol_type_in == 'ligand':
                         # XSD: <xs:complexType name="ligandType"> has 10 elements
                         lig = emdb_19.ligandType()
                         unpack_odd_details(mol_in, comp, lig)
@@ -4944,10 +4953,9 @@ class EMDBXMLTranslator(object):
                         copy_natural_source(mol_in, lig, cell=True, organelle=True, tissue=True, cellular_location=True, organ=True)
                         # element 8 - <xs:complexType name="ligandType">
                         # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0"/>
-                        if mol_type_in == 'ligand':
-                            eng_src = create_eng_source(mol_in)
-                            if eng_src is not None and eng_src.hasContent_:
-                                lig.set_engSource(eng_src)
+                        eng_src = create_eng_source(mol_in)
+                        if eng_src is not None and eng_src.hasContent_:
+                            lig.set_engSource(eng_src)
                         # element 9 - <xs:complexType name="ligandType">
                         # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
                         # element 10 - <xs:complexType name="ligandType">
@@ -5207,7 +5215,74 @@ class EMDBXMLTranslator(object):
                     if self.roundtrip:
                         img.set_microscope(the_mic)
                     else:
-                        known_microscopes=['FEI MORGAGNI', 'FEI POLARA 300', 'FEI TECNAI 10', 'FEI TECNAI 12', 'FEI TECNAI 20', 'FEI TECNAI F20', 'FEI TECNAI F30', 'FEI TECNAI SPHERA', 'FEI TECNAI SPIRIT', 'FEI TITAN', 'FEI TITAN KRIOS', 'FEI/PHILIPS CM10', 'FEI/PHILIPS CM12', 'FEI/PHILIPS CM120T', 'FEI/PHILIPS CM200FEG', 'FEI/PHILIPS CM200FEG/SOPHIE', 'FEI/PHILIPS CM200FEG/ST', 'FEI/PHILIPS CM200FEG/UT', 'FEI/PHILIPS CM200T', 'FEI/PHILIPS CM300FEG/HE', 'FEI/PHILIPS CM300FEG/ST', 'FEI/PHILIPS CM300FEG/T', 'FEI/PHILIPS EM400', 'FEI/PHILIPS EM420', 'FEI TALOS ARCTICA', 'FEI TECNAI ARCTICA', 'HITACHI EF2000', 'HITACHI H7600', 'HITACHI HF2000', 'HITACHI HF3000', 'HITACHI H-9500SD', 'JEOL 100CX', 'JEOL 1010', 'JEOL 1200', 'JEOL 1200EX', 'JEOL 1200EXII', 'JEOL 1230', 'JEOL 1400', 'JEOL 2000EX', 'JEOL 2000EXII', 'JEOL 2010', 'JEOL 2010F', 'JEOL 2010HT', 'JEOL 2010HC', 'JEOL 2010UHR', 'JEOL 2011', 'JEOL 2100', 'JEOL 2100F', 'JEOL 2200FS', 'JEOL 2200FSC', 'JEOL 3000SFF', 'JEOL 3100FEF', 'JEOL 3100FFC', 'JEOL 3200FS', 'JEOL 3200FSC', 'JEOL KYOTO-3000SFF', 'JEOL 3200FSC', 'JEOL 4000', 'JEOL 4000EX', 'ZEISS LEO912', 'ZEISS LIBRA120PLUS', 'OTHER']
+                        known_microscopes = ['FEI MORGAGNI',
+                            'FEI POLARA 300',
+                            'FEI TALOS ARCTICA',
+                            'FEI TECNAI 10',
+                            'FEI TECNAI 12',
+                            'FEI TECNAI 20',
+                            'FEI TECNAI ARCTICA',
+                            'FEI TECNAI F20',
+                            'FEI TECNAI F30',
+                            'FEI TECNAI SPHERA',
+                            'FEI TECNAI SPIRIT',
+                            'FEI TITAN',
+                            'FEI TITAN KRIOS',
+                            'FEI/PHILIPS CM10',
+                            'FEI/PHILIPS CM12',
+                            'FEI/PHILIPS CM120T',
+                            'FEI/PHILIPS CM200FEG',
+                            'FEI/PHILIPS CM200FEG/SOPHIE',
+                            'FEI/PHILIPS CM200FEG/ST',
+                            'FEI/PHILIPS CM200FEG/UT',
+                            'FEI/PHILIPS CM200T',
+                            'FEI/PHILIPS CM300FEG/HE',
+                            'FEI/PHILIPS CM300FEG/ST',
+                            'FEI/PHILIPS CM300FEG/T',
+                            'FEI/PHILIPS EM400',
+                            'FEI/PHILIPS EM420',
+                            'HITACHI EF2000',
+                            'HITACHI H-9500SD',
+                            'HITACHI H7600',
+                            'HITACHI HF2000',
+                            'HITACHI HF3000',
+                            'JEOL 100CX',
+                            'JEOL 1010',
+                            'JEOL 1200',
+                            'JEOL 1200EX',
+                            'JEOL 1200EXII',
+                            'JEOL 1230',
+                            'JEOL 1400',
+                            'JEOL 2000EX',
+                            'JEOL 2000EXII',
+                            'JEOL 2010',
+                            'JEOL 2010F',
+                            'JEOL 2010HC',
+                            'JEOL 2010HT',
+                            'JEOL 2010UHR',
+                            'JEOL 2011',
+                            'JEOL 2100',
+                            'JEOL 2100F',
+                            'JEOL 2200FS',
+                            'JEOL 2200FSC',
+                            'JEOL 3000SFF',
+                            'JEOL 3100FEF',
+                            'JEOL 3100FFC',
+                            'JEOL 3200FS',
+                            'JEOL 3200FSC',
+                            'JEOL 4000',
+                            'JEOL 4000EX',
+                            'JEOL CRYO ARM 200',
+                            'JEOL CRYO ARM 300',
+                            'JEOL KYOTO-3000SFF',
+                            'TFS GLACIOS',
+                            'TFS KRIOS',
+                            'TFS TALOS',
+                            'TFS TALOS L120C',
+                            'TFS TALOS F200C',
+                            'ZEISS LEO912',
+                            'ZEISS LIBRA120PLUS',
+                            'OTHER']
                         if the_mic in known_microscopes:
                             img.set_microscope(the_mic)
                         else:
