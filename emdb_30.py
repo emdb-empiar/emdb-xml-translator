@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Mon Jan 27 15:43:50 2020 by generateDS.py version 2.29.5.
+# Generated Tue Jan 28 16:24:23 2020 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
@@ -19,7 +19,7 @@
 #   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "/Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_1_8/emdb.py" --no-warnings --external-encoding="utf-8" /Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_1_8/emdb.xsd
 #
 # Current working directory (os.getcwd()):
-#   modified_generateDS-2.29.5
+#   sanja
 #
 
 import sys
@@ -8028,6 +8028,7 @@ class film_type(GeneratedsSuper):
         self.original_tagname_ = None
         self.film_type_id = _cast(int, film_type_id)
         self.film_material = film_material
+        self.validate_film_materialType(self.film_material)
         self.film_topology = film_topology
         self.validate_film_topologyType(self.film_topology)
         self.film_thickness = film_thickness
@@ -8050,6 +8051,18 @@ class film_type(GeneratedsSuper):
     def set_film_thickness(self, film_thickness): self.film_thickness = film_thickness
     def get_film_type_id(self): return self.film_type_id
     def set_film_type_id(self, film_type_id): self.film_type_id = film_type_id
+    def validate_film_materialType(self, value):
+        # Validate type film_materialType, a restriction on xs:token.
+        if value is not None and Validate_simpletypes_:
+            value = str(value)
+            enumerations = ['CARBON', 'CELLULOSE ACETATE', 'FORMVAR', 'GOLD', 'GRAPHENE', 'GRAPHENE OXIDE', 'PARLODION']
+            enumeration_respectee = False
+            for enum in enumerations:
+                if value == enum:
+                    enumeration_respectee = True
+                    break
+            if not enumeration_respectee:
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on film_materialType' % {"value" : value.encode("utf-8")} )
     def validate_film_topologyType(self, value):
         # Validate type film_topologyType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
@@ -8135,6 +8148,8 @@ class film_type(GeneratedsSuper):
                 film_material_ = ""
             film_material_ = self.gds_validate_string(film_material_, node, 'film_material')
             self.film_material = film_material_
+            # validate type film_materialType
+            self.validate_film_materialType(self.film_material)
         elif nodeName_ == 'film_topology':
             film_topology_ = child_.text
             if film_topology_:

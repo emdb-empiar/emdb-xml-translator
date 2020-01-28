@@ -1537,7 +1537,19 @@
     </xs:complexType>
     <xs:complexType name="film_type">
         <xs:sequence>
-            <xs:element minOccurs="0" name="film_material" type="xs:token" />
+            <xs:element minOccurs="0" name="film_material">
+                <xs:simpleType>
+                    <xs:restriction base="xs:token">
+                        <xs:enumeration value="CARBON" />
+                        <xs:enumeration value="CELLULOSE ACETATE" />
+                        <xs:enumeration value="FORMVAR" />
+                        <xs:enumeration value="GOLD" />
+                        <xs:enumeration value="GRAPHENE" />
+                        <xs:enumeration value="GRAPHENE OXIDE" />
+                        <xs:enumeration value="PARLODION" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
             <xs:element minOccurs="0" name="film_topology">
                 <xs:simpleType>
                     <xs:restriction base="xs:token">
