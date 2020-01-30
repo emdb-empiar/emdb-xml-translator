@@ -1539,6 +1539,7 @@
                         <xs:enumeration value="GRAPHENE OXIDE"/>
                         <xs:enumeration value="MOLYBDENUM"/>
                         <xs:enumeration value="NICKEL"/>
+                        <xs:enumeration value="NICKEL/TITANIUM"/>
                         <xs:enumeration value="PLATINUM"/>
                         <xs:enumeration value="SILICON NITRIDE"/>
                         <xs:enumeration value="TITANIUM"/>
@@ -2015,6 +2016,7 @@
                         <xs:enumeration value="FEI/PHILIPS EM420"/>
                         <xs:enumeration value="HITACHI EF2000"/>
                         <xs:enumeration value="HITACHI H-9500SD"/>
+                        <xs:enumeration value="HITACHI H3000 UHVEM"/>
                         <xs:enumeration value="HITACHI H7600"/>
                         <xs:enumeration value="HITACHI HF2000"/>
                         <xs:enumeration value="HITACHI HF3000"/>

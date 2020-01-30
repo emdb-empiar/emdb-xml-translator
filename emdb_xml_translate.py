@@ -5243,6 +5243,7 @@ class EMDBXMLTranslator(object):
                             'FEI/PHILIPS EM420',
                             'HITACHI EF2000',
                             'HITACHI H-9500SD',
+                            'HITACHI H3000 UHVEM',
                             'HITACHI H7600',
                             'HITACHI HF2000',
                             'HITACHI HF3000',
