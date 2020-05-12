@@ -47,7 +47,7 @@ class EMDBXMLTranslator(object):
         There are many constants in use for the translation. They have been collected here for  ease of use.
         """
         # Global constants
-        LATEST_XML_VERSION = '3.0.1.1'
+        LATEST_XML_VERSION = '3.0.1.9'
         # Used to identify sample supramolecule
         EM_SAMPLE_ID = 1000
         EM_DATE_FORMAT = '%d-%b-%Y'
@@ -1160,16 +1160,18 @@ class EMDBXMLTranslator(object):
                         if self.roundtrip:
                             fod.set_valueOf_(detector_in)
                         else:
-                            allowed_detectors = ['AGFA SCIENTA FILM', 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)', 'DIRECT ELECTRON DE-16 (4k x 4k)',
-                                                 'DIRECT ELECTRON DE-20 (5k x 3k)', 'DIRECT ELECTRON DE-64 (8k x 8k)', 'FEI CETA (4k x 4k)', 'FEI EAGLE (2k x 2k)',
-                                                 'FEI EAGLE (4k x 4k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)', 'FEI FALCON III (4k x 4k)', 'GATAN K2 (4k x 4k)',
-                                                 'GATAN K2 BASE (4k x 4k)', 'GATAN K2 IS (4k x 4k)', 'GATAN K2 QUANTUM (4k x 4k)', 'GATAN K2 SUMMIT (4k x 4k)', 'GATAN MULTISCAN',
-                                                 'GATAN ORIUS SC1000 (4k x 2.7k)', 'GATAN ORIUS SC200 (2k x 2k)', 'GATAN ORIUS SC600 (2.7k x 2.7k)',
-                                                 'GATAN ULTRASCAN 1000 (2k x 2k)', 'GATAN ULTRASCAN 10000 (10k x 10k)', 'GATAN ULTRASCAN 4000 (4k x 4k)', 'GENERIC CCD',
-                                                 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)', 'GENERIC FILM', 'GENERIC GATAN', 'GENERIC GATAN (2k x 2k)',
-                                                 'GENERIC GATAN (4k x 4k)', 'GENERIC IMAGE PLATES', 'GENERIC TVIPS', 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)',
-                                                 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'OTHER', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F216 (2k x 2k)',
-                                                 'TVIPS TEMCAM-F224 (2k x 2k)', 'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F816 (8k x 8k)']
+                            allowed_detectors = ['AGFA SCIENTA FILM', 'KODAK 4489 FILM', 'KODAK SO-163 FILM', 'GENERIC FILM', 'GENERIC IMAGE PLATES',
+                                                 'DIRECT ELECTRON DE-10 (5k x 4k)', 'DIRECT ELECTRON DE-12 (4k x 3k)', 'DIRECT ELECTRON DE-16 (4k x 4k)',
+                                                 'DIRECT ELECTRON DE-20 (5k x 3k)', 'DIRECT ELECTRON DE-64 (8k x 8k)', 'FEI CETA (4k x 4k)',
+                                                 'FEI EAGLE (2k x 2k)', 'FEI FALCON I (4k x 4k)', 'FEI FALCON II (4k x 4k)', 'FEI FALCON III (4k x 4k)',
+                                                 'FEI FALCON IV (4k x 4k)', 'GATAN MULTISCAN', 'GATAN ORIUS SC200 (2k x 2k)', 'GATAN ORIUS SC600 (2.7k x 2.7k)',
+                                                 'GATAN ORIUS SC1000 (4k x 2.7k)', 'GATAN ULTRASCAN 1000 (2k x 2k)', 'GATAN ULTRASCAN 4000 (4k x 4k)',
+                                                 'GATAN ULTRASCAN 10000 (10k x 10k)', 'GATAN K2 (4k x 4k)', 'GATAN K2 BASE (4k x 4k)', 'GATAN K2 SUMMIT (4k x 4k)',
+                                                 'GATAN K2 IS (4k x 4k)', 'GATAN K2 QUANTUM (4k x 4k)', 'GENERIC GATAN (2k x 2k)', 'GENERIC GATAN (2k x 4k)',
+                                                 'GENERIC GATAN', 'PROSCAN TEM-PIV (2k x 2k)', 'SIA 15C (3k x 3k)', 'TVIPS TEMCAM-F816 (8k x 8k)',
+                                                 'TVIPS TEMCAM-F415 (4k x 4k)', 'TVIPS TEMCAM-F416 (4k x 4k)', 'TVIPS TEMCAM-F216 (2k x 2k)', 'TVIPS TEMCAM-F224 (2k x 2k)',
+                                                 'GENERIC TVIPS (2k x 2k)', 'GENERIC TVIPS (4k x 4k)', 'GENERIC TVIPS', 'GENERIC CCD (2k x 2k)', 'GENERIC CCD (4k x 4k)',
+                                                 'GENERIC CCD', 'OTHER']
 
                             if detector_in in allowed_detectors:
                                 fod.set_valueOf_(detector_in)

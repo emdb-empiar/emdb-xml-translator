@@ -24,7 +24,7 @@
             </xs:element>
         </xs:sequence>
         <xs:attribute name="emdb_id" type="emdb_id_type" use="required"/>
-        <xs:attribute name="version" type="xs:token" default="3.0.1.8"/>
+        <xs:attribute name="version" type="xs:token" default="3.0.1.9"/>
         <!-- <xs:attribute name="composite_structure" type="xs:boolean"/> -->
     </xs:complexType>
     <xs:complexType name="admin_type">
@@ -2376,7 +2376,6 @@
     <xs:simpleType name="allowed_acceleration_voltage">
         <xs:restriction base="xs:positiveInteger">
             <xs:minInclusive value="25"/>
-            <xs:maxInclusive value="400"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="allowed_c2_aperture_diameter">
@@ -2503,6 +2502,7 @@
             <xs:enumeration value="FEI FALCON I (4k x 4k)"/>
             <xs:enumeration value="FEI FALCON II (4k x 4k)"/>
             <xs:enumeration value="FEI FALCON III (4k x 4k)"/>
+            <xs:enumeration value="FEI FALCON IV (4k x 4k)"/>
             <xs:enumeration value="GATAN K2 (4k x 4k)"/>
             <xs:enumeration value="GATAN K2 BASE (4k x 4k)"/>
             <xs:enumeration value="GATAN K2 IS (4k x 4k)"/>
@@ -2542,7 +2542,6 @@
     </xs:simpleType>
     <xs:simpleType name="allowed_scaning_interval">
         <xs:restriction base="xs:float">
-            <xs:maxInclusive value="50"/>
             <xs:minExclusive value="0"/>
         </xs:restriction>
     </xs:simpleType>
