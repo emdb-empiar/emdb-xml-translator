@@ -5856,6 +5856,7 @@ class EMDBXMLTranslator(object):
         """
         Validate in_xml against in_schema
         """
+        print("schema is %s" % in_schema_filename)
         try:
             in_schema = open(in_schema_filename, 'r')
         except IOError as exp:

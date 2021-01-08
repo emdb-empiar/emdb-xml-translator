@@ -47,15 +47,17 @@ def process_all_19_30(file_path_template, out_dir):
     num_success = 0
     error_list = []
     i = 1
+    print("start")
     for emdb_file in emdb_files:
+        print(emdb_file)
         inf = os.path.basename(emdb_file)
         if True: # inf.find("EMD-1001") != -1:
             print i
             i = i + 1
             print inf
-            #print "IN: %s" % emdb_file
+            print "IN: %s" % emdb_file
             outf = os.path.join(out_dir, inf)
-            #print "OUT: %s" % outf
+            print "OUT: %s" % outf
             # logging.info("Input file: %s, output file: %s", emdb_file, outf)
             command_list = list(command_list_base)
             command_list.append(outf)
@@ -63,7 +65,8 @@ def process_all_19_30(file_path_template, out_dir):
             cmd_text = ' '.join(command_list)
             #print "EXEC: %s" % cmd_text
             #logging.info('Executing: %s', cmd_text)
-            exit_code = subprocess.call(command_list)
+            exit_code = -1
+            #exit_code = subprocess.call(command_list)
             if exit_code != 0:
                 num_errors += 1
                 error_list.append(inf)

@@ -41,20 +41,24 @@ def process_all_30_19(file_path_template, out_dir):
     """
     command_list_base = ['python', './emdb_xml_translate.py', '-v', '-i', '3.0', '-o', '1.9', '-f']
     emdb_files = glob.glob(file_path_template)
+    print(emdb_files)
+    print(file_path_template)
     num_errors = 0
     num_success = 0
     error_list = []
     i = 0
+    print("start")
     for emdb_file in emdb_files:
+        print(emdb_file)
         i += 1
         if i > 0:
             inf = os.path.basename(emdb_file)
-            if inf.find("10575") != -1:
+            if inf.find("21633") != -1:
                 print i
-                # print 'IN: %s' % inf
+                print 'IN: %s' % inf
                 print inf
                 outf = os.path.join(out_dir, inf)
-                # print 'OUT: %s' % outf
+                print 'OUT: %s' % outf
                 #logging.info("Input file: %s, output file: %s", emdb_file, outf)
                 command_list = list(command_list_base)
                 command_list.append(outf)
@@ -62,6 +66,7 @@ def process_all_30_19(file_path_template, out_dir):
                 cmd_text = ' '.join(command_list)
                 # print 'EXECUTING: %s' % cmd_text
                 #logging.info('Executing: %s', cmd_text)
+                exit_code = -1
                 exit_code = subprocess.call(command_list)
                 if exit_code != 0:
                     num_errors += 1

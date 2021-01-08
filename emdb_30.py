@@ -2,24 +2,24 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Tue May 12 19:15:12 2020 by generateDS.py version 2.29.5.
+# Generated Fri Jan  8 15:30:39 2021 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
 #   ('--root-element', 'emd')
 #   ('-f', '')
-#   ('-o', '/Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_1_9/emdb.py')
+#   ('-o', '/Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_2_3/emdb.py')
 #   ('--no-warnings', '')
 #   ('--external-encoding', 'utf-8')
 #
 # Command line arguments:
-#   /Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_1_9/emdb.xsd
+#   /Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_2_3/emdb.xsd
 #
 # Command line:
-#   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "/Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_1_9/emdb.py" --no-warnings --external-encoding="utf-8" /Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_1_9/emdb.xsd
+#   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "/Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_2_3/emdb.py" --no-warnings --external-encoding="utf-8" /Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_2_3/emdb.xsd
 #
 # Current working directory (os.getcwd()):
-#   sanja
+#   emdb-xml-translator
 #
 
 import sys
@@ -145,15 +145,18 @@ except ImportError as exp:
             #    return ('%.1f' % input_data)
             #else:
             #    return ('%.2f' % input_data).rstrip('0')
-            decimal_places = 1
             fl_input_data = float(input_data)
-            if "." in str(input_data):
-                stripped_input = str(input_data).rstrip("0") 
-                index = stripped_input.index(".")
-                len_stripped = len(stripped_input)
-                decimal_places = len_stripped - (index + 1)
-                fl_input_data = float(stripped_input)
-            return '%.*f' % (decimal_places, fl_input_data)
+            ret = '%s' % str(fl_input_data)
+            if "e" not in str(input_data) and "E" not in str(input_data):
+                decimal_places = 1
+                if "." in str(input_data) and not str(input_data).endswith('.0'):
+                    stripped_input = str(input_data).rstrip("0")
+                    index = stripped_input.index(".")
+                    len_stripped = len(stripped_input)
+                    decimal_places = len_stripped - (index + 1)
+                    fl_input_data = float(stripped_input)
+                ret = '%.*f' % (decimal_places, fl_input_data)
+            return ret
     
         def gds_validate_float(self, input_data, node=None, input_name=''):
             return input_data
@@ -736,7 +739,7 @@ def _cast(typ, value):
 class entry_type(GeneratedsSuper):
     subclass = None
     superclass = None
-    def __init__(self, emdb_id=None, version='3.0.1.9', admin=None, crossreferences=None, sample=None, structure_determination_list=None, map=None, interpretation=None, validation=None):
+    def __init__(self, emdb_id=None, version='3.0.2.3', admin=None, crossreferences=None, sample=None, structure_determination_list=None, map=None, interpretation=None, validation=None):
         self.original_tagname_ = None
         self.emdb_id = _cast(None, emdb_id)
         self.version = _cast(None, version)
@@ -1267,7 +1270,7 @@ class version_type(GeneratedsSuper):
         # Validate type processing_siteType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['PDBe', 'RCSB', 'PDBj']
+            enumerations = ['PDBe', 'RCSB', 'PDBj', 'PDBc']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
@@ -3844,13 +3847,17 @@ class base_supramolecule_type(GeneratedsSuper):
 class cell_supramolecule_type(base_supramolecule_type):
     subclass = None
     superclass = base_supramolecule_type
-    def __init__(self, supramolecule_id=None, name=None, category=None, parent=None, macromolecule_list=None, details=None, number_of_copies=None, oligomeric_state=None, external_references=None, recombinant_exp_flag=None, natural_source=None):
+    def __init__(self, supramolecule_id=None, name=None, category=None, parent=None, macromolecule_list=None, details=None, number_of_copies=None, oligomeric_state=None, external_references=None, recombinant_exp_flag=None, natural_source=None, synthetic_source=None):
         self.original_tagname_ = None
         super(cell_supramolecule_type, self).__init__(supramolecule_id, name, category, parent, macromolecule_list, details, number_of_copies, oligomeric_state, external_references, recombinant_exp_flag, )
         if natural_source is None:
             self.natural_source = []
         else:
             self.natural_source = natural_source
+        if synthetic_source is None:
+            self.synthetic_source = []
+        else:
+            self.synthetic_source = synthetic_source
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -3867,9 +3874,15 @@ class cell_supramolecule_type(base_supramolecule_type):
     def add_natural_source(self, value): self.natural_source.append(value)
     def insert_natural_source_at(self, index, value): self.natural_source.insert(index, value)
     def replace_natural_source_at(self, index, value): self.natural_source[index] = value
+    def get_synthetic_source(self): return self.synthetic_source
+    def set_synthetic_source(self, synthetic_source): self.synthetic_source = synthetic_source
+    def add_synthetic_source(self, value): self.synthetic_source.append(value)
+    def insert_synthetic_source_at(self, index, value): self.synthetic_source.insert(index, value)
+    def replace_synthetic_source_at(self, index, value): self.synthetic_source[index] = value
     def hasContent_(self):
         if (
             self.natural_source or
+            self.synthetic_source or
             super(cell_supramolecule_type, self).hasContent_()
         ):
             return True
@@ -3906,6 +3919,8 @@ class cell_supramolecule_type(base_supramolecule_type):
             eol_ = ''
         for natural_source_ in self.natural_source:
             natural_source_.export(outfile, level, namespace_, name_='natural_source', pretty_print=pretty_print)
+        for synthetic_source_ in self.synthetic_source:
+            synthetic_source_.export(outfile, level, namespace_, name_='synthetic_source', pretty_print=pretty_print)
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -3917,10 +3932,15 @@ class cell_supramolecule_type(base_supramolecule_type):
         super(cell_supramolecule_type, self).buildAttributes(node, attrs, already_processed)
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'natural_source':
-            obj_ = cell_natural_source_type.factory()
+            obj_ = cell_source_type.factory()
             obj_.build(child_)
             self.natural_source.append(obj_)
             obj_.original_tagname_ = 'natural_source'
+        elif nodeName_ == 'synthetic_source':
+            obj_ = cell_source_type.factory()
+            obj_.build(child_)
+            self.synthetic_source.append(obj_)
+            obj_.original_tagname_ = 'synthetic_source'
         super(cell_supramolecule_type, self).buildChildren(child_, node, nodeName_, True)
 # end class cell_supramolecule_type
 
@@ -4131,7 +4151,7 @@ class organism_type(GeneratedsSuper):
 class complex_supramolecule_type(base_supramolecule_type):
     subclass = None
     superclass = base_supramolecule_type
-    def __init__(self, supramolecule_id=None, name=None, category=None, parent=None, macromolecule_list=None, details=None, number_of_copies=None, oligomeric_state=None, external_references=None, recombinant_exp_flag=None, chimera=None, natural_source=None, recombinant_expression=None, molecular_weight=None, ribosome_details=None):
+    def __init__(self, supramolecule_id=None, name=None, category=None, parent=None, macromolecule_list=None, details=None, number_of_copies=None, oligomeric_state=None, external_references=None, recombinant_exp_flag=None, chimera=None, natural_source=None, synthetic_source=None, recombinant_expression=None, molecular_weight=None, ribosome_details=None):
         self.original_tagname_ = None
         super(complex_supramolecule_type, self).__init__(supramolecule_id, name, category, parent, macromolecule_list, details, number_of_copies, oligomeric_state, external_references, recombinant_exp_flag, )
         self.chimera = _cast(bool, chimera)
@@ -4139,6 +4159,10 @@ class complex_supramolecule_type(base_supramolecule_type):
             self.natural_source = []
         else:
             self.natural_source = natural_source
+        if synthetic_source is None:
+            self.synthetic_source = []
+        else:
+            self.synthetic_source = synthetic_source
         if recombinant_expression is None:
             self.recombinant_expression = []
         else:
@@ -4161,6 +4185,11 @@ class complex_supramolecule_type(base_supramolecule_type):
     def add_natural_source(self, value): self.natural_source.append(value)
     def insert_natural_source_at(self, index, value): self.natural_source.insert(index, value)
     def replace_natural_source_at(self, index, value): self.natural_source[index] = value
+    def get_synthetic_source(self): return self.synthetic_source
+    def set_synthetic_source(self, synthetic_source): self.synthetic_source = synthetic_source
+    def add_synthetic_source(self, value): self.synthetic_source.append(value)
+    def insert_synthetic_source_at(self, index, value): self.synthetic_source.insert(index, value)
+    def replace_synthetic_source_at(self, index, value): self.synthetic_source[index] = value
     def get_recombinant_expression(self): return self.recombinant_expression
     def set_recombinant_expression(self, recombinant_expression): self.recombinant_expression = recombinant_expression
     def add_recombinant_expression(self, value): self.recombinant_expression.append(value)
@@ -4175,6 +4204,7 @@ class complex_supramolecule_type(base_supramolecule_type):
     def hasContent_(self):
         if (
             self.natural_source or
+            self.synthetic_source or
             self.recombinant_expression or
             self.molecular_weight is not None or
             self.ribosome_details is not None or
@@ -4217,6 +4247,8 @@ class complex_supramolecule_type(base_supramolecule_type):
             eol_ = ''
         for natural_source_ in self.natural_source:
             natural_source_.export(outfile, level, namespace_, name_='natural_source', pretty_print=pretty_print)
+        for synthetic_source_ in self.synthetic_source:
+            synthetic_source_.export(outfile, level, namespace_, name_='synthetic_source', pretty_print=pretty_print)
         for recombinant_expression_ in self.recombinant_expression:
             recombinant_expression_.export(outfile, level, namespace_, name_='recombinant_expression', pretty_print=pretty_print)
         if self.molecular_weight is not None:
@@ -4244,10 +4276,15 @@ class complex_supramolecule_type(base_supramolecule_type):
         super(complex_supramolecule_type, self).buildAttributes(node, attrs, already_processed)
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'natural_source':
-            obj_ = complex_natural_source_type.factory()
+            obj_ = complex_source_type.factory()
             obj_.build(child_)
             self.natural_source.append(obj_)
             obj_.original_tagname_ = 'natural_source'
+        elif nodeName_ == 'synthetic_source':
+            obj_ = complex_source_type.factory()
+            obj_.build(child_)
+            self.synthetic_source.append(obj_)
+            obj_.original_tagname_ = 'synthetic_source'
         elif nodeName_ == 'recombinant_expression':
             obj_ = recombinant_source_type.factory()
             obj_.build(child_)
@@ -4266,12 +4303,12 @@ class complex_supramolecule_type(base_supramolecule_type):
 # end class complex_supramolecule_type
 
 
-class complex_natural_source_type(base_source_type):
+class complex_source_type(base_source_type):
     subclass = None
     superclass = base_source_type
     def __init__(self, database=None, organism=None, strain=None, synonym_organism=None, organ=None, tissue=None, cell=None, organelle=None, cellular_location=None):
         self.original_tagname_ = None
-        super(complex_natural_source_type, self).__init__(database, organism, strain, synonym_organism, )
+        super(complex_source_type, self).__init__(database, organism, strain, synonym_organism, )
         self.organ = organ
         self.tissue = tissue
         self.cell = cell
@@ -4280,13 +4317,13 @@ class complex_natural_source_type(base_source_type):
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
-                CurrentSubclassModule_, complex_natural_source_type)
+                CurrentSubclassModule_, complex_source_type)
             if subclass is not None:
                 return subclass(*args_, **kwargs_)
-        if complex_natural_source_type.subclass:
-            return complex_natural_source_type.subclass(*args_, **kwargs_)
+        if complex_source_type.subclass:
+            return complex_source_type.subclass(*args_, **kwargs_)
         else:
-            return complex_natural_source_type(*args_, **kwargs_)
+            return complex_source_type(*args_, **kwargs_)
     factory = staticmethod(factory)
     def get_organ(self): return self.organ
     def set_organ(self, organ): self.organ = organ
@@ -4305,13 +4342,13 @@ class complex_natural_source_type(base_source_type):
             self.cell is not None or
             self.organelle is not None or
             self.cellular_location is not None or
-            super(complex_natural_source_type, self).hasContent_()
+            super(complex_source_type, self).hasContent_()
         ):
             return True
         else:
             return False
-    def export(self, outfile, level, namespace_='', name_='complex_natural_source_type', namespacedef_='', pretty_print=True):
-        imported_ns_def_ = GenerateDSNamespaceDefs_.get('complex_natural_source_type')
+    def export(self, outfile, level, namespace_='', name_='complex_source_type', namespacedef_='', pretty_print=True):
+        imported_ns_def_ = GenerateDSNamespaceDefs_.get('complex_source_type')
         if imported_ns_def_ is not None:
             namespacedef_ = imported_ns_def_
         if pretty_print:
@@ -4323,18 +4360,18 @@ class complex_natural_source_type(base_source_type):
         showIndent(outfile, level, pretty_print)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_, name_='complex_natural_source_type')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='complex_source_type')
         if self.hasContent_():
             outfile.write('>%s' % (eol_, ))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='complex_natural_source_type', pretty_print=pretty_print)
+            self.exportChildren(outfile, level + 1, namespace_='', name_='complex_source_type', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
             outfile.write('/>%s' % (eol_, ))
-    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='complex_natural_source_type'):
-        super(complex_natural_source_type, self).exportAttributes(outfile, level, already_processed, namespace_, name_='complex_natural_source_type')
-    def exportChildren(self, outfile, level, namespace_='', name_='complex_natural_source_type', fromsubclass_=False, pretty_print=True):
-        super(complex_natural_source_type, self).exportChildren(outfile, level, namespace_, name_, True, pretty_print=pretty_print)
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='complex_source_type'):
+        super(complex_source_type, self).exportAttributes(outfile, level, already_processed, namespace_, name_='complex_source_type')
+    def exportChildren(self, outfile, level, namespace_='', name_='complex_source_type', fromsubclass_=False, pretty_print=True):
+        super(complex_source_type, self).exportChildren(outfile, level, namespace_, name_, True, pretty_print=pretty_print)
         if pretty_print:
             eol_ = '\n'
         else:
@@ -4362,7 +4399,7 @@ class complex_natural_source_type(base_source_type):
             self.buildChildren(child, node, nodeName_)
         return self
     def buildAttributes(self, node, attrs, already_processed):
-        super(complex_natural_source_type, self).buildAttributes(node, attrs, already_processed)
+        super(complex_source_type, self).buildAttributes(node, attrs, already_processed)
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'organ':
             organ_ = child_.text
@@ -4404,8 +4441,8 @@ class complex_natural_source_type(base_source_type):
                 cellular_location_ = ""
             cellular_location_ = self.gds_validate_string(cellular_location_, node, 'cellular_location')
             self.cellular_location = cellular_location_
-        super(complex_natural_source_type, self).buildChildren(child_, node, nodeName_, True)
-# end class complex_natural_source_type
+        super(complex_source_type, self).buildChildren(child_, node, nodeName_, True)
+# end class complex_source_type
 
 
 class recombinant_source_type(GeneratedsSuper):
@@ -4654,13 +4691,17 @@ class molecular_weight_type(GeneratedsSuper):
 class organelle_or_cellular_component_supramolecule_type(base_supramolecule_type):
     subclass = None
     superclass = base_supramolecule_type
-    def __init__(self, supramolecule_id=None, name=None, category=None, parent=None, macromolecule_list=None, details=None, number_of_copies=None, oligomeric_state=None, external_references=None, recombinant_exp_flag=None, natural_source=None, molecular_weight=None, recombinant_expression=None):
+    def __init__(self, supramolecule_id=None, name=None, category=None, parent=None, macromolecule_list=None, details=None, number_of_copies=None, oligomeric_state=None, external_references=None, recombinant_exp_flag=None, natural_source=None, synthetic_source=None, molecular_weight=None, recombinant_expression=None):
         self.original_tagname_ = None
         super(organelle_or_cellular_component_supramolecule_type, self).__init__(supramolecule_id, name, category, parent, macromolecule_list, details, number_of_copies, oligomeric_state, external_references, recombinant_exp_flag, )
         if natural_source is None:
             self.natural_source = []
         else:
             self.natural_source = natural_source
+        if synthetic_source is None:
+            self.synthetic_source = []
+        else:
+            self.synthetic_source = synthetic_source
         self.molecular_weight = molecular_weight
         self.recombinant_expression = recombinant_expression
     def factory(*args_, **kwargs_):
@@ -4679,6 +4720,11 @@ class organelle_or_cellular_component_supramolecule_type(base_supramolecule_type
     def add_natural_source(self, value): self.natural_source.append(value)
     def insert_natural_source_at(self, index, value): self.natural_source.insert(index, value)
     def replace_natural_source_at(self, index, value): self.natural_source[index] = value
+    def get_synthetic_source(self): return self.synthetic_source
+    def set_synthetic_source(self, synthetic_source): self.synthetic_source = synthetic_source
+    def add_synthetic_source(self, value): self.synthetic_source.append(value)
+    def insert_synthetic_source_at(self, index, value): self.synthetic_source.insert(index, value)
+    def replace_synthetic_source_at(self, index, value): self.synthetic_source[index] = value
     def get_molecular_weight(self): return self.molecular_weight
     def set_molecular_weight(self, molecular_weight): self.molecular_weight = molecular_weight
     def get_recombinant_expression(self): return self.recombinant_expression
@@ -4686,6 +4732,7 @@ class organelle_or_cellular_component_supramolecule_type(base_supramolecule_type
     def hasContent_(self):
         if (
             self.natural_source or
+            self.synthetic_source or
             self.molecular_weight is not None or
             self.recombinant_expression is not None or
             super(organelle_or_cellular_component_supramolecule_type, self).hasContent_()
@@ -4724,6 +4771,8 @@ class organelle_or_cellular_component_supramolecule_type(base_supramolecule_type
             eol_ = ''
         for natural_source_ in self.natural_source:
             natural_source_.export(outfile, level, namespace_, name_='natural_source', pretty_print=pretty_print)
+        for synthetic_source_ in self.synthetic_source:
+            synthetic_source_.export(outfile, level, namespace_, name_='synthetic_source', pretty_print=pretty_print)
         if self.molecular_weight is not None:
             self.molecular_weight.export(outfile, level, namespace_, name_='molecular_weight', pretty_print=pretty_print)
         if self.recombinant_expression is not None:
@@ -4739,10 +4788,15 @@ class organelle_or_cellular_component_supramolecule_type(base_supramolecule_type
         super(organelle_or_cellular_component_supramolecule_type, self).buildAttributes(node, attrs, already_processed)
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'natural_source':
-            obj_ = organelle_natural_source_type.factory()
+            obj_ = organelle_source_type.factory()
             obj_.build(child_)
             self.natural_source.append(obj_)
             obj_.original_tagname_ = 'natural_source'
+        elif nodeName_ == 'synthetic_source':
+            obj_ = organelle_source_type.factory()
+            obj_.build(child_)
+            self.synthetic_source.append(obj_)
+            obj_.original_tagname_ = 'synthetic_source'
         elif nodeName_ == 'molecular_weight':
             obj_ = molecular_weight_type.factory()
             obj_.build(child_)
@@ -4757,12 +4811,12 @@ class organelle_or_cellular_component_supramolecule_type(base_supramolecule_type
 # end class organelle_or_cellular_component_supramolecule_type
 
 
-class organelle_natural_source_type(base_source_type):
+class organelle_source_type(base_source_type):
     subclass = None
     superclass = base_source_type
     def __init__(self, database=None, organism=None, strain=None, synonym_organism=None, organ=None, tissue=None, cell=None, organelle=None, cellular_location=None):
         self.original_tagname_ = None
-        super(organelle_natural_source_type, self).__init__(database, organism, strain, synonym_organism, )
+        super(organelle_source_type, self).__init__(database, organism, strain, synonym_organism, )
         self.organ = organ
         self.tissue = tissue
         self.cell = cell
@@ -4771,13 +4825,13 @@ class organelle_natural_source_type(base_source_type):
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
-                CurrentSubclassModule_, organelle_natural_source_type)
+                CurrentSubclassModule_, organelle_source_type)
             if subclass is not None:
                 return subclass(*args_, **kwargs_)
-        if organelle_natural_source_type.subclass:
-            return organelle_natural_source_type.subclass(*args_, **kwargs_)
+        if organelle_source_type.subclass:
+            return organelle_source_type.subclass(*args_, **kwargs_)
         else:
-            return organelle_natural_source_type(*args_, **kwargs_)
+            return organelle_source_type(*args_, **kwargs_)
     factory = staticmethod(factory)
     def get_organ(self): return self.organ
     def set_organ(self, organ): self.organ = organ
@@ -4796,13 +4850,13 @@ class organelle_natural_source_type(base_source_type):
             self.cell is not None or
             self.organelle is not None or
             self.cellular_location is not None or
-            super(organelle_natural_source_type, self).hasContent_()
+            super(organelle_source_type, self).hasContent_()
         ):
             return True
         else:
             return False
-    def export(self, outfile, level, namespace_='', name_='organelle_natural_source_type', namespacedef_='', pretty_print=True):
-        imported_ns_def_ = GenerateDSNamespaceDefs_.get('organelle_natural_source_type')
+    def export(self, outfile, level, namespace_='', name_='organelle_source_type', namespacedef_='', pretty_print=True):
+        imported_ns_def_ = GenerateDSNamespaceDefs_.get('organelle_source_type')
         if imported_ns_def_ is not None:
             namespacedef_ = imported_ns_def_
         if pretty_print:
@@ -4814,18 +4868,18 @@ class organelle_natural_source_type(base_source_type):
         showIndent(outfile, level, pretty_print)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_, name_='organelle_natural_source_type')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='organelle_source_type')
         if self.hasContent_():
             outfile.write('>%s' % (eol_, ))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='organelle_natural_source_type', pretty_print=pretty_print)
+            self.exportChildren(outfile, level + 1, namespace_='', name_='organelle_source_type', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
             outfile.write('/>%s' % (eol_, ))
-    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='organelle_natural_source_type'):
-        super(organelle_natural_source_type, self).exportAttributes(outfile, level, already_processed, namespace_, name_='organelle_natural_source_type')
-    def exportChildren(self, outfile, level, namespace_='', name_='organelle_natural_source_type', fromsubclass_=False, pretty_print=True):
-        super(organelle_natural_source_type, self).exportChildren(outfile, level, namespace_, name_, True, pretty_print=pretty_print)
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='organelle_source_type'):
+        super(organelle_source_type, self).exportAttributes(outfile, level, already_processed, namespace_, name_='organelle_source_type')
+    def exportChildren(self, outfile, level, namespace_='', name_='organelle_source_type', fromsubclass_=False, pretty_print=True):
+        super(organelle_source_type, self).exportChildren(outfile, level, namespace_, name_, True, pretty_print=pretty_print)
         if pretty_print:
             eol_ = '\n'
         else:
@@ -4853,7 +4907,7 @@ class organelle_natural_source_type(base_source_type):
             self.buildChildren(child, node, nodeName_)
         return self
     def buildAttributes(self, node, attrs, already_processed):
-        super(organelle_natural_source_type, self).buildAttributes(node, attrs, already_processed)
+        super(organelle_source_type, self).buildAttributes(node, attrs, already_processed)
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'organ':
             organ_ = child_.text
@@ -4895,20 +4949,24 @@ class organelle_natural_source_type(base_source_type):
                 cellular_location_ = ""
             cellular_location_ = self.gds_validate_string(cellular_location_, node, 'cellular_location')
             self.cellular_location = cellular_location_
-        super(organelle_natural_source_type, self).buildChildren(child_, node, nodeName_, True)
-# end class organelle_natural_source_type
+        super(organelle_source_type, self).buildChildren(child_, node, nodeName_, True)
+# end class organelle_source_type
 
 
 class sample_supramolecule_type(base_supramolecule_type):
     subclass = None
     superclass = base_supramolecule_type
-    def __init__(self, supramolecule_id=None, name=None, category=None, parent=None, macromolecule_list=None, details=None, number_of_copies=None, oligomeric_state=None, external_references=None, recombinant_exp_flag=None, natural_source=None, number_unique_components=None, molecular_weight=None):
+    def __init__(self, supramolecule_id=None, name=None, category=None, parent=None, macromolecule_list=None, details=None, number_of_copies=None, oligomeric_state=None, external_references=None, recombinant_exp_flag=None, natural_source=None, synthetic_source=None, number_unique_components=None, molecular_weight=None):
         self.original_tagname_ = None
         super(sample_supramolecule_type, self).__init__(supramolecule_id, name, category, parent, macromolecule_list, details, number_of_copies, oligomeric_state, external_references, recombinant_exp_flag, )
         if natural_source is None:
             self.natural_source = []
         else:
             self.natural_source = natural_source
+        if synthetic_source is None:
+            self.synthetic_source = []
+        else:
+            self.synthetic_source = synthetic_source
         self.number_unique_components = number_unique_components
         self.molecular_weight = molecular_weight
     def factory(*args_, **kwargs_):
@@ -4927,6 +4985,11 @@ class sample_supramolecule_type(base_supramolecule_type):
     def add_natural_source(self, value): self.natural_source.append(value)
     def insert_natural_source_at(self, index, value): self.natural_source.insert(index, value)
     def replace_natural_source_at(self, index, value): self.natural_source[index] = value
+    def get_synthetic_source(self): return self.synthetic_source
+    def set_synthetic_source(self, synthetic_source): self.synthetic_source = synthetic_source
+    def add_synthetic_source(self, value): self.synthetic_source.append(value)
+    def insert_synthetic_source_at(self, index, value): self.synthetic_source.insert(index, value)
+    def replace_synthetic_source_at(self, index, value): self.synthetic_source[index] = value
     def get_number_unique_components(self): return self.number_unique_components
     def set_number_unique_components(self, number_unique_components): self.number_unique_components = number_unique_components
     def get_molecular_weight(self): return self.molecular_weight
@@ -4934,6 +4997,7 @@ class sample_supramolecule_type(base_supramolecule_type):
     def hasContent_(self):
         if (
             self.natural_source or
+            self.synthetic_source or
             self.number_unique_components is not None or
             self.molecular_weight is not None or
             super(sample_supramolecule_type, self).hasContent_()
@@ -4972,6 +5036,8 @@ class sample_supramolecule_type(base_supramolecule_type):
             eol_ = ''
         for natural_source_ in self.natural_source:
             natural_source_.export(outfile, level, namespace_, name_='natural_source', pretty_print=pretty_print)
+        for synthetic_source_ in self.synthetic_source:
+            synthetic_source_.export(outfile, level, namespace_, name_='synthetic_source', pretty_print=pretty_print)
         if self.number_unique_components is not None:
             showIndent(outfile, level, pretty_print)
             outfile.write('<number_unique_components>%s</number_unique_components>%s' % (self.gds_format_integer(self.number_unique_components, input_name='number_unique_components'), eol_))
@@ -4988,10 +5054,15 @@ class sample_supramolecule_type(base_supramolecule_type):
         super(sample_supramolecule_type, self).buildAttributes(node, attrs, already_processed)
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'natural_source':
-            obj_ = sample_natural_source_type.factory()
+            obj_ = sample_source_type.factory()
             obj_.build(child_)
             self.natural_source.append(obj_)
             obj_.original_tagname_ = 'natural_source'
+        elif nodeName_ == 'synthetic_source':
+            obj_ = sample_source_type.factory()
+            obj_.build(child_)
+            self.synthetic_source.append(obj_)
+            obj_.original_tagname_ = 'synthetic_source'
         elif nodeName_ == 'number_unique_components':
             sval_ = child_.text
             try:
@@ -5011,25 +5082,25 @@ class sample_supramolecule_type(base_supramolecule_type):
 # end class sample_supramolecule_type
 
 
-class sample_natural_source_type(base_source_type):
+class sample_source_type(base_source_type):
     subclass = None
     superclass = base_source_type
     def __init__(self, database=None, organism=None, strain=None, synonym_organism=None, organ=None, tissue=None, cell=None):
         self.original_tagname_ = None
-        super(sample_natural_source_type, self).__init__(database, organism, strain, synonym_organism, )
+        super(sample_source_type, self).__init__(database, organism, strain, synonym_organism, )
         self.organ = organ
         self.tissue = tissue
         self.cell = cell
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
-                CurrentSubclassModule_, sample_natural_source_type)
+                CurrentSubclassModule_, sample_source_type)
             if subclass is not None:
                 return subclass(*args_, **kwargs_)
-        if sample_natural_source_type.subclass:
-            return sample_natural_source_type.subclass(*args_, **kwargs_)
+        if sample_source_type.subclass:
+            return sample_source_type.subclass(*args_, **kwargs_)
         else:
-            return sample_natural_source_type(*args_, **kwargs_)
+            return sample_source_type(*args_, **kwargs_)
     factory = staticmethod(factory)
     def get_organ(self): return self.organ
     def set_organ(self, organ): self.organ = organ
@@ -5042,13 +5113,13 @@ class sample_natural_source_type(base_source_type):
             self.organ is not None or
             self.tissue is not None or
             self.cell is not None or
-            super(sample_natural_source_type, self).hasContent_()
+            super(sample_source_type, self).hasContent_()
         ):
             return True
         else:
             return False
-    def export(self, outfile, level, namespace_='', name_='sample_natural_source_type', namespacedef_='', pretty_print=True):
-        imported_ns_def_ = GenerateDSNamespaceDefs_.get('sample_natural_source_type')
+    def export(self, outfile, level, namespace_='', name_='sample_source_type', namespacedef_='', pretty_print=True):
+        imported_ns_def_ = GenerateDSNamespaceDefs_.get('sample_source_type')
         if imported_ns_def_ is not None:
             namespacedef_ = imported_ns_def_
         if pretty_print:
@@ -5060,18 +5131,18 @@ class sample_natural_source_type(base_source_type):
         showIndent(outfile, level, pretty_print)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_, name_='sample_natural_source_type')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='sample_source_type')
         if self.hasContent_():
             outfile.write('>%s' % (eol_, ))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='sample_natural_source_type', pretty_print=pretty_print)
+            self.exportChildren(outfile, level + 1, namespace_='', name_='sample_source_type', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
             outfile.write('/>%s' % (eol_, ))
-    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='sample_natural_source_type'):
-        super(sample_natural_source_type, self).exportAttributes(outfile, level, already_processed, namespace_, name_='sample_natural_source_type')
-    def exportChildren(self, outfile, level, namespace_='', name_='sample_natural_source_type', fromsubclass_=False, pretty_print=True):
-        super(sample_natural_source_type, self).exportChildren(outfile, level, namespace_, name_, True, pretty_print=pretty_print)
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='sample_source_type'):
+        super(sample_source_type, self).exportAttributes(outfile, level, already_processed, namespace_, name_='sample_source_type')
+    def exportChildren(self, outfile, level, namespace_='', name_='sample_source_type', fromsubclass_=False, pretty_print=True):
+        super(sample_source_type, self).exportChildren(outfile, level, namespace_, name_, True, pretty_print=pretty_print)
         if pretty_print:
             eol_ = '\n'
         else:
@@ -5093,7 +5164,7 @@ class sample_natural_source_type(base_source_type):
             self.buildChildren(child, node, nodeName_)
         return self
     def buildAttributes(self, node, attrs, already_processed):
-        super(sample_natural_source_type, self).buildAttributes(node, attrs, already_processed)
+        super(sample_source_type, self).buildAttributes(node, attrs, already_processed)
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'organ':
             organ_ = child_.text
@@ -5119,20 +5190,24 @@ class sample_natural_source_type(base_source_type):
                 cell_ = ""
             cell_ = self.gds_validate_string(cell_, node, 'cell')
             self.cell = cell_
-        super(sample_natural_source_type, self).buildChildren(child_, node, nodeName_, True)
-# end class sample_natural_source_type
+        super(sample_source_type, self).buildChildren(child_, node, nodeName_, True)
+# end class sample_source_type
 
 
 class tissue_supramolecule_type(base_supramolecule_type):
     subclass = None
     superclass = base_supramolecule_type
-    def __init__(self, supramolecule_id=None, name=None, category=None, parent=None, macromolecule_list=None, details=None, number_of_copies=None, oligomeric_state=None, external_references=None, recombinant_exp_flag=None, natural_source=None):
+    def __init__(self, supramolecule_id=None, name=None, category=None, parent=None, macromolecule_list=None, details=None, number_of_copies=None, oligomeric_state=None, external_references=None, recombinant_exp_flag=None, natural_source=None, sythetic_source=None):
         self.original_tagname_ = None
         super(tissue_supramolecule_type, self).__init__(supramolecule_id, name, category, parent, macromolecule_list, details, number_of_copies, oligomeric_state, external_references, recombinant_exp_flag, )
         if natural_source is None:
             self.natural_source = []
         else:
             self.natural_source = natural_source
+        if sythetic_source is None:
+            self.sythetic_source = []
+        else:
+            self.sythetic_source = sythetic_source
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -5149,9 +5224,15 @@ class tissue_supramolecule_type(base_supramolecule_type):
     def add_natural_source(self, value): self.natural_source.append(value)
     def insert_natural_source_at(self, index, value): self.natural_source.insert(index, value)
     def replace_natural_source_at(self, index, value): self.natural_source[index] = value
+    def get_sythetic_source(self): return self.sythetic_source
+    def set_sythetic_source(self, sythetic_source): self.sythetic_source = sythetic_source
+    def add_sythetic_source(self, value): self.sythetic_source.append(value)
+    def insert_sythetic_source_at(self, index, value): self.sythetic_source.insert(index, value)
+    def replace_sythetic_source_at(self, index, value): self.sythetic_source[index] = value
     def hasContent_(self):
         if (
             self.natural_source or
+            self.sythetic_source or
             super(tissue_supramolecule_type, self).hasContent_()
         ):
             return True
@@ -5188,6 +5269,8 @@ class tissue_supramolecule_type(base_supramolecule_type):
             eol_ = ''
         for natural_source_ in self.natural_source:
             natural_source_.export(outfile, level, namespace_, name_='natural_source', pretty_print=pretty_print)
+        for sythetic_source_ in self.sythetic_source:
+            sythetic_source_.export(outfile, level, namespace_, name_='sythetic_source', pretty_print=pretty_print)
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -5199,32 +5282,37 @@ class tissue_supramolecule_type(base_supramolecule_type):
         super(tissue_supramolecule_type, self).buildAttributes(node, attrs, already_processed)
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'natural_source':
-            obj_ = tissue_natural_source_type.factory()
+            obj_ = tissue_source_type.factory()
             obj_.build(child_)
             self.natural_source.append(obj_)
             obj_.original_tagname_ = 'natural_source'
+        elif nodeName_ == 'sythetic_source':
+            obj_ = tissue_source_type.factory()
+            obj_.build(child_)
+            self.sythetic_source.append(obj_)
+            obj_.original_tagname_ = 'sythetic_source'
         super(tissue_supramolecule_type, self).buildChildren(child_, node, nodeName_, True)
 # end class tissue_supramolecule_type
 
 
-class tissue_natural_source_type(base_source_type):
+class tissue_source_type(base_source_type):
     subclass = None
     superclass = base_source_type
     def __init__(self, database=None, organism=None, strain=None, synonym_organism=None, organ=None, tissue=None):
         self.original_tagname_ = None
-        super(tissue_natural_source_type, self).__init__(database, organism, strain, synonym_organism, )
+        super(tissue_source_type, self).__init__(database, organism, strain, synonym_organism, )
         self.organ = organ
         self.tissue = tissue
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
-                CurrentSubclassModule_, tissue_natural_source_type)
+                CurrentSubclassModule_, tissue_source_type)
             if subclass is not None:
                 return subclass(*args_, **kwargs_)
-        if tissue_natural_source_type.subclass:
-            return tissue_natural_source_type.subclass(*args_, **kwargs_)
+        if tissue_source_type.subclass:
+            return tissue_source_type.subclass(*args_, **kwargs_)
         else:
-            return tissue_natural_source_type(*args_, **kwargs_)
+            return tissue_source_type(*args_, **kwargs_)
     factory = staticmethod(factory)
     def get_organ(self): return self.organ
     def set_organ(self, organ): self.organ = organ
@@ -5234,13 +5322,13 @@ class tissue_natural_source_type(base_source_type):
         if (
             self.organ is not None or
             self.tissue is not None or
-            super(tissue_natural_source_type, self).hasContent_()
+            super(tissue_source_type, self).hasContent_()
         ):
             return True
         else:
             return False
-    def export(self, outfile, level, namespace_='', name_='tissue_natural_source_type', namespacedef_='', pretty_print=True):
-        imported_ns_def_ = GenerateDSNamespaceDefs_.get('tissue_natural_source_type')
+    def export(self, outfile, level, namespace_='', name_='tissue_source_type', namespacedef_='', pretty_print=True):
+        imported_ns_def_ = GenerateDSNamespaceDefs_.get('tissue_source_type')
         if imported_ns_def_ is not None:
             namespacedef_ = imported_ns_def_
         if pretty_print:
@@ -5252,18 +5340,18 @@ class tissue_natural_source_type(base_source_type):
         showIndent(outfile, level, pretty_print)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_, name_='tissue_natural_source_type')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='tissue_source_type')
         if self.hasContent_():
             outfile.write('>%s' % (eol_, ))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='tissue_natural_source_type', pretty_print=pretty_print)
+            self.exportChildren(outfile, level + 1, namespace_='', name_='tissue_source_type', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
             outfile.write('/>%s' % (eol_, ))
-    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='tissue_natural_source_type'):
-        super(tissue_natural_source_type, self).exportAttributes(outfile, level, already_processed, namespace_, name_='tissue_natural_source_type')
-    def exportChildren(self, outfile, level, namespace_='', name_='tissue_natural_source_type', fromsubclass_=False, pretty_print=True):
-        super(tissue_natural_source_type, self).exportChildren(outfile, level, namespace_, name_, True, pretty_print=pretty_print)
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='tissue_source_type'):
+        super(tissue_source_type, self).exportAttributes(outfile, level, already_processed, namespace_, name_='tissue_source_type')
+    def exportChildren(self, outfile, level, namespace_='', name_='tissue_source_type', fromsubclass_=False, pretty_print=True):
+        super(tissue_source_type, self).exportChildren(outfile, level, namespace_, name_, True, pretty_print=pretty_print)
         if pretty_print:
             eol_ = '\n'
         else:
@@ -5282,7 +5370,7 @@ class tissue_natural_source_type(base_source_type):
             self.buildChildren(child, node, nodeName_)
         return self
     def buildAttributes(self, node, attrs, already_processed):
-        super(tissue_natural_source_type, self).buildAttributes(node, attrs, already_processed)
+        super(tissue_source_type, self).buildAttributes(node, attrs, already_processed)
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'organ':
             organ_ = child_.text
@@ -5300,14 +5388,14 @@ class tissue_natural_source_type(base_source_type):
                 tissue_ = ""
             tissue_ = self.gds_validate_string(tissue_, node, 'tissue')
             self.tissue = tissue_
-        super(tissue_natural_source_type, self).buildChildren(child_, node, nodeName_, True)
-# end class tissue_natural_source_type
+        super(tissue_source_type, self).buildChildren(child_, node, nodeName_, True)
+# end class tissue_source_type
 
 
 class virus_supramolecule_type(base_supramolecule_type):
     subclass = None
     superclass = base_supramolecule_type
-    def __init__(self, supramolecule_id=None, name=None, category=None, parent=None, macromolecule_list=None, details=None, number_of_copies=None, oligomeric_state=None, external_references=None, recombinant_exp_flag=None, sci_species_name=None, sci_species_strain=None, natural_host=None, host_system=None, molecular_weight=None, virus_shell=None, virus_type=None, virus_isolate=None, virus_enveloped=None, virus_empty=None, syn_species_name=None, sci_species_serotype=None, sci_species_serocomplex=None, sci_species_subspecies=None):
+    def __init__(self, supramolecule_id=None, name=None, category=None, parent=None, macromolecule_list=None, details=None, number_of_copies=None, oligomeric_state=None, external_references=None, recombinant_exp_flag=None, sci_species_name=None, sci_species_strain=None, natural_host=None, synthetic_host=None, host_system=None, molecular_weight=None, virus_shell=None, virus_type=None, virus_isolate=None, virus_enveloped=None, virus_empty=None, syn_species_name=None, sci_species_serotype=None, sci_species_serocomplex=None, sci_species_subspecies=None):
         self.original_tagname_ = None
         super(virus_supramolecule_type, self).__init__(supramolecule_id, name, category, parent, macromolecule_list, details, number_of_copies, oligomeric_state, external_references, recombinant_exp_flag, )
         self.sci_species_name = sci_species_name
@@ -5316,6 +5404,10 @@ class virus_supramolecule_type(base_supramolecule_type):
             self.natural_host = []
         else:
             self.natural_host = natural_host
+        if synthetic_host is None:
+            self.synthetic_host = []
+        else:
+            self.synthetic_host = synthetic_host
         self.host_system = host_system
         self.molecular_weight = molecular_weight
         if virus_shell is None:
@@ -5352,6 +5444,11 @@ class virus_supramolecule_type(base_supramolecule_type):
     def add_natural_host(self, value): self.natural_host.append(value)
     def insert_natural_host_at(self, index, value): self.natural_host.insert(index, value)
     def replace_natural_host_at(self, index, value): self.natural_host[index] = value
+    def get_synthetic_host(self): return self.synthetic_host
+    def set_synthetic_host(self, synthetic_host): self.synthetic_host = synthetic_host
+    def add_synthetic_host(self, value): self.synthetic_host.append(value)
+    def insert_synthetic_host_at(self, index, value): self.synthetic_host.insert(index, value)
+    def replace_synthetic_host_at(self, index, value): self.synthetic_host[index] = value
     def get_host_system(self): return self.host_system
     def set_host_system(self, host_system): self.host_system = host_system
     def get_molecular_weight(self): return self.molecular_weight
@@ -5406,6 +5503,7 @@ class virus_supramolecule_type(base_supramolecule_type):
             self.sci_species_name is not None or
             self.sci_species_strain is not None or
             self.natural_host or
+            self.synthetic_host or
             self.host_system is not None or
             self.molecular_weight is not None or
             self.virus_shell or
@@ -5458,6 +5556,8 @@ class virus_supramolecule_type(base_supramolecule_type):
             outfile.write('<sci_species_strain>%s</sci_species_strain>%s' % (self.gds_encode(self.gds_format_string(quote_xml(self.sci_species_strain), input_name='sci_species_strain')), eol_))
         for natural_host_ in self.natural_host:
             natural_host_.export(outfile, level, namespace_, name_='natural_host', pretty_print=pretty_print)
+        for synthetic_host_ in self.synthetic_host:
+            synthetic_host_.export(outfile, level, namespace_, name_='synthetic_host', pretty_print=pretty_print)
         if self.host_system is not None:
             self.host_system.export(outfile, level, namespace_, name_='host_system', pretty_print=pretty_print)
         if self.molecular_weight is not None:
@@ -5508,10 +5608,15 @@ class virus_supramolecule_type(base_supramolecule_type):
             sci_species_strain_ = self.gds_validate_string(sci_species_strain_, node, 'sci_species_strain')
             self.sci_species_strain = sci_species_strain_
         elif nodeName_ == 'natural_host':
-            obj_ = virus_natural_host_type.factory()
+            obj_ = virus_host_type.factory()
             obj_.build(child_)
             self.natural_host.append(obj_)
             obj_.original_tagname_ = 'natural_host'
+        elif nodeName_ == 'synthetic_host':
+            obj_ = virus_host_type.factory()
+            obj_.build(child_)
+            self.synthetic_host.append(obj_)
+            obj_.original_tagname_ = 'synthetic_host'
         elif nodeName_ == 'host_system':
             obj_ = recombinant_source_type.factory()
             obj_.build(child_)
@@ -5666,32 +5771,32 @@ class virus_species_name_type(GeneratedsSuper):
 # end class virus_species_name_type
 
 
-class virus_natural_host_type(base_source_type):
+class virus_host_type(base_source_type):
     subclass = None
     superclass = base_source_type
     def __init__(self, database=None, organism=None, strain=None, synonym_organism=None):
         self.original_tagname_ = None
-        super(virus_natural_host_type, self).__init__(database, organism, strain, synonym_organism, )
+        super(virus_host_type, self).__init__(database, organism, strain, synonym_organism, )
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
-                CurrentSubclassModule_, virus_natural_host_type)
+                CurrentSubclassModule_, virus_host_type)
             if subclass is not None:
                 return subclass(*args_, **kwargs_)
-        if virus_natural_host_type.subclass:
-            return virus_natural_host_type.subclass(*args_, **kwargs_)
+        if virus_host_type.subclass:
+            return virus_host_type.subclass(*args_, **kwargs_)
         else:
-            return virus_natural_host_type(*args_, **kwargs_)
+            return virus_host_type(*args_, **kwargs_)
     factory = staticmethod(factory)
     def hasContent_(self):
         if (
-            super(virus_natural_host_type, self).hasContent_()
+            super(virus_host_type, self).hasContent_()
         ):
             return True
         else:
             return False
-    def export(self, outfile, level, namespace_='', name_='virus_natural_host_type', namespacedef_='', pretty_print=True):
-        imported_ns_def_ = GenerateDSNamespaceDefs_.get('virus_natural_host_type')
+    def export(self, outfile, level, namespace_='', name_='virus_host_type', namespacedef_='', pretty_print=True):
+        imported_ns_def_ = GenerateDSNamespaceDefs_.get('virus_host_type')
         if imported_ns_def_ is not None:
             namespacedef_ = imported_ns_def_
         if pretty_print:
@@ -5703,18 +5808,18 @@ class virus_natural_host_type(base_source_type):
         showIndent(outfile, level, pretty_print)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_, name_='virus_natural_host_type')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='virus_host_type')
         if self.hasContent_():
             outfile.write('>%s' % (eol_, ))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='virus_natural_host_type', pretty_print=pretty_print)
+            self.exportChildren(outfile, level + 1, namespace_='', name_='virus_host_type', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
             outfile.write('/>%s' % (eol_, ))
-    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='virus_natural_host_type'):
-        super(virus_natural_host_type, self).exportAttributes(outfile, level, already_processed, namespace_, name_='virus_natural_host_type')
-    def exportChildren(self, outfile, level, namespace_='', name_='virus_natural_host_type', fromsubclass_=False, pretty_print=True):
-        super(virus_natural_host_type, self).exportChildren(outfile, level, namespace_, name_, True, pretty_print=pretty_print)
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='virus_host_type'):
+        super(virus_host_type, self).exportAttributes(outfile, level, already_processed, namespace_, name_='virus_host_type')
+    def exportChildren(self, outfile, level, namespace_='', name_='virus_host_type', fromsubclass_=False, pretty_print=True):
+        super(virus_host_type, self).exportChildren(outfile, level, namespace_, name_, True, pretty_print=pretty_print)
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -5723,11 +5828,11 @@ class virus_natural_host_type(base_source_type):
             self.buildChildren(child, node, nodeName_)
         return self
     def buildAttributes(self, node, attrs, already_processed):
-        super(virus_natural_host_type, self).buildAttributes(node, attrs, already_processed)
+        super(virus_host_type, self).buildAttributes(node, attrs, already_processed)
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
-        super(virus_natural_host_type, self).buildChildren(child_, node, nodeName_, True)
+        super(virus_host_type, self).buildChildren(child_, node, nodeName_, True)
         pass
-# end class virus_natural_host_type
+# end class virus_host_type
 
 
 class macromolecule_list_type(GeneratedsSuper):
@@ -6200,7 +6305,7 @@ class macromolecule_source_type(base_source_type):
 class dna_macromolecule_type(base_macromolecule_type):
     subclass = None
     superclass = base_macromolecule_type
-    def __init__(self, macromolecule_id=None, mutant=None, chimera=None, name=None, natural_source=None, molecular_weight=None, details=None, number_of_copies=None, oligomeric_state=None, recombinant_exp_flag=None, sequence=None, classification=None, structure=None, synthetic_flag=None):
+    def __init__(self, macromolecule_id=None, mutant=None, chimera=None, name=None, natural_source=None, molecular_weight=None, details=None, number_of_copies=None, oligomeric_state=None, recombinant_exp_flag=None, sequence=None, classification=None, structure=None, synthetic_flag=None, synthetic_source=None):
         self.original_tagname_ = None
         super(dna_macromolecule_type, self).__init__(macromolecule_id, mutant, chimera, name, natural_source, molecular_weight, details, number_of_copies, oligomeric_state, recombinant_exp_flag, )
         self.sequence = sequence
@@ -6208,6 +6313,7 @@ class dna_macromolecule_type(base_macromolecule_type):
         self.validate_classificationType(self.classification)
         self.structure = structure
         self.synthetic_flag = synthetic_flag
+        self.synthetic_source = synthetic_source
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -6227,6 +6333,8 @@ class dna_macromolecule_type(base_macromolecule_type):
     def set_structure(self, structure): self.structure = structure
     def get_synthetic_flag(self): return self.synthetic_flag
     def set_synthetic_flag(self, synthetic_flag): self.synthetic_flag = synthetic_flag
+    def get_synthetic_source(self): return self.synthetic_source
+    def set_synthetic_source(self, synthetic_source): self.synthetic_source = synthetic_source
     def validate_classificationType(self, value):
         # Validate type classificationType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
@@ -6245,6 +6353,7 @@ class dna_macromolecule_type(base_macromolecule_type):
             self.classification is not None or
             self.structure is not None or
             self.synthetic_flag is not None or
+            self.synthetic_source is not None or
             super(dna_macromolecule_type, self).hasContent_()
         ):
             return True
@@ -6290,6 +6399,8 @@ class dna_macromolecule_type(base_macromolecule_type):
         if self.synthetic_flag is not None:
             showIndent(outfile, level, pretty_print)
             outfile.write('<synthetic_flag>%s</synthetic_flag>%s' % (self.gds_format_boolean(self.synthetic_flag, input_name='synthetic_flag'), eol_))
+        if self.synthetic_source is not None:
+            self.synthetic_source.export(outfile, level, namespace_, name_='synthetic_source', pretty_print=pretty_print)
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -6333,6 +6444,11 @@ class dna_macromolecule_type(base_macromolecule_type):
                 raise_parse_error(child_, 'requires boolean')
             ival_ = self.gds_validate_boolean(ival_, node, 'synthetic_flag')
             self.synthetic_flag = ival_
+        elif nodeName_ == 'synthetic_source':
+            obj_ = macromolecule_source_type.factory()
+            obj_.build(child_)
+            self.synthetic_source = obj_
+            obj_.original_tagname_ = 'synthetic_source'
         super(dna_macromolecule_type, self).buildChildren(child_, node, nodeName_, True)
 # end class dna_macromolecule_type
 
@@ -6340,11 +6456,12 @@ class dna_macromolecule_type(base_macromolecule_type):
 class em_label_macromolecule_type(base_macromolecule_type):
     subclass = None
     superclass = base_macromolecule_type
-    def __init__(self, macromolecule_id=None, mutant=None, chimera=None, name=None, natural_source=None, molecular_weight=None, details=None, number_of_copies=None, oligomeric_state=None, recombinant_exp_flag=None, formula=None):
+    def __init__(self, macromolecule_id=None, mutant=None, chimera=None, name=None, natural_source=None, molecular_weight=None, details=None, number_of_copies=None, oligomeric_state=None, recombinant_exp_flag=None, formula=None, synthetic_source=None):
         self.original_tagname_ = None
         super(em_label_macromolecule_type, self).__init__(macromolecule_id, mutant, chimera, name, natural_source, molecular_weight, details, number_of_copies, oligomeric_state, recombinant_exp_flag, )
         self.formula = formula
         self.validate_formula_type(self.formula)
+        self.synthetic_source = synthetic_source
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -6358,6 +6475,8 @@ class em_label_macromolecule_type(base_macromolecule_type):
     factory = staticmethod(factory)
     def get_formula(self): return self.formula
     def set_formula(self, formula): self.formula = formula
+    def get_synthetic_source(self): return self.synthetic_source
+    def set_synthetic_source(self, synthetic_source): self.synthetic_source = synthetic_source
     def validate_formula_type(self, value):
         # Validate type formula_type, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
@@ -6365,6 +6484,7 @@ class em_label_macromolecule_type(base_macromolecule_type):
     def hasContent_(self):
         if (
             self.formula is not None or
+            self.synthetic_source is not None or
             super(em_label_macromolecule_type, self).hasContent_()
         ):
             return True
@@ -6402,6 +6522,8 @@ class em_label_macromolecule_type(base_macromolecule_type):
         if self.formula is not None:
             showIndent(outfile, level, pretty_print)
             outfile.write('<formula>%s</formula>%s' % (self.gds_encode(self.gds_format_string(quote_xml(self.formula), input_name='formula')), eol_))
+        if self.synthetic_source is not None:
+            self.synthetic_source.export(outfile, level, namespace_, name_='synthetic_source', pretty_print=pretty_print)
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -6422,6 +6544,11 @@ class em_label_macromolecule_type(base_macromolecule_type):
             self.formula = formula_
             # validate type formula_type
             self.validate_formula_type(self.formula)
+        elif nodeName_ == 'synthetic_source':
+            obj_ = macromolecule_source_type.factory()
+            obj_.build(child_)
+            self.synthetic_source = obj_
+            obj_.original_tagname_ = 'synthetic_source'
         super(em_label_macromolecule_type, self).buildChildren(child_, node, nodeName_, True)
 # end class em_label_macromolecule_type
 
@@ -6546,7 +6673,7 @@ class ligand_macromolecule_type(base_macromolecule_type):
 class other_macromolecule_type(base_macromolecule_type):
     subclass = None
     superclass = base_macromolecule_type
-    def __init__(self, macromolecule_id=None, mutant=None, chimera=None, name=None, natural_source=None, molecular_weight=None, details=None, number_of_copies=None, oligomeric_state=None, recombinant_exp_flag=None, sequence=None, classification=None, recombinant_expression=None, structure=None, synthetic_flag=None):
+    def __init__(self, macromolecule_id=None, mutant=None, chimera=None, name=None, natural_source=None, molecular_weight=None, details=None, number_of_copies=None, oligomeric_state=None, recombinant_exp_flag=None, sequence=None, classification=None, recombinant_expression=None, structure=None, synthetic_flag=None, synthetic_source=None):
         self.original_tagname_ = None
         super(other_macromolecule_type, self).__init__(macromolecule_id, mutant, chimera, name, natural_source, molecular_weight, details, number_of_copies, oligomeric_state, recombinant_exp_flag, )
         self.sequence = sequence
@@ -6554,6 +6681,7 @@ class other_macromolecule_type(base_macromolecule_type):
         self.recombinant_expression = recombinant_expression
         self.structure = structure
         self.synthetic_flag = synthetic_flag
+        self.synthetic_source = synthetic_source
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -6575,6 +6703,8 @@ class other_macromolecule_type(base_macromolecule_type):
     def set_structure(self, structure): self.structure = structure
     def get_synthetic_flag(self): return self.synthetic_flag
     def set_synthetic_flag(self, synthetic_flag): self.synthetic_flag = synthetic_flag
+    def get_synthetic_source(self): return self.synthetic_source
+    def set_synthetic_source(self, synthetic_source): self.synthetic_source = synthetic_source
     def hasContent_(self):
         if (
             self.sequence is not None or
@@ -6582,6 +6712,7 @@ class other_macromolecule_type(base_macromolecule_type):
             self.recombinant_expression is not None or
             self.structure is not None or
             self.synthetic_flag is not None or
+            self.synthetic_source is not None or
             super(other_macromolecule_type, self).hasContent_()
         ):
             return True
@@ -6629,6 +6760,8 @@ class other_macromolecule_type(base_macromolecule_type):
         if self.synthetic_flag is not None:
             showIndent(outfile, level, pretty_print)
             outfile.write('<synthetic_flag>%s</synthetic_flag>%s' % (self.gds_format_boolean(self.synthetic_flag, input_name='synthetic_flag'), eol_))
+        if self.synthetic_source is not None:
+            self.synthetic_source.export(outfile, level, namespace_, name_='synthetic_source', pretty_print=pretty_print)
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -6675,6 +6808,11 @@ class other_macromolecule_type(base_macromolecule_type):
                 raise_parse_error(child_, 'requires boolean')
             ival_ = self.gds_validate_boolean(ival_, node, 'synthetic_flag')
             self.synthetic_flag = ival_
+        elif nodeName_ == 'synthetic_source':
+            obj_ = macromolecule_source_type.factory()
+            obj_.build(child_)
+            self.synthetic_source = obj_
+            obj_.original_tagname_ = 'synthetic_source'
         super(other_macromolecule_type, self).buildChildren(child_, node, nodeName_, True)
 # end class other_macromolecule_type
 
@@ -6682,10 +6820,11 @@ class other_macromolecule_type(base_macromolecule_type):
 class protein_or_peptide_macromolecule_type(base_macromolecule_type):
     subclass = None
     superclass = base_macromolecule_type
-    def __init__(self, macromolecule_id=None, mutant=None, chimera=None, name=None, natural_source=None, molecular_weight=None, details=None, number_of_copies=None, oligomeric_state=None, recombinant_exp_flag=None, recombinant_expression=None, enantiomer=None, sequence=None, ec_number=None):
+    def __init__(self, macromolecule_id=None, mutant=None, chimera=None, name=None, natural_source=None, molecular_weight=None, details=None, number_of_copies=None, oligomeric_state=None, recombinant_exp_flag=None, recombinant_expression=None, synthetic_source=None, enantiomer=None, sequence=None, ec_number=None):
         self.original_tagname_ = None
         super(protein_or_peptide_macromolecule_type, self).__init__(macromolecule_id, mutant, chimera, name, natural_source, molecular_weight, details, number_of_copies, oligomeric_state, recombinant_exp_flag, )
         self.recombinant_expression = recombinant_expression
+        self.synthetic_source = synthetic_source
         self.enantiomer = enantiomer
         self.validate_enantiomerType(self.enantiomer)
         self.sequence = sequence
@@ -6706,6 +6845,8 @@ class protein_or_peptide_macromolecule_type(base_macromolecule_type):
     factory = staticmethod(factory)
     def get_recombinant_expression(self): return self.recombinant_expression
     def set_recombinant_expression(self, recombinant_expression): self.recombinant_expression = recombinant_expression
+    def get_synthetic_source(self): return self.synthetic_source
+    def set_synthetic_source(self, synthetic_source): self.synthetic_source = synthetic_source
     def get_enantiomer(self): return self.enantiomer
     def set_enantiomer(self, enantiomer): self.enantiomer = enantiomer
     def get_sequence(self): return self.sequence
@@ -6737,6 +6878,7 @@ class protein_or_peptide_macromolecule_type(base_macromolecule_type):
     def hasContent_(self):
         if (
             self.recombinant_expression is not None or
+            self.synthetic_source is not None or
             self.enantiomer is not None or
             self.sequence is not None or
             self.ec_number or
@@ -6776,6 +6918,8 @@ class protein_or_peptide_macromolecule_type(base_macromolecule_type):
             eol_ = ''
         if self.recombinant_expression is not None:
             self.recombinant_expression.export(outfile, level, namespace_, name_='recombinant_expression', pretty_print=pretty_print)
+        if self.synthetic_source is not None:
+            self.synthetic_source.export(outfile, level, namespace_, name_='synthetic_source', pretty_print=pretty_print)
         if self.enantiomer is not None:
             showIndent(outfile, level, pretty_print)
             outfile.write('<enantiomer>%s</enantiomer>%s' % (self.gds_encode(self.gds_format_string(quote_xml(self.enantiomer), input_name='enantiomer')), eol_))
@@ -6799,6 +6943,11 @@ class protein_or_peptide_macromolecule_type(base_macromolecule_type):
             obj_.build(child_)
             self.recombinant_expression = obj_
             obj_.original_tagname_ = 'recombinant_expression'
+        elif nodeName_ == 'synthetic_source':
+            obj_ = macromolecule_source_type.factory()
+            obj_.build(child_)
+            self.synthetic_source = obj_
+            obj_.original_tagname_ = 'synthetic_source'
         elif nodeName_ == 'enantiomer':
             enantiomer_ = child_.text
             if enantiomer_:
@@ -6831,7 +6980,7 @@ class protein_or_peptide_macromolecule_type(base_macromolecule_type):
 class rna_macromolecule_type(base_macromolecule_type):
     subclass = None
     superclass = base_macromolecule_type
-    def __init__(self, macromolecule_id=None, mutant=None, chimera=None, name=None, natural_source=None, molecular_weight=None, details=None, number_of_copies=None, oligomeric_state=None, recombinant_exp_flag=None, sequence=None, classification=None, structure=None, synthetic_flag=None, ec_number=None):
+    def __init__(self, macromolecule_id=None, mutant=None, chimera=None, name=None, natural_source=None, molecular_weight=None, details=None, number_of_copies=None, oligomeric_state=None, recombinant_exp_flag=None, sequence=None, classification=None, structure=None, synthetic_flag=None, synthetic_source=None, ec_number=None):
         self.original_tagname_ = None
         super(rna_macromolecule_type, self).__init__(macromolecule_id, mutant, chimera, name, natural_source, molecular_weight, details, number_of_copies, oligomeric_state, recombinant_exp_flag, )
         self.sequence = sequence
@@ -6839,6 +6988,7 @@ class rna_macromolecule_type(base_macromolecule_type):
         self.validate_classificationType21(self.classification)
         self.structure = structure
         self.synthetic_flag = synthetic_flag
+        self.synthetic_source = synthetic_source
         if ec_number is None:
             self.ec_number = []
         else:
@@ -6862,6 +7012,8 @@ class rna_macromolecule_type(base_macromolecule_type):
     def set_structure(self, structure): self.structure = structure
     def get_synthetic_flag(self): return self.synthetic_flag
     def set_synthetic_flag(self, synthetic_flag): self.synthetic_flag = synthetic_flag
+    def get_synthetic_source(self): return self.synthetic_source
+    def set_synthetic_source(self, synthetic_source): self.synthetic_source = synthetic_source
     def get_ec_number(self): return self.ec_number
     def set_ec_number(self, ec_number): self.ec_number = ec_number
     def add_ec_number(self, value): self.ec_number.append(value)
@@ -6892,6 +7044,7 @@ class rna_macromolecule_type(base_macromolecule_type):
             self.classification is not None or
             self.structure is not None or
             self.synthetic_flag is not None or
+            self.synthetic_source is not None or
             self.ec_number or
             super(rna_macromolecule_type, self).hasContent_()
         ):
@@ -6938,6 +7091,8 @@ class rna_macromolecule_type(base_macromolecule_type):
         if self.synthetic_flag is not None:
             showIndent(outfile, level, pretty_print)
             outfile.write('<synthetic_flag>%s</synthetic_flag>%s' % (self.gds_format_boolean(self.synthetic_flag, input_name='synthetic_flag'), eol_))
+        if self.synthetic_source is not None:
+            self.synthetic_source.export(outfile, level, namespace_, name_='synthetic_source', pretty_print=pretty_print)
         for ec_number_ in self.ec_number:
             showIndent(outfile, level, pretty_print)
             outfile.write('<ec_number>%s</ec_number>%s' % (self.gds_encode(self.gds_format_string(quote_xml(ec_number_), input_name='ec_number')), eol_))
@@ -6984,6 +7139,11 @@ class rna_macromolecule_type(base_macromolecule_type):
                 raise_parse_error(child_, 'requires boolean')
             ival_ = self.gds_validate_boolean(ival_, node, 'synthetic_flag')
             self.synthetic_flag = ival_
+        elif nodeName_ == 'synthetic_source':
+            obj_ = macromolecule_source_type.factory()
+            obj_.build(child_)
+            self.synthetic_source = obj_
+            obj_.original_tagname_ = 'synthetic_source'
         elif nodeName_ == 'ec_number':
             ec_number_ = child_.text
             if ec_number_:
@@ -9923,7 +10083,7 @@ class base_microscopy_type(GeneratedsSuper):
         # Validate type microscopeType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['FEI MORGAGNI', 'FEI POLARA 300', 'FEI TALOS ARCTICA', 'FEI TECNAI 10', 'FEI TECNAI 12', 'FEI TECNAI 20', 'FEI TECNAI ARCTICA', 'FEI TECNAI F20', 'FEI TECNAI F30', 'FEI TECNAI SPHERA', 'FEI TECNAI SPIRIT', 'FEI TITAN', 'FEI TITAN KRIOS', 'FEI/PHILIPS CM10', 'FEI/PHILIPS CM12', 'FEI/PHILIPS CM120T', 'FEI/PHILIPS CM200FEG', 'FEI/PHILIPS CM200FEG/SOPHIE', 'FEI/PHILIPS CM200FEG/ST', 'FEI/PHILIPS CM200FEG/UT', 'FEI/PHILIPS CM200T', 'FEI/PHILIPS CM300FEG/HE', 'FEI/PHILIPS CM300FEG/ST', 'FEI/PHILIPS CM300FEG/T', 'FEI/PHILIPS EM400', 'FEI/PHILIPS EM420', 'HITACHI EF2000', 'HITACHI H-9500SD', 'HITACHI H3000 UHVEM', 'HITACHI H7600', 'HITACHI HF2000', 'HITACHI HF3000', 'JEOL 100CX', 'JEOL 1010', 'JEOL 1200', 'JEOL 1200EX', 'JEOL 1200EXII', 'JEOL 1230', 'JEOL 1400', 'JEOL 2000EX', 'JEOL 2000EXII', 'JEOL 2010', 'JEOL 2010F', 'JEOL 2010HC', 'JEOL 2010HT', 'JEOL 2010UHR', 'JEOL 2011', 'JEOL 2100', 'JEOL 2100F', 'JEOL 2200FS', 'JEOL 2200FSC', 'JEOL 3000SFF', 'JEOL 3100FEF', 'JEOL 3100FFC', 'JEOL 3200FS', 'JEOL 3200FSC', 'JEOL 4000', 'JEOL 4000EX', 'JEOL CRYO ARM 200', 'JEOL CRYO ARM 300', 'JEOL KYOTO-3000SFF', 'TFS GLACIOS', 'TFS KRIOS', 'TFS TALOS', 'TFS TALOS L120C', 'TFS TALOS F200C', 'ZEISS LEO912', 'ZEISS LIBRA120PLUS']
+            enumerations = ['FEI MORGAGNI', 'FEI POLARA 300', 'FEI TALOS ARCTICA', 'FEI TECNAI 10', 'FEI TECNAI 12', 'FEI TECNAI 20', 'FEI TECNAI ARCTICA', 'FEI TECNAI F20', 'FEI TECNAI F30', 'FEI TECNAI SPHERA', 'FEI TECNAI SPIRIT', 'FEI TITAN', 'FEI TITAN KRIOS', 'FEI/PHILIPS CM10', 'FEI/PHILIPS CM12', 'FEI/PHILIPS CM120T', 'FEI/PHILIPS CM200FEG', 'FEI/PHILIPS CM200FEG/SOPHIE', 'FEI/PHILIPS CM200FEG/ST', 'FEI/PHILIPS CM200FEG/UT', 'FEI/PHILIPS CM200T', 'FEI/PHILIPS CM300FEG/HE', 'FEI/PHILIPS CM300FEG/ST', 'FEI/PHILIPS CM300FEG/T', 'FEI/PHILIPS EM400', 'FEI/PHILIPS EM420', 'HITACHI EF2000', 'HITACHI H-9500SD', 'HITACHI H3000 UHVEM', 'HITACHI H7600', 'HITACHI HF2000', 'HITACHI HF3000', 'JEOL 100CX', 'JEOL 1000EES', 'JEOL 1010', 'JEOL 1200', 'JEOL 1200EX', 'JEOL 1200EXII', 'JEOL 1230', 'JEOL 1400', 'JEOL 2000EX', 'JEOL 2000EXII', 'JEOL 2010', 'JEOL 2010F', 'JEOL 2010HC', 'JEOL 2010HT', 'JEOL 2010UHR', 'JEOL 2011', 'JEOL 2100', 'JEOL 2100F', 'JEOL 2200FS', 'JEOL 2200FSC', 'JEOL 3000SFF', 'JEOL 3100FEF', 'JEOL 3100FFC', 'JEOL 3200FS', 'JEOL 3200FSC', 'JEOL 4000', 'JEOL 4000EX', 'JEOL CRYO ARM 200', 'JEOL CRYO ARM 300', 'JEOL KYOTO-3000SFF', 'TFS GLACIOS', 'TFS KRIOS', 'TFS TALOS', 'TFS TALOS L120C', 'TFS TALOS F200C', 'ZEISS LEO912', 'ZEISS LIBRA120PLUS']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
@@ -10397,13 +10557,14 @@ class residual_tilt_type(GeneratedsSuper):
 class specialist_optics_type(GeneratedsSuper):
     subclass = None
     superclass = None
-    def __init__(self, phase_plate=None, sph_aberration_corrector=None, chr_aberration_corrector=None, energy_filter=None):
+    def __init__(self, phase_plate=None, sph_aberration_corrector=None, chr_aberration_corrector=None, energy_filter=None, details=None):
         self.original_tagname_ = None
         self.phase_plate = phase_plate
         self.validate_phase_plateType(self.phase_plate)
         self.sph_aberration_corrector = sph_aberration_corrector
         self.chr_aberration_corrector = chr_aberration_corrector
         self.energy_filter = energy_filter
+        self.details = details
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -10423,6 +10584,8 @@ class specialist_optics_type(GeneratedsSuper):
     def set_chr_aberration_corrector(self, chr_aberration_corrector): self.chr_aberration_corrector = chr_aberration_corrector
     def get_energy_filter(self): return self.energy_filter
     def set_energy_filter(self, energy_filter): self.energy_filter = energy_filter
+    def get_details(self): return self.details
+    def set_details(self, details): self.details = details
     def validate_phase_plateType(self, value):
         # Validate type phase_plateType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
@@ -10440,7 +10603,8 @@ class specialist_optics_type(GeneratedsSuper):
             self.phase_plate is not None or
             self.sph_aberration_corrector is not None or
             self.chr_aberration_corrector is not None or
-            self.energy_filter is not None
+            self.energy_filter is not None or
+            self.details is not None
         ):
             return True
         else:
@@ -10484,6 +10648,9 @@ class specialist_optics_type(GeneratedsSuper):
             outfile.write('<chr_aberration_corrector>%s</chr_aberration_corrector>%s' % (self.gds_encode(self.gds_format_string(quote_xml(self.chr_aberration_corrector), input_name='chr_aberration_corrector')), eol_))
         if self.energy_filter is not None:
             self.energy_filter.export(outfile, level, namespace_, name_='energy_filter', pretty_print=pretty_print)
+        if self.details is not None:
+            showIndent(outfile, level, pretty_print)
+            outfile.write('<details>%s</details>%s' % (self.gds_encode(self.gds_format_string(quote_xml(self.details), input_name='details')), eol_))
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -10525,6 +10692,10 @@ class specialist_optics_type(GeneratedsSuper):
             obj_.build(child_)
             self.energy_filter = obj_
             obj_.original_tagname_ = 'energy_filter'
+        elif nodeName_ == 'details':
+            details_ = child_.text
+            details_ = self.gds_validate_string(details_, node, 'details')
+            self.details = details_
 # end class specialist_optics_type
 
 
@@ -13142,13 +13313,13 @@ class crystallography_statistics_type(GeneratedsSuper):
             outfile.write('<r_merge>%s</r_merge>%s' % (self.gds_format_float(self.r_merge, input_name='r_merge'), eol_))
         if self.overall_phase_error is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<overall_phase_error>%s</overall_phase_error>%s' % (self.gds_format_float(self.overall_phase_error, input_name='overall_phase_error'), eol_))
+            outfile.write('<overall_phase_error>%s</overall_phase_error>%s' % (self.gds_encode(self.gds_format_string(quote_xml(self.overall_phase_error), input_name='overall_phase_error')), eol_))
         if self.overall_phase_residual is not None:
             showIndent(outfile, level, pretty_print)
             outfile.write('<overall_phase_residual>%s</overall_phase_residual>%s' % (self.gds_format_float(self.overall_phase_residual, input_name='overall_phase_residual'), eol_))
         if self.phase_error_rejection_criteria is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<phase_error_rejection_criteria>%s</phase_error_rejection_criteria>%s' % (self.gds_format_float(self.phase_error_rejection_criteria, input_name='phase_error_rejection_criteria'), eol_))
+            outfile.write('<phase_error_rejection_criteria>%s</phase_error_rejection_criteria>%s' % (self.gds_encode(self.gds_format_string(quote_xml(self.phase_error_rejection_criteria), input_name='phase_error_rejection_criteria')), eol_))
         if self.high_resolution is not None:
             self.high_resolution.export(outfile, level, namespace_, name_='high_resolution', pretty_print=pretty_print)
         if self.shell_list is not None:
@@ -13211,13 +13382,13 @@ class crystallography_statistics_type(GeneratedsSuper):
             fval_ = self.gds_validate_float(fval_, node, 'r_merge')
             self.r_merge = fval_
         elif nodeName_ == 'overall_phase_error':
-            sval_ = child_.text
-            try:
-                fval_ = float(sval_)
-            except (TypeError, ValueError) as exp:
-                raise_parse_error(child_, 'requires float or double: %s' % exp)
-            fval_ = self.gds_validate_float(fval_, node, 'overall_phase_error')
-            self.overall_phase_error = fval_
+            overall_phase_error_ = child_.text
+            if overall_phase_error_:
+                overall_phase_error_ = re_.sub(String_cleanup_pat_, " ", overall_phase_error_).strip()
+            else:
+                overall_phase_error_ = ""
+            overall_phase_error_ = self.gds_validate_string(overall_phase_error_, node, 'overall_phase_error')
+            self.overall_phase_error = overall_phase_error_
         elif nodeName_ == 'overall_phase_residual':
             sval_ = child_.text
             try:
@@ -13227,13 +13398,13 @@ class crystallography_statistics_type(GeneratedsSuper):
             fval_ = self.gds_validate_float(fval_, node, 'overall_phase_residual')
             self.overall_phase_residual = fval_
         elif nodeName_ == 'phase_error_rejection_criteria':
-            sval_ = child_.text
-            try:
-                fval_ = float(sval_)
-            except (TypeError, ValueError) as exp:
-                raise_parse_error(child_, 'requires float or double: %s' % exp)
-            fval_ = self.gds_validate_float(fval_, node, 'phase_error_rejection_criteria')
-            self.phase_error_rejection_criteria = fval_
+            phase_error_rejection_criteria_ = child_.text
+            if phase_error_rejection_criteria_:
+                phase_error_rejection_criteria_ = re_.sub(String_cleanup_pat_, " ", phase_error_rejection_criteria_).strip()
+            else:
+                phase_error_rejection_criteria_ = ""
+            phase_error_rejection_criteria_ = self.gds_validate_string(phase_error_rejection_criteria_, node, 'phase_error_rejection_criteria')
+            self.phase_error_rejection_criteria = phase_error_rejection_criteria_
         elif nodeName_ == 'high_resolution':
             obj_ = high_resolutionType34.factory()
             obj_.build(child_)
@@ -16952,7 +17123,7 @@ class sitesType(GeneratedsSuper):
         # Validate type depositionType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['PDBe', 'PDBj', 'RCSB']
+            enumerations = ['PDBe', 'PDBj', 'RCSB', 'PDBc']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
@@ -16964,7 +17135,7 @@ class sitesType(GeneratedsSuper):
         # Validate type last_processingType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['PDBe', 'PDBj', 'RCSB']
+            enumerations = ['PDBe', 'PDBj', 'RCSB', 'PDBc']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
@@ -32486,25 +32657,25 @@ class non_subtom_final_reconstruction_type(final_reconstruction_type):
 # end class non_subtom_final_reconstruction_type
 
 
-class cell_natural_source_type(base_source_type):
+class cell_source_type(base_source_type):
     subclass = None
     superclass = base_source_type
     def __init__(self, database=None, organism=None, strain=None, synonym_organism=None, organ=None, tissue=None, cell=None):
         self.original_tagname_ = None
-        super(cell_natural_source_type, self).__init__(database, organism, strain, synonym_organism, )
+        super(cell_source_type, self).__init__(database, organism, strain, synonym_organism, )
         self.organ = organ
         self.tissue = tissue
         self.cell = cell
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
-                CurrentSubclassModule_, cell_natural_source_type)
+                CurrentSubclassModule_, cell_source_type)
             if subclass is not None:
                 return subclass(*args_, **kwargs_)
-        if cell_natural_source_type.subclass:
-            return cell_natural_source_type.subclass(*args_, **kwargs_)
+        if cell_source_type.subclass:
+            return cell_source_type.subclass(*args_, **kwargs_)
         else:
-            return cell_natural_source_type(*args_, **kwargs_)
+            return cell_source_type(*args_, **kwargs_)
     factory = staticmethod(factory)
     def get_organ(self): return self.organ
     def set_organ(self, organ): self.organ = organ
@@ -32517,13 +32688,13 @@ class cell_natural_source_type(base_source_type):
             self.organ is not None or
             self.tissue is not None or
             self.cell is not None or
-            super(cell_natural_source_type, self).hasContent_()
+            super(cell_source_type, self).hasContent_()
         ):
             return True
         else:
             return False
-    def export(self, outfile, level, namespace_='', name_='cell_natural_source_type', namespacedef_='', pretty_print=True):
-        imported_ns_def_ = GenerateDSNamespaceDefs_.get('cell_natural_source_type')
+    def export(self, outfile, level, namespace_='', name_='cell_source_type', namespacedef_='', pretty_print=True):
+        imported_ns_def_ = GenerateDSNamespaceDefs_.get('cell_source_type')
         if imported_ns_def_ is not None:
             namespacedef_ = imported_ns_def_
         if pretty_print:
@@ -32535,18 +32706,18 @@ class cell_natural_source_type(base_source_type):
         showIndent(outfile, level, pretty_print)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_, name_='cell_natural_source_type')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='cell_source_type')
         if self.hasContent_():
             outfile.write('>%s' % (eol_, ))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='cell_natural_source_type', pretty_print=pretty_print)
+            self.exportChildren(outfile, level + 1, namespace_='', name_='cell_source_type', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
             outfile.write('/>%s' % (eol_, ))
-    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='cell_natural_source_type'):
-        super(cell_natural_source_type, self).exportAttributes(outfile, level, already_processed, namespace_, name_='cell_natural_source_type')
-    def exportChildren(self, outfile, level, namespace_='', name_='cell_natural_source_type', fromsubclass_=False, pretty_print=True):
-        super(cell_natural_source_type, self).exportChildren(outfile, level, namespace_, name_, True, pretty_print=pretty_print)
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='cell_source_type'):
+        super(cell_source_type, self).exportAttributes(outfile, level, already_processed, namespace_, name_='cell_source_type')
+    def exportChildren(self, outfile, level, namespace_='', name_='cell_source_type', fromsubclass_=False, pretty_print=True):
+        super(cell_source_type, self).exportChildren(outfile, level, namespace_, name_, True, pretty_print=pretty_print)
         if pretty_print:
             eol_ = '\n'
         else:
@@ -32568,7 +32739,7 @@ class cell_natural_source_type(base_source_type):
             self.buildChildren(child, node, nodeName_)
         return self
     def buildAttributes(self, node, attrs, already_processed):
-        super(cell_natural_source_type, self).buildAttributes(node, attrs, already_processed)
+        super(cell_source_type, self).buildAttributes(node, attrs, already_processed)
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'organ':
             organ_ = child_.text
@@ -32594,8 +32765,8 @@ class cell_natural_source_type(base_source_type):
                 cell_ = ""
             cell_ = self.gds_validate_string(cell_, node, 'cell')
             self.cell = cell_
-        super(cell_natural_source_type, self).buildChildren(child_, node, nodeName_, True)
-# end class cell_natural_source_type
+        super(cell_source_type, self).buildChildren(child_, node, nodeName_, True)
+# end class cell_source_type
 
 
 GDSClassesMapping = {
@@ -32809,7 +32980,7 @@ __all__ = [
     "categoryType",
     "cellType",
     "cell_angle_type",
-    "cell_natural_source_type",
+    "cell_source_type",
     "cell_supramolecule_type",
     "cell_type",
     "chainType",
@@ -32821,7 +32992,7 @@ __all__ = [
     "classification_type",
     "code_type",
     "coma_freeType",
-    "complex_natural_source_type",
+    "complex_source_type",
     "complex_supramolecule_type",
     "concentrationType",
     "concentrationType26",
@@ -32947,8 +33118,8 @@ __all__ = [
     "non_subtom_final_reconstruction_type",
     "noneType",
     "obsolete_listType",
-    "organelle_natural_source_type",
     "organelle_or_cellular_component_supramolecule_type",
+    "organelle_source_type",
     "organism_type",
     "organizationType",
     "originType",
@@ -32979,7 +33150,7 @@ __all__ = [
     "resolution_rangeType",
     "rna_macromolecule_type",
     "saccharide_macromolecule_type",
-    "sample_natural_source_type",
+    "sample_source_type",
     "sample_supramolecule_type",
     "sample_type",
     "sampling_intervalType",
@@ -33038,7 +33209,7 @@ __all__ = [
     "tilt_listType",
     "tilt_series_type",
     "timeType",
-    "tissue_natural_source_type",
+    "tissue_source_type",
     "tissue_supramolecule_type",
     "tomography_microscopy_type",
     "tomography_preparation_type",
@@ -33052,7 +33223,7 @@ __all__ = [
     "validation_type",
     "version_list_type",
     "version_type",
-    "virus_natural_host_type",
+    "virus_host_type",
     "virus_shellType",
     "virus_species_name_type",
     "virus_supramolecule_type",

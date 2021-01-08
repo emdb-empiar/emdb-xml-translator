@@ -24,7 +24,7 @@
             </xs:element>
         </xs:sequence>
         <xs:attribute name="emdb_id" type="emdb_id_type" use="required" />
-        <xs:attribute default="3.0.1.9" name="version" type="xs:token" />
+        <xs:attribute default="3.0.2.3" name="version" type="xs:token" />
         
     </xs:complexType>
     <xs:complexType name="admin_type">
@@ -40,6 +40,7 @@
                                     <xs:enumeration value="PDBe" />
                                     <xs:enumeration value="PDBj" />
                                     <xs:enumeration value="RCSB" />
+                                    <xs:enumeration value="PDBc" />
                                 </xs:restriction>
                             </xs:simpleType>
                         </xs:element>
@@ -49,6 +50,7 @@
                                     <xs:enumeration value="PDBe" />
                                     <xs:enumeration value="PDBj" />
                                     <xs:enumeration value="RCSB" />
+                                    <xs:enumeration value="PDBc" />
                                 </xs:restriction>
                             </xs:simpleType>
                         </xs:element>
@@ -110,7 +112,7 @@
                         </xs:element>
                     </xs:sequence>
                 </xs:complexType>
-             </xs:element>
+            </xs:element>
             <xs:element maxOccurs="unbounded" minOccurs="0" name="contact_author">
                 <xs:complexType>
                     <xs:complexContent>
@@ -162,6 +164,7 @@
                         <xs:enumeration value="PDBe" />
                         <xs:enumeration value="RCSB" />
                         <xs:enumeration value="PDBj" />
+                        <xs:enumeration value="PDBc" />
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
@@ -356,6 +359,7 @@
             <xs:enumeration value="Partnership for T-Cell Biology (TCELL)" />
             <xs:enumeration value="Program for the Characterization of Secreted Effector Proteins (PCSEP)" />
             <xs:enumeration value="Protein Structure Factory (PSF)" />
+            <xs:enumeration value="QCRG Structural Biology Consortium" />
             <xs:enumeration value="RIKEN Structural Genomics/Proteomics Initiative (RSGI)" />
             <xs:enumeration value="Scottish Structural Proteomics Facility (SSPF)" />
             <xs:enumeration value="Seattle Structural Genomics Center for Infectious Disease (SSGCID)" />
@@ -696,12 +700,13 @@
         <xs:complexContent>
             <xs:extension base="base_supramolecule_type">
                 <xs:sequence>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="natural_source" type="cell_natural_source_type" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="natural_source" type="cell_source_type" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="synthetic_source" type="cell_source_type" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:complexType name="cell_natural_source_type">
+    <xs:complexType name="cell_source_type">
         <xs:complexContent>
             <xs:extension base="base_source_type">
                 <xs:sequence>
@@ -738,7 +743,8 @@
         <xs:complexContent>
             <xs:extension base="base_supramolecule_type">
                 <xs:sequence>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="natural_source" type="complex_natural_source_type" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="natural_source" type="complex_source_type" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="synthetic_source" type="complex_source_type" />
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="recombinant_expression" type="recombinant_source_type" />
                     <xs:element minOccurs="0" name="molecular_weight" type="molecular_weight_type" />
                     <xs:element minOccurs="0" name="ribosome-details" type="xs:string" />
@@ -747,7 +753,7 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:complexType name="complex_natural_source_type">
+    <xs:complexType name="complex_source_type">
         <xs:complexContent>
             <xs:extension base="base_source_type">
                 <xs:sequence>
@@ -824,14 +830,15 @@
         <xs:complexContent>
             <xs:extension base="base_supramolecule_type">
                 <xs:sequence>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="natural_source" type="organelle_natural_source_type" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="natural_source" type="organelle_source_type" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="synthetic_source" type="organelle_source_type" />
                     <xs:element minOccurs="0" name="molecular_weight" type="molecular_weight_type" />
                     <xs:element maxOccurs="1" minOccurs="0" name="recombinant_expression" type="recombinant_source_type" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:complexType name="organelle_natural_source_type">
+    <xs:complexType name="organelle_source_type">
         <xs:complexContent>
             <xs:extension base="base_source_type">
                 <xs:sequence>
@@ -849,14 +856,15 @@
         <xs:complexContent>
             <xs:extension base="base_supramolecule_type">
                 <xs:sequence>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="natural_source" type="sample_natural_source_type" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="natural_source" type="sample_source_type" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="synthetic_source" type="sample_source_type" />
                     <xs:element minOccurs="0" name="number_unique_components" type="xs:positiveInteger" />
                     <xs:element minOccurs="0" name="molecular_weight" type="molecular_weight_type" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:complexType name="sample_natural_source_type">
+    <xs:complexType name="sample_source_type">
         <xs:complexContent>
             <xs:extension base="base_source_type">
                 <xs:sequence>
@@ -872,12 +880,13 @@
         <xs:complexContent>
             <xs:extension base="base_supramolecule_type">
                 <xs:sequence>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="natural_source" type="tissue_natural_source_type" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="natural_source" type="tissue_source_type" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="sythetic_source" type="tissue_source_type" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:complexType name="tissue_natural_source_type">
+    <xs:complexType name="tissue_source_type">
         <xs:complexContent>
             <xs:extension base="base_source_type">
                 <xs:sequence>
@@ -894,7 +903,8 @@
                 <xs:sequence>
                     <xs:element minOccurs="0" name="sci_species_name" type="virus_species_name_type" />
                     <xs:element maxOccurs="1" minOccurs="0" name="sci_species_strain" type="xs:string" />
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="natural_host" type="virus_natural_host_type" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="natural_host" type="virus_host_type" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="synthetic_host" type="virus_host_type" />
                     <xs:element minOccurs="0" name="host_system" type="recombinant_source_type" />
                     <xs:element minOccurs="0" name="molecular_weight" type="molecular_weight_type" />
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="virus_shell">
@@ -955,7 +965,7 @@
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
-    <xs:complexType name="virus_natural_host_type">
+    <xs:complexType name="virus_host_type">
         <xs:complexContent>
             <xs:extension base="base_source_type" />
         </xs:complexContent>
@@ -1050,6 +1060,7 @@
                     </xs:element>
                     <xs:element minOccurs="0" name="structure" type="xs:token" />
                     <xs:element minOccurs="0" name="synthetic_flag" type="xs:boolean" />
+                    <xs:element minOccurs="0" name="synthetic_source" type="macromolecule_source_type" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -1060,6 +1071,7 @@
             <xs:extension base="base_macromolecule_type">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="formula" type="formula_type" />
+                    <xs:element minOccurs="0" name="synthetic_source" type="macromolecule_source_type" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -1140,6 +1152,7 @@
                     <xs:element minOccurs="0" name="recombinant_expression" type="recombinant_source_type" />
                     <xs:element minOccurs="0" name="structure" type="xs:token" />
                     <xs:element minOccurs="0" name="synthetic_flag" type="xs:boolean" />
+                    <xs:element minOccurs="0" name="synthetic_source" type="macromolecule_source_type" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -1150,6 +1163,7 @@
             <xs:extension base="base_macromolecule_type">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="recombinant_expression" type="recombinant_source_type" />
+                    <xs:element minOccurs="0" name="synthetic_source" type="macromolecule_source_type" />
                     <xs:element minOccurs="0" name="enantiomer">
                         <xs:simpleType>
                             <xs:restriction base="xs:token">
@@ -1290,6 +1304,7 @@
                     </xs:element>
                     <xs:element minOccurs="0" name="structure" type="xs:token" />
                     <xs:element minOccurs="0" name="synthetic_flag" type="xs:boolean" />
+                    <xs:element minOccurs="0" name="synthetic_source" type="macromolecule_source_type" />
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="ec_number">
                         <xs:simpleType>
                             <xs:restriction base="xs:token">
@@ -1927,7 +1942,7 @@
     </xs:simpleType>
     <xs:complexType name="fib_duration_type">
         <xs:simpleContent>
-            <xs:extension base="xs:positiveInteger">
+            <xs:extension base="xs:float">
                 <xs:attribute fixed="s" name="units" type="xs:token" />
             </xs:extension>
         </xs:simpleContent>
@@ -1955,7 +1970,6 @@
     <xs:simpleType name="allowed_focus_ion_final_thickness">
         <xs:restriction base="xs:float">
             <xs:minInclusive value="10" />
-            <xs:maxInclusive value="300" />
         </xs:restriction>
     </xs:simpleType>
     <xs:element abstract="true" name="microscopy" type="base_microscopy_type" />
@@ -2004,6 +2018,7 @@
                         <xs:enumeration value="HITACHI HF2000" />
                         <xs:enumeration value="HITACHI HF3000" />
                         <xs:enumeration value="JEOL 100CX" />
+                        <xs:enumeration value="JEOL 1000EES" />
                         <xs:enumeration value="JEOL 1010" />
                         <xs:enumeration value="JEOL 1200" />
                         <xs:enumeration value="JEOL 1200EX" />
@@ -2445,6 +2460,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element minOccurs="0" name="details" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
     <xs:simpleType name="allowed_energy_window">
@@ -3187,11 +3203,11 @@
             <xs:element name="number_intensities_measured" type="xs:positiveInteger" />
             <xs:element name="number_structure_factors" type="xs:positiveInteger" />
             <xs:element name="fourier_space_coverage" type="xs:float" />
-            <xs:element name="r_sym" type="xs:float" />
+            <xs:element minOccurs="0" name="r_sym" type="xs:float" />
             <xs:element name="r_merge" type="xs:float" />
-            <xs:element name="overall_phase_error" type="xs:float" />
-            <xs:element name="overall_phase_residual" type="xs:float" />
-            <xs:element name="phase_error_rejection_criteria" type="xs:float" />
+            <xs:element minOccurs="0" name="overall_phase_error" type="xs:token" />
+            <xs:element minOccurs="0" name="overall_phase_residual" type="xs:float" />
+            <xs:element name="phase_error_rejection_criteria" type="xs:token" />
             <xs:element name="high_resolution">
                 <xs:complexType>
                     <xs:simpleContent>
