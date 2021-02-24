@@ -128,6 +128,7 @@ class EMDBXMLTranslator(object):
                                     'GATAN CHDT 3504 DOUBLE TILT HIGH RESOLUTION NITROGEN COOLING HOLDER': 'GATAN LIQUID NITROGEN',
                                     'GATAN CT3500 SINGLE TILT LIQUID NITROGEN CRYO TRANSFER HOLDER': 'GATAN LIQUID NITROGEN',
                                     'GATAN CT3500TR SINGLE TILT ROTATION LIQUID NITROGEN CRYO TRANSFER HOLDER': 'GATAN LIQUID NITROGEN',
+                                    'GATAN ELSA 698 SINGLE TILT LIQUID NITROGEN CRYO TRANSFER HOLDER': 'GATAN ELSA 698 SINGLE TILT LIQUID NITROGEN CRYO TRANSFER HOLDER',
                                     'GATAN HC 3500 SINGLE TILT HEATING/NITROGEN COOLING HOLDER': 'GATAN LIQUID NITROGEN',
                                     'GATAN HCHDT 3010 DOUBLE TILT HIGH RESOLUTION HELIUM COOLING HOLDER': 'GATAN HELIUM',
                                     'GATAN HCHST 3008 SINGLE TILT HIGH RESOLUTION HELIUM COOLING HOLDER': 'GATAN HELIUM',
@@ -143,7 +144,11 @@ class EMDBXMLTranslator(object):
                                     'OTHER': 'OTHER',
                                     'PHILIPS ROTATION HOLDER': 'PHILIPS ROTATION HOLDER',
                                     'SIDE ENTRY, EUCENTRIC': 'SIDE ENTRY, EUCENTRIC',
-                                    'JEOL3200FSC CRYOHOLDER': 'JEOL 3200FSC CRYOHOLDER'}
+                                    'JEOL CRYOSPECPORTER': 'JEOL CRYOSPECPORTER',
+                                    'JEOL3200FSC CRYOHOLDER': 'JEOL 3200FSC CRYOHOLDER',
+                                    'FISCHIONE 2550': 'FISCHIONE 2550',
+                                    'FISCHIONE INSTRUMENTS DUAL AXIS TOMOGRAPHY HOLDER': 'FISCHIONE INSTRUMENTS DUAL AXIS TOMOGRAPHY HOLDER',
+                                    }
 
         SPECIMEN_STATE_30_to_19 = {'particle': 'particle',
                                    'filament': 'filament',
