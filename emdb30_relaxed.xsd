@@ -24,7 +24,7 @@
             </xs:element>
         </xs:sequence>
         <xs:attribute name="emdb_id" type="emdb_id_type" use="required" />
-        <xs:attribute default="3.0.2.4" name="version" type="xs:token" />
+        <xs:attribute default="3.0.2.5" name="version" type="xs:token" />
         
     </xs:complexType>
     <xs:complexType name="admin_type">
@@ -1957,7 +1957,7 @@
     <xs:simpleType name="allowed_focus_ion_initial_thickness">
         <xs:restriction base="xs:float">
             <xs:minInclusive value="10" />
-            <xs:maxInclusive value="10000" />
+            <xs:maxInclusive value="100000" />
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="fib_final_thickness_type">
