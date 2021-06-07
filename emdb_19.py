@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Tue May 12 19:43:47 2020 by generateDS.py version 2.29.5.
+# Generated Tue May 11 16:19:07 2021 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
@@ -13,13 +13,13 @@
 #   ('--external-encoding', 'utf-8')
 #
 # Command line arguments:
-#   /Users/sanja/IdeaProjects/emdb-schemas/current/emdb.xsd
+#   /Users/sanja/IdeaProjects/emdb-schemas/v1/v1_9/emdb_v1_9_6.xsd
 #
 # Command line:
-#   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "/Users/sanja/IdeaProjects/emdb-schemas/current/emdb.py" --no-warnings --external-encoding="utf-8" /Users/sanja/IdeaProjects/emdb-schemas/current/emdb.xsd
+#   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "/Users/sanja/IdeaProjects/emdb-schemas/current/emdb.py" --no-warnings --external-encoding="utf-8" /Users/sanja/IdeaProjects/emdb-schemas/v1/v1_9/emdb_v1_9_6.xsd
 #
 # Current working directory (os.getcwd()):
-#   sanja
+#   current
 #
 
 import sys
@@ -145,15 +145,18 @@ except ImportError as exp:
             #    return ('%.1f' % input_data)
             #else:
             #    return ('%.2f' % input_data).rstrip('0')
-            decimal_places = 1
             fl_input_data = float(input_data)
-            if "." in str(input_data):
-                stripped_input = str(input_data).rstrip("0") 
-                index = stripped_input.index(".")
-                len_stripped = len(stripped_input)
-                decimal_places = len_stripped - (index + 1)
-                fl_input_data = float(stripped_input)
-            return '%.*f' % (decimal_places, fl_input_data)
+            ret = '%s' % str(fl_input_data)
+            if "e" not in str(input_data) and "E" not in str(input_data):
+                decimal_places = 1
+                if "." in str(input_data) and not str(input_data).endswith('.0'):
+                    stripped_input = str(input_data).rstrip("0")
+                    index = stripped_input.index(".")
+                    len_stripped = len(stripped_input)
+                    decimal_places = len_stripped - (index + 1)
+                    fl_input_data = float(stripped_input)
+                ret = '%.*f' % (decimal_places, fl_input_data)
+            return ret
     
         def gds_validate_float(self, input_data, node=None, input_name=''):
             return input_data
@@ -3875,7 +3878,7 @@ class imgType(GeneratedsSuper):
         # Validate type specimenHolderType, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['FEI TITAN KRIOS AUTOGRID HOLDER', 'GATAN HELIUM', 'GATAN LIQUID NITROGEN', 'HOME BUILD', 'JEOL', 'JEOL 3200FSC CRYOHOLDER', 'PHILIPS ROTATION HOLDER', 'SIDE ENTRY, EUCENTRIC', 'JEOL CRYOSPECPORTER', 'OTHER']
+            enumerations = ['FEI TITAN KRIOS AUTOGRID HOLDER', 'GATAN HELIUM', 'GATAN LIQUID NITROGEN', 'HOME BUILD', 'JEOL', 'JEOL 3200FSC CRYOHOLDER', 'PHILIPS ROTATION HOLDER', 'SIDE ENTRY, EUCENTRIC', 'JEOL CRYOSPECPORTER', 'FISCHIONE INSTRUMENTS DUAL AXIS TOMOGRAPHY HOLDER', 'OTHER']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:

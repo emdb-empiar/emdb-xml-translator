@@ -24,7 +24,7 @@
             </xs:element>
         </xs:sequence>
         <xs:attribute name="emdb_id" type="emdb_id_type" use="required" />
-        <xs:attribute default="3.0.2.5" name="version" type="xs:token" />
+        <xs:attribute default="3.0.2.6" name="version" type="xs:token" />
         
     </xs:complexType>
     <xs:complexType name="admin_type">
@@ -2052,6 +2052,7 @@
                         <xs:enumeration value="TFS TALOS" />
                         <xs:enumeration value="TFS TALOS L120C" />
                         <xs:enumeration value="TFS TALOS F200C" />
+                        <xs:enumeration value="TFS Tundra" />
                         <xs:enumeration value="ZEISS LEO912" />
                         <xs:enumeration value="ZEISS LIBRA120PLUS" />
                     <xs:enumeration value="OTHER" /></xs:restriction>

@@ -2,21 +2,21 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Thu Apr  8 16:48:20 2021 by generateDS.py version 2.29.5.
+# Generated Mon Jun  7 16:59:32 2021 by generateDS.py version 2.29.5.
 # Python 2.7.11 (v2.7.11:6d1b6a68f775, Dec  5 2015, 12:54:16)  [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
 #
 # Command line options:
 #   ('--root-element', 'emd')
 #   ('-f', '')
-#   ('-o', '/Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_2_5/emdb.py')
+#   ('-o', '/Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_2_6/emdb.py')
 #   ('--no-warnings', '')
 #   ('--external-encoding', 'utf-8')
 #
 # Command line arguments:
-#   /Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_2_5/emdb.xsd
+#   /Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_2_6/emdb.xsd
 #
 # Command line:
-#   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "/Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_2_5/emdb.py" --no-warnings --external-encoding="utf-8" /Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_2_5/emdb.xsd
+#   /Users/sanja/Documents/modified_generateDS-2.29.5/generateDS.py --root-element="emd" -f -o "/Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_2_6/emdb.py" --no-warnings --external-encoding="utf-8" /Users/sanja/IdeaProjects/emdb-schemas/v3/v3_0_2_6/emdb.xsd
 #
 # Current working directory (os.getcwd()):
 #   sanja
@@ -739,7 +739,7 @@ def _cast(typ, value):
 class entry_type(GeneratedsSuper):
     subclass = None
     superclass = None
-    def __init__(self, emdb_id=None, version='3.0.2.5', admin=None, crossreferences=None, sample=None, structure_determination_list=None, map=None, interpretation=None, validation=None):
+    def __init__(self, emdb_id=None, version='3.0.2.6', admin=None, crossreferences=None, sample=None, structure_determination_list=None, map=None, interpretation=None, validation=None):
         self.original_tagname_ = None
         self.emdb_id = _cast(None, emdb_id)
         self.version = _cast(None, version)
@@ -10083,7 +10083,7 @@ class base_microscopy_type(GeneratedsSuper):
         # Validate type microscopeType, a restriction on xs:token.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['FEI MORGAGNI', 'FEI POLARA 300', 'FEI TALOS ARCTICA', 'FEI TECNAI 10', 'FEI TECNAI 12', 'FEI TECNAI 20', 'FEI TECNAI ARCTICA', 'FEI TECNAI F20', 'FEI TECNAI F30', 'FEI TECNAI SPHERA', 'FEI TECNAI SPIRIT', 'FEI TITAN', 'FEI TITAN KRIOS', 'FEI/PHILIPS CM10', 'FEI/PHILIPS CM12', 'FEI/PHILIPS CM120T', 'FEI/PHILIPS CM200FEG', 'FEI/PHILIPS CM200FEG/SOPHIE', 'FEI/PHILIPS CM200FEG/ST', 'FEI/PHILIPS CM200FEG/UT', 'FEI/PHILIPS CM200T', 'FEI/PHILIPS CM300FEG/HE', 'FEI/PHILIPS CM300FEG/ST', 'FEI/PHILIPS CM300FEG/T', 'FEI/PHILIPS EM400', 'FEI/PHILIPS EM420', 'HITACHI EF2000', 'HITACHI H-9500SD', 'HITACHI H3000 UHVEM', 'HITACHI H7600', 'HITACHI HF2000', 'HITACHI HF3000', 'JEOL 100CX', 'JEOL 1000EES', 'JEOL 1010', 'JEOL 1200', 'JEOL 1200EX', 'JEOL 1200EXII', 'JEOL 1230', 'JEOL 1400', 'JEOL 2000EX', 'JEOL 2000EXII', 'JEOL 2010', 'JEOL 2010F', 'JEOL 2010HC', 'JEOL 2010HT', 'JEOL 2010UHR', 'JEOL 2011', 'JEOL 2100', 'JEOL 2100F', 'JEOL 2200FS', 'JEOL 2200FSC', 'JEOL 3000SFF', 'JEOL 3100FEF', 'JEOL 3100FFC', 'JEOL 3200FS', 'JEOL 3200FSC', 'JEOL 4000', 'JEOL 4000EX', 'JEOL CRYO ARM 200', 'JEOL CRYO ARM 300', 'JEOL KYOTO-3000SFF', 'TFS GLACIOS', 'TFS KRIOS', 'TFS TALOS', 'TFS TALOS L120C', 'TFS TALOS F200C', 'ZEISS LEO912', 'ZEISS LIBRA120PLUS']
+            enumerations = ['FEI MORGAGNI', 'FEI POLARA 300', 'FEI TALOS ARCTICA', 'FEI TECNAI 10', 'FEI TECNAI 12', 'FEI TECNAI 20', 'FEI TECNAI ARCTICA', 'FEI TECNAI F20', 'FEI TECNAI F30', 'FEI TECNAI SPHERA', 'FEI TECNAI SPIRIT', 'FEI TITAN', 'FEI TITAN KRIOS', 'FEI/PHILIPS CM10', 'FEI/PHILIPS CM12', 'FEI/PHILIPS CM120T', 'FEI/PHILIPS CM200FEG', 'FEI/PHILIPS CM200FEG/SOPHIE', 'FEI/PHILIPS CM200FEG/ST', 'FEI/PHILIPS CM200FEG/UT', 'FEI/PHILIPS CM200T', 'FEI/PHILIPS CM300FEG/HE', 'FEI/PHILIPS CM300FEG/ST', 'FEI/PHILIPS CM300FEG/T', 'FEI/PHILIPS EM400', 'FEI/PHILIPS EM420', 'HITACHI EF2000', 'HITACHI H-9500SD', 'HITACHI H3000 UHVEM', 'HITACHI H7600', 'HITACHI HF2000', 'HITACHI HF3000', 'JEOL 100CX', 'JEOL 1000EES', 'JEOL 1010', 'JEOL 1200', 'JEOL 1200EX', 'JEOL 1200EXII', 'JEOL 1230', 'JEOL 1400', 'JEOL 2000EX', 'JEOL 2000EXII', 'JEOL 2010', 'JEOL 2010F', 'JEOL 2010HC', 'JEOL 2010HT', 'JEOL 2010UHR', 'JEOL 2011', 'JEOL 2100', 'JEOL 2100F', 'JEOL 2200FS', 'JEOL 2200FSC', 'JEOL 3000SFF', 'JEOL 3100FEF', 'JEOL 3100FFC', 'JEOL 3200FS', 'JEOL 3200FSC', 'JEOL 4000', 'JEOL 4000EX', 'JEOL CRYO ARM 200', 'JEOL CRYO ARM 300', 'JEOL KYOTO-3000SFF', 'TFS GLACIOS', 'TFS KRIOS', 'TFS TALOS', 'TFS TALOS L120C', 'TFS TALOS F200C', 'TFS Tundra', 'ZEISS LEO912', 'ZEISS LIBRA120PLUS']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
