@@ -2069,7 +2069,7 @@
                         <xs:enumeration value="TFS TALOS"/>
                         <xs:enumeration value="TFS TALOS L120C"/>
                         <xs:enumeration value="TFS TALOS F200C"/>
-                        <xs:enumeration value="TFS Tundra"/>
+                        <xs:enumeration value="TFS TUNDRA"/>
                         <xs:enumeration value="ZEISS LEO912"/>
                         <xs:enumeration value="ZEISS LIBRA120PLUS"/>
                     </xs:restriction>
@@ -2738,7 +2738,7 @@
     </xs:group>
     <xs:complexType name="applied_symmetry_type">
         <xs:choice>
-            <xs:element name="space_group" type="xs:token"/>
+            <xs:element name="space_group" type="xs:int"/>
             <xs:element name="point_group">
                 <xs:simpleType>
                     <xs:restriction base="point_group_symmetry_type">
