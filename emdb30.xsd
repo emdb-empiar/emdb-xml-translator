@@ -24,7 +24,7 @@
             </xs:element>
         </xs:sequence>
         <xs:attribute name="emdb_id" type="emdb_id_type" use="required"/>
-        <xs:attribute name="version" type="xs:token" default="3.0.2.6"/>
+        <xs:attribute name="version" type="xs:token" default="3.0.2.8"/>
         <!-- <xs:attribute name="composite_structure" type="xs:boolean"/> -->
     </xs:complexType>
     <xs:complexType name="admin_type">
@@ -126,7 +126,7 @@
             <xs:element name="authors_list">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="author" type="author_type" maxOccurs="unbounded"/>
+                        <xs:element name="author" type="author_ORCID_type" maxOccurs="unbounded"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -389,6 +389,25 @@
             </xs:simpleType>
         </xs:union>
     </xs:simpleType>
+    <xs:simpleType name="ORCID_type">
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{4}-[0-9]{4}-[0-9]{4}-([0-9]{3}X|[0-9]{4})"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="author_ORCID_type">
+        <xs:simpleContent>
+            <xs:extension base="author_type">
+                <xs:attribute name="ORCID" type="ORCID_type"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="author_order_type">
+        <xs:simpleContent>
+            <xs:extension base="author_ORCID_type">
+                <xs:attribute name="order" type="xs:positiveInteger"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 
     <xs:complexType name="crossreferences_type">
         <xs:sequence>
@@ -488,13 +507,6 @@
             <xs:attribute name="published" type="xs:boolean" use="required"/>
         </xs:complexType>
     </xs:element>
-    <xs:complexType name="author_order_type">
-        <xs:simpleContent>
-            <xs:extension base="author_type">
-                <xs:attribute name="order" type="xs:positiveInteger"/>
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
     <xs:simpleType name="page_type">
         <xs:restriction base="xs:string"/>
     </xs:simpleType>
@@ -1928,7 +1940,7 @@
     </xs:complexType>
     <xs:simpleType name="allowed_focus_ion_voltage">
         <xs:restriction base="xs:float">
-            <xs:minInclusive value="5"/>
+            <xs:minInclusive value="3"/>
             <xs:maxInclusive value="30"/>
         </xs:restriction>
     </xs:simpleType>
@@ -2509,6 +2521,7 @@
     <xs:simpleType name="allowed_film_or_detector_model">
         <xs:restriction base="xs:token">
             <xs:enumeration value="AGFA SCIENTA FILM"/>
+            <xs:enumeration value="DIRECT ELECTRON APOLLO (4k x 4k)"/>
             <xs:enumeration value="DIRECT ELECTRON DE-10 (5k x 4k)"/>
             <xs:enumeration value="DIRECT ELECTRON DE-12 (4k x 3k)"/>
             <xs:enumeration value="DIRECT ELECTRON DE-16 (4k x 4k)"/>
