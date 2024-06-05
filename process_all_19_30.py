@@ -63,10 +63,10 @@ def process_all_19_30(file_path_template, out_dir):
             command_list.append(outf)
             command_list.append(emdb_file)
             cmd_text = ' '.join(command_list)
-            #print "EXEC: %s" % cmd_text
+            print "EXEC: %s" % cmd_text
             #logging.info('Executing: %s', cmd_text)
             exit_code = -1
-            #exit_code = subprocess.call(command_list)
+            exit_code = subprocess.call(command_list)
             if exit_code != 0:
                 num_errors += 1
                 error_list.append(inf)
@@ -78,7 +78,7 @@ def process_all_19_30(file_path_template, out_dir):
                 #     logging.warning('List of entries that were not translated')
                 #     for entry in error_list:
                 #         logging.warning(entry)
-
+        # break
 
 def main():
     """

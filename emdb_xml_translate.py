@@ -354,6 +354,7 @@ class EMDBXMLTranslator(object):
             if authors_in is not None:
                 auth_in = authors_in.replace(', ', ',').split(',')
                 index = 1
+
                 for auth_str_in in auth_in:
                     if auth_str_in != '':
                         known_issues = {'D Lindner': 'Lindner D',
@@ -368,15 +369,22 @@ class EMDBXMLTranslator(object):
                         auth_str = auth_str_in
                         if auth_str_in in known_issues:
                             auth_str = known_issues.get(auth_str_in)
+                        # if simple is False:
+                        #     author = emdb30.author_order_type()
+                        #     author.set_valueOf_(auth_str)
+                        #     author.set_order(index)
+                        #     if author.has__content():
+                        #         add_author(author)
+                        #         index += 1
+                        # else:
+                        #     add_author(auth_str)
+                        author = emdb30.author_order_type()
+                        author.set_valueOf_(auth_str)
                         if simple is False:
-                            author = emdb30.author_order_type()
-                            author.set_valueOf_(auth_str)
                             author.set_order(index)
-                            if author.hasContent_():
-                                add_author(author)
-                                index += 1
-                        else:
-                            add_author(auth_str)
+                        if author.has__content():
+                            add_author(author)
+                            index += 1
 
         def copy_citation(cit_in, cit_out):
             """
@@ -571,7 +579,7 @@ class EMDBXMLTranslator(object):
             if wt_meth_in is not None:
                 mol_wt.set_method(wt_meth_in)
 
-            if mol_wt.hasContent_():
+            if mol_wt.has__content():
                 setter_func(mol_wt)
 
         def add_reference(x_ref_in, adder_func):
@@ -661,7 +669,7 @@ class EMDBXMLTranslator(object):
             #                     self.check_set(hel_in.get_axialSymmetry, hel.set_axial_symmetry)
             #                     # not in the schema anymore
             #                     # self.check_set(hel_in.get_hand, hel.set_hand)
-            #                     if hel.hasContent_():
+            #                     if hel.has__content():
             #                         sym.set_helical_parameters(hel)
 
             map_out.set_symmetry(sym)
@@ -1032,7 +1040,7 @@ class EMDBXMLTranslator(object):
             temp_av_in = img.get_temperature()
             if temp_av_in is not None:
                 temp.set_temperature_average(emdb30.temperature_type(valueOf_=temp_av_in.get_valueOf_(), units=const.U_KEL))
-            if temp.hasContent_():
+            if temp.has__content():
                 mic.set_temperature(temp)
             # element 18 - <xs:complexType name="base_microscopy_type">
             # XSD: <xs:element name="alignment_procedure" minOccurs="0"> has 1 element of 6 choices
@@ -1060,9 +1068,9 @@ class EMDBXMLTranslator(object):
             tilt_in = img.get_electronBeamTiltParams()
             if tilt_in is not None:
                 leg.set_electron_beam_tilt_params(tilt_in)
-            if leg.hasContent_():
+            if leg.has__content():
                 align.set_legacy(leg)
-            if align.hasContent_():
+            if align.has__content():
                 mic.set_alignment_procedure(align)
             # element 19 - <xs:complexType name="base_microscopy_type">
             # XSD: <xs:element name="specialist_optics" type="specialist_optics_type" minOccurs="0"/>
@@ -1108,9 +1116,9 @@ class EMDBXMLTranslator(object):
                     # element 3 - <xs:element name="energy_filter" minOccurs="0">
                     # XSD: <xs:element name="upper_energy_threshold" minOccurs="0">
                     egf.set_upper_energy_threshold(emdb30.upper_energy_thresholdType(valueOf_=-1.0, units=e_units_in))
-            if egf.hasContent_():
+            if egf.has__content():
                 spop.set_energy_filter(egf)
-            if spop.hasContent_():
+            if spop.has__content():
                 mic.set_specialist_optics(spop)
             # element 20 - <xs:complexType name="base_microscopy_type">
             # XSD: <xs:element name="software_list" type="software_list_type" minOccurs="0"/>
@@ -1182,7 +1190,7 @@ class EMDBXMLTranslator(object):
                                 fod.set_valueOf_(detector_in)
                             else:
                                 fod.set_valueOf_('OTHER')
-                    if fod.hasContent_():
+                    if fod.has__content():
                         im_rec.set_film_or_detector_model(fod)
                 # element 8 - <xs:element name="image_recording">
                 # XSD: <xs:element name="average_electron_dose_per_image" minOccurs="0">
@@ -1193,9 +1201,9 @@ class EMDBXMLTranslator(object):
                 # element 9 - <xs:element name="image_recording">
                 # XSD: <xs:element name="detector_distance" type="xs:string" minOccurs="0"/>
                 self.check_set(img.get_detectorDistance, im_rec.set_detector_distance)
-                if im_rec.hasContent_():
+                if im_rec.has__content():
                     im_rec_list.add_image_recording(im_rec)
-                if im_rec_list.hasContent_():
+                if im_rec_list.has__content():
                     mic.set_image_recording_list(im_rec_list)
             # if number of detectors > number of microscopes
             # mic: 1 2 3 4
@@ -1254,7 +1262,7 @@ class EMDBXMLTranslator(object):
                         # For now classify all as CCD - this may need remediation
                         fod.set_category('CCD')
 
-                    if fod.hasContent_():
+                    if fod.has__content():
                         im_rec.set_film_or_detector_model(fod)
                     # element 2 - <xs:element name="image_recording">
                     # XSD: <xs:element name="detector_mode" minOccurs="0">
@@ -1278,7 +1286,7 @@ class EMDBXMLTranslator(object):
                         dig.set_sampling_interval(emdb30.sampling_intervalType(valueOf_=sampling_size_in.get_valueOf_(), units=const.U_MICROM))
                     # element 4 - <xs:element name="digitization_details" minOccurs="0">
                     # XSD: <xs:element name="frames_per_image" type="xs:token" minOccurs="0">
-                    if dig.hasContent_():
+                    if dig.has__content():
                         im_rec.set_digitization_details(dig)
                     # element 4 - <xs:element name="image_recording">
                     # XSD: <xs:element name="number_grids_imaged" type="xs:positiveInteger" minOccurs="0"/>
@@ -1308,10 +1316,10 @@ class EMDBXMLTranslator(object):
                     # XSD: <xs:element name="bits_per_pixel" type="xs:float" minOccurs="0">
                     self.check_set(im_ac.get_quantBitNumber, im_rec.set_bits_per_pixel)
 
-                    if im_rec.hasContent_():
+                    if im_rec.has__content():
                         im_rec_list.add_image_recording(im_rec)
 
-                if im_rec_list.hasContent_():
+                if im_rec_list.has__content():
                     mic.set_image_recording_list(im_rec_list)
             # element 24 - <xs:complexType name="base_microscopy_type">
             # XSD: <xs:element name="specimen_holder" type="xs:string" minOccurs="0">
@@ -1398,6 +1406,8 @@ class EMDBXMLTranslator(object):
         status_prior_in = dep_in.get_status().get_prior()
         if status_prior_in is not None:
             prior_status = emdb30.statusType()
+            if status_prior_in == const.STS_HOLD1:
+                status_prior_in = const.STS_HOLD
             # <xs:complexType name="version_type"> has 5 elements
             # element 1 - <xs:complexType name="version_type">
             # XSD: <xs:element name="date" minOccurs="0">
@@ -1412,9 +1422,9 @@ class EMDBXMLTranslator(object):
             # XSD: <xs:element name="details" type="xs:string" minOccurs="0">
             # attribute 1 - <xs:element name="status" maxOccurs="unbounded">
             # XSD: <xs:attribute name="id" type="xs:positiveInteger" use="required"/>
-            prior_status.set_id(1)
+            prior_status.set_status_id(1)
             status_history_list.add_status(prior_status)
-        if status_history_list.hasContent_():
+        if status_history_list.has__content():
             admin.set_status_history_list(status_history_list)
         # element 2 - <xs:complexType name="admin_type">
         # XSD: <xs:element name="current_status" type="version_type">
@@ -1427,7 +1437,10 @@ class EMDBXMLTranslator(object):
         # XSD: <xs:complexType name="code_type"> has base base="status_code_type" + 2 attributes
         code = emdb30.code_type()
         # XSD: <xs:simpleType name="status_code_type"> <xs:restriction base="xs:token">
-        code.set_valueOf_(dep_in.get_status().get_valueOf_())
+        status = dep_in.get_status().get_valueOf_()
+        if status == const.STS_HOLD1:
+            status = const.STS_HOLD
+        code.set_valueOf_(status)
         # attribute 1 - <xs:complexType name="code_type">
         # XSD: <xs:attribute name="superseded" type="xs:boolean">
         superseded_list_in = dep_in.get_supersededByList()
@@ -1447,7 +1460,7 @@ class EMDBXMLTranslator(object):
         # XSD: <xs:element name="annotator" minOccurs="0">
         # element 5 - <xs:complexType name="version_type">
         # XSD: <xs:element name="details" type="xs:string" minOccurs="0">
-        if current_status.hasContent_():
+        if current_status.has__content():
             admin.set_current_status(current_status)
         # element 3 - <xs:complexType name="admin_type">
         # XSD: <xs:element name="sites"> has 2 elements
@@ -1489,7 +1502,7 @@ class EMDBXMLTranslator(object):
                 obs = emdb30.supersedes_type()
                 obs.set_entry(obs_in)
                 obs_list.add_entry(obs)
-            if obs_list.hasContent_():
+            if obs_list.has__content():
                 admin.set_obsolete_list(obs_list)
         # element 6 - <xs:complexType name="admin_type">
         # XSD: <xs:element name="superseded_by_list" minOccurs="0"> has 1 element
@@ -1502,7 +1515,7 @@ class EMDBXMLTranslator(object):
                 supersede = emdb30.supersedes_type()
                 supersede.set_entry(supersede_in)
                 supersede_list.add_entry(supersede)
-            if supersede_list.hasContent_():
+            if supersede_list.has__content():
                 admin.set_superseded_by_list(supersede_list)
         # element 7 - <xs:complexType name="admin_type">
         # XSD: <xs:element name="grant_support" minOccurs="0">
@@ -1517,7 +1530,7 @@ class EMDBXMLTranslator(object):
         # element 1 - <xs:element name="authors_list">
         # XSD: <xs:element name="author" type="author_type" maxOccurs="unbounded">
         copy_authors(dep_in.get_authors, author_list.add_author, simple=True)
-        # if author_list.hasContent_():
+        # if author_list.has__content():
         admin.set_authors_list(author_list)
         # element 11 - <xs:complexType name="admin_type">
         # XSD: <xs:element name="details" type="xs:token" minOccurs="0">
@@ -1771,7 +1784,7 @@ class EMDBXMLTranslator(object):
                 # nuclAcidType and labelType (this method is never called for labels) do not have natSource
                 if component_in.get_entry() != 'nucleic-acid':
                     ns_in = spec_component_in.get_natSource()
-                    if ns_in is not None and ns_in.hasContent_():
+                    if ns_in is not None: # and ns_in.has__content():
                         # element 1 - <xs:complexType name="macromolecule_source_type">
                         # XSD: <xs:element name="organ" type="xs:token" minOccurs="0"/>
                         # element 2 - <xs:complexType name="macromolecule_source_type">
@@ -1822,7 +1835,7 @@ class EMDBXMLTranslator(object):
             if not label:
                 mol_nat_source = emdb30.macromolecule_source_type()
                 set_mol_natural_source(mol_nat_source, component_in, spec_component_in)
-                if mol_nat_source.hasContent_():
+                if mol_nat_source.has__content():
                     mol.set_natural_source(mol_nat_source)
             # element 3 - <xs:complexType name="base_macromolecule_type">
             # XSD: <xs:element name="molecular_weight" type="molecular_weight_type" minOccurs="0">
@@ -1948,7 +1961,7 @@ class EMDBXMLTranslator(object):
                             # element 2 - <xs:element name="ligand" substitutionGroup="macromolecule" type="ligand_macromolecule_type">
                             # XSD: <xs:element name="external_references" maxOccurs="unbounded" minOccurs="0">
                             l_ext_refs = l_in.get_externalReferences()
-                            if l_ext_refs is not None and l_ext_refs.hasContent_():
+                            if l_ext_refs is not None and l_ext_refs.has__content():
                                 add_mol_references(ligand_mol.add_external_references, l_ext_refs)
                             #                                 for ext_ref in ext_refs:
                             #                                     if ext_ref.original_tagname_ == 'refUniProt':
@@ -2008,7 +2021,7 @@ class EMDBXMLTranslator(object):
                                 # XSD: <xs:element name="discrepancy_list" minOccurs="0">
                                 # element 3 - <xs:element name="sequence">
                                 # XSD: <xs:element name="external_references" maxOccurs="unbounded" minOccurs="0">
-                                if seq.hasContent_():
+                                if seq.has__content():
                                     dna_mol.set_sequence(seq)
                                 # element 2 - <xs:element name="dna" substitutionGroup="macromolecule" type="dna_macromolecule_type">
                                 # XSD: <xs:element name="classification" minOccurs="0">
@@ -2042,7 +2055,7 @@ class EMDBXMLTranslator(object):
                                     # XSD: <xs:element name="discrepancy_list" minOccurs="0">
                                     # element 3 - <xs:element name="sequence">
                                     # XSD: <xs:element name="external_references" maxOccurs="unbounded" minOccurs="0">
-                                if seq.hasContent_():
+                                if seq.has__content():
                                     rna_mol.set_sequence(seq)
                                 # element 2 - <xs:element name="rna" substitutionGroup="macromolecule" type="rna_macromolecule_type">
                                 # XSD: <xs:element name="classification" minOccurs="0">
@@ -2058,7 +2071,7 @@ class EMDBXMLTranslator(object):
                                 self.check_set(na_in.get_syntheticFlag, rna_mol.set_synthetic_flag)
                                 # element 5 - <xs:element name="rna" substitutionGroup="macromolecule" type="rna_macromolecule_type">
                                 # XSD: <xs:element name="ec_number" maxOccurs="unbounded" minOccurs="0">
-                                if rna_mol.hasContent_():
+                                if rna_mol.has__content():
                                     mol_list.add_macromolecule(rna_mol)
                             elif na_class_in in ['DNA/RNA', 'OTHER']:
                                 # substitution group 6 - <xs:element ref="macromolecule" maxOccurs="unbounded"/>
@@ -2081,7 +2094,7 @@ class EMDBXMLTranslator(object):
                                     # XSD: <xs:element name="discrepancy_list" minOccurs="0">
                                     # element 3 - <xs:element name="sequence" minOccurs="0">
                                     # XSD: <xs:element name="external_references" maxOccurs="unbounded" minOccurs="0">
-                                if seq.hasContent_():
+                                if seq.has__content():
                                     other_mol.set_sequence(seq)
                                 # element 2 - <xs:element name="other_macromolecule" substitutionGroup="macromolecule" type="other_macromolecule_type">
                                 # XSD: <xs:element name="classification" type="xs:token">
@@ -2098,7 +2111,7 @@ class EMDBXMLTranslator(object):
                                 # XSD: <xs:element name="synthetic_flag" type="xs:boolean" minOccurs="0">
                                 self.check_set(na_in.get_syntheticFlag, other_mol.set_synthetic_flag)
 
-                                if other_mol.hasContent_():
+                                if other_mol.has__content():
                                     mol_list.add_macromolecule(other_mol)
                     elif c_type == 'virus':
                         # substitution group 2 - <xs:element ref="supramolecule" maxOccurs="unbounded"/>
@@ -2125,7 +2138,7 @@ class EMDBXMLTranslator(object):
                             all_vir_ns_in = virus_in.get_natSource()
                             if all_vir_ns_in is not None:
                                 for vir_ns_in in all_vir_ns_in:
-                                    vir_nat_source = emdb30.virus_natural_host_type()
+                                    vir_nat_source = emdb30.virus_host_type()
                                     # XSD: <xs:complexType name="virus_natural_host_type">, xs:extension base="base_source_type"/> has 3 elements and 1 attribute
                                     # attribute 1 - <xs:complexType name="base_source_type">
                                     # XSD: <xs:attribute name="database" use="required">
@@ -2160,36 +2173,36 @@ class EMDBXMLTranslator(object):
                             es_in = virus_in.get_engSource()
                             if es_in is not None and es_in != []:
                                 e_value = es_in[0]
-                                if e_value.hasContent_:
-                                    # XSD: <xs:complexType name="recombinant_source_type"> has 1 attribute and 5 elements
-                                    rec_source = emdb30.recombinant_source_type()
-                                    # attribute 1 - <xs:complexType name="recombinant_source_type">
-                                    # XSD: <xs:attribute name="database" use="required">
-                                    rec_source.set_database('NCBI')
-                                    # element 1 - <xs:complexType name="recombinant_source_type">
-                                    # XSD: <xs:element name="organism" type="organism_type">
-                                    exp_sys_in = e_value.get_expSystem()
-                                    if exp_sys_in is not None:
-                                        # XSD: <xs:complexType name="organism_type"> is a token and has 1 attribute
-                                        org = emdb30.organism_type()
-                                        self.check_set(exp_sys_in.get_valueOf_, org.set_valueOf_)
-                                        # attribute 1 - <xs:complexType name="organism_type">
-                                        # XSD: <xs:attribute name="ncbi" type="xs:positiveInteger"/>
-                                        self.check_set(exp_sys_in.get_ncbiTaxId, org.set_ncbi)
-                                        rec_source.set_recombinant_organism(org)
-                                    # element 2 - <xs:complexType name="recombinant_source_type">
-                                    # XSD: <xs:element name="strain" type="xs:token" minOccurs="0"/>
-                                    self.check_set(e_value.get_expSystemStrain, rec_source.set_recombinant_strain)
-                                    # element 3 - <xs:complexType name="recombinant_source_type">
-                                    # XSD: <xs:element name="cell" type="xs:token" minOccurs="0">
-                                    self.check_set(e_value.get_expSystemCell, rec_source.set_recombinant_cell)
-                                    # element 4 - <xs:complexType name="recombinant_source_type">
-                                    # XSD: <xs:element name="plasmid" type="xs:token" minOccurs="0"/>
-                                    self.check_set(e_value.get_vector, rec_source.set_recombinant_plasmid)
-                                    # element 5 - <xs:complexType name="recombinant_source_type">
-                                    # XSD: <xs:element name="synonym_organism" type="xs:token" minOccurs="0">
-                                    # if rec_source.hasContent_():
-                                    virus_smol.set_host_system(rec_source)
+                                # if e_value.has__content():
+                                # XSD: <xs:complexType name="recombinant_source_type"> has 1 attribute and 5 elements
+                                rec_source = emdb30.recombinant_source_type()
+                                # attribute 1 - <xs:complexType name="recombinant_source_type">
+                                # XSD: <xs:attribute name="database" use="required">
+                                rec_source.set_database('NCBI')
+                                # element 1 - <xs:complexType name="recombinant_source_type">
+                                # XSD: <xs:element name="organism" type="organism_type">
+                                exp_sys_in = e_value.get_expSystem()
+                                if exp_sys_in is not None:
+                                    # XSD: <xs:complexType name="organism_type"> is a token and has 1 attribute
+                                    org = emdb30.organism_type()
+                                    self.check_set(exp_sys_in.get_valueOf_, org.set_valueOf_)
+                                    # attribute 1 - <xs:complexType name="organism_type">
+                                    # XSD: <xs:attribute name="ncbi" type="xs:positiveInteger"/>
+                                    self.check_set(exp_sys_in.get_ncbiTaxId, org.set_ncbi)
+                                    rec_source.set_recombinant_organism(org)
+                                # element 2 - <xs:complexType name="recombinant_source_type">
+                                # XSD: <xs:element name="strain" type="xs:token" minOccurs="0"/>
+                                self.check_set(e_value.get_expSystemStrain, rec_source.set_recombinant_strain)
+                                # element 3 - <xs:complexType name="recombinant_source_type">
+                                # XSD: <xs:element name="cell" type="xs:token" minOccurs="0">
+                                self.check_set(e_value.get_expSystemCell, rec_source.set_recombinant_cell)
+                                # element 4 - <xs:complexType name="recombinant_source_type">
+                                # XSD: <xs:element name="plasmid" type="xs:token" minOccurs="0"/>
+                                self.check_set(e_value.get_vector, rec_source.set_recombinant_plasmid)
+                                # element 5 - <xs:complexType name="recombinant_source_type">
+                                # XSD: <xs:element name="synonym_organism" type="xs:token" minOccurs="0">
+                                # if rec_source.has__content():
+                                virus_smol.set_host_system(rec_source)
                             # element 5 - <xs:complexType name="virus_supramolecule_type">
                             # XSD: <xs:element name="molecular_weight" type="molecular_weight_type" minOccurs="0"/>
                             set_mol_weight(virus_smol.set_molecular_weight, component_in.get_molWtTheo(), component_in.get_molWtExp())
@@ -2260,9 +2273,9 @@ class EMDBXMLTranslator(object):
                             # element 1 - <xs:element name="organelle_or_cellular_component_supramolecule" substitutionGroup="supramolecule" type="organelle_or_cellular_component_supramolecule_type"/>
                             # XSD: <xs:element name="natural_source" minOccurs="0" type="organelle_natural_source_type" maxOccurs="unbounded"/>
                             # XSD: <xs:complexType name="organelle_natural_source_type"> has base and 5 elements
-                            org_nat_source = emdb30.organelle_natural_source_type()
+                            org_nat_source = emdb30.organelle_source_type()
                             set_mol_natural_source(org_nat_source, component_in, cell_comp_in)#, organelle=False)
-                            if org_nat_source.hasContent_():
+                            if org_nat_source.has__content():
                                 comp_smol.add_natural_source(org_nat_source)
                         # element 2 - <xs:element name="organelle_or_cellular_component_supramolecule" substitutionGroup="supramolecule" type="organelle_or_cellular_component_supramolecule_type"/>
                         # XSD: <xs:element name="molecular_weight" type="molecular_weight_type" minOccurs="0"/>
@@ -2298,9 +2311,9 @@ class EMDBXMLTranslator(object):
                             # XSD: <xs:attribute name="chimera" type="xs:boolean" fixed="true"/>
                             # element 1 - <xs:complexType name="complex_supramolecule_type">
                             # XSD: <xs:element name="natural_source" type="complex_natural_source_type" minOccurs="0" maxOccurs="unbounded"/>
-                            complex_smol_nat_source = emdb30.complex_natural_source_type()
+                            complex_smol_nat_source = emdb30.complex_source_type()
                             set_mol_natural_source(complex_smol_nat_source, component_in, complex_smol_in, tissue=True, cell=True, organelle=True, cell_loc=True)
-                            if complex_smol_nat_source.hasContent_():
+                            if complex_smol_nat_source.has__content():
                                 complex_smol.add_natural_source(complex_smol_nat_source)
                             # element 2 - <xs:complexType name="complex_supramolecule_type">
                             # XSD: <xs:element name="recombinant_expression" type="recombinant_source_type" maxOccurs="unbounded" minOccurs="0">
@@ -2323,7 +2336,7 @@ class EMDBXMLTranslator(object):
 
             sample.set_supramolecule_list(sup_mol_list)
 
-            if mol_list.hasContent_():
+            if mol_list.has__content():
                 sample.set_macromolecule_list(mol_list)
 
             xml_out.set_sample(sample)
@@ -2448,7 +2461,7 @@ class EMDBXMLTranslator(object):
                 spec_prep_list.add_specimen_preparation(prep)
                 prep.set_preparation_id(j)
             j = j + 1
-        if spec_prep_list.hasContent_():
+        if spec_prep_list.has__content():
             struct_det.set_specimen_preparation_list(spec_prep_list)
         # element 5 - <xs:complexType name="structure_determination_type">
         # XSD: <xs:element name="microscopy_list"> has 1 element
@@ -2599,9 +2612,9 @@ class EMDBXMLTranslator(object):
                     # XSD: <xs:element name="beta" type="cell_angle_type" minOccurs="0"/>
                     self.set_value_and_units(cryst_par_in.get_beta, unit_cell.set_beta, emdb30.cell_angle_type, units=const.U_DEG)
 
-                    if unit_cell.hasContent_():
+                    if unit_cell.has__content():
                         cryst_par.set_unit_cell(unit_cell)
-                    if cryst_par.hasContent_():
+                    if cryst_par.has__content():
                         setter(cryst_par)
 
             def set_helical_symmetry(spec_prep_in, rec, symm):
@@ -2640,13 +2653,15 @@ class EMDBXMLTranslator(object):
                         # XSD: <xs:element name="axial_symmetry" minOccurs="0">
                         axial_symm = hx_par_in.get_axialSymmetry()
                         if axial_symm is not None and axial_symm != 'sr':
+                            if axial_symm == 'sr12':
+                                axial_symm = "C12"
                             hx_par.set_axial_symmetry(axial_symm)
                             # element 3 - <xs:complexType name="helical_parameters_type">
                             # REMOVED - XSD: <xs:element name="hand" minOccurs="0"> added as required by old v1.9s
                             #hnd = hx_par_in.get_hand()
                             #hx_par.set_hand(hnd)
 
-                    if hx_par.hasContent_():
+                    if hx_par.has__content():
                         symm.set_helical_parameters(hx_par)
                         rec.set_applied_symmetry(symm)
 
@@ -2716,7 +2731,7 @@ class EMDBXMLTranslator(object):
                         # element 3 - <xs:complexType name="applied_symmetry_type">
                         # XSD: <xs:element name="helical_parameters" type="helical_parameters_type">
                         set_helical_symmetry(spec_prep_in, final_rec, symm)
-                if symm.hasContent_():
+                if symm.has__content():
                     final_rec.set_applied_symmetry(symm)
                 # element 3 - <xs:complexType name="final_reconstruction_type">
                 # XSD: <xs:element name="algorithm" type="reconstruction_algorithm_type" minOccurs="0">
@@ -2842,7 +2857,7 @@ class EMDBXMLTranslator(object):
                 # XSD: <xs:element name="software_list" type="software_list_type" minOccurs="0"/>
                 # element 5 - <xs:complexType name="particle_selection_type">
                 # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
-                if part_select.hasContent_():
+                if part_select.has__content():
                     im_proc.set_particle_selection(part_select)
                 # element 2 - <xs:group name="single_particle_proc_add_group">
                 # XSD: <xs:element name="ctf_correction" type="ctf_correction_type" minOccurs="0"/>
@@ -2874,7 +2889,7 @@ class EMDBXMLTranslator(object):
                 if num_cls_in is not None:
                     final_cls = emdb30.classification_type()
                     final_cls.set_number_classes(num_cls_in)
-                    if final_cls.hasContent_():
+                    if final_cls.has__content():
                         im_proc.set_final_two_d_classification(final_cls)
                 # element 9 - <xs:group name="single_particle_proc_add_group">
                 # XSD: <xs:element name="final_three_d_classification" type="classification_type" minOccurs="0"/>
@@ -2999,7 +3014,7 @@ class EMDBXMLTranslator(object):
                 # XSD: <xs:element name="software_list" type="software_list_type" minOccurs="0"/>
                 # element 6 - <xs:element name="extraction">
                 # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
-                if subtom_extr.hasContent_():
+                if subtom_extr.has__content():
                     im_proc.set_extraction(subtom_extr)
                 # element 3 - <xs:group name="subtomogram_averaging_proc_add_group">
                 # XSD: <xs:element name="ctf_correction" type="ctf_correction_type" minOccurs="0"/>
@@ -3012,7 +3027,7 @@ class EMDBXMLTranslator(object):
                 if num_cls_in is not None:
                     final_cls = emdb30.classification_type()
                     final_cls.set_number_classes(num_cls_in)
-                    if final_cls.hasContent_():
+                    if final_cls.has__content():
                         im_proc.set_final_three_d_classification(final_cls)
                 # element 6 - <xs:group name="subtomogram_averaging_proc_add_group">
                 # XSD: <xs:element name="final_angle_assignment" type="angle_assignment_type" minOccurs="0"/>
@@ -3189,8 +3204,8 @@ class EMDBXMLTranslator(object):
                                 else:
                                     ch_minus_commas = ch_in.replace(',', '')
                                     chain.set_chain_id(ch_minus_commas)
-                                if chain.hasContent_():
-                                    pdb_model.add_chain(chain)
+                                if chain.has__content():
+                                    pdb_model.set_chain(chain)
                             # element 3 - <xs:element name="initial_model" maxOccurs="unbounded" minOccurs="0">
                             # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
 
@@ -3267,9 +3282,9 @@ class EMDBXMLTranslator(object):
                 # element 8 - <xs:complexType name="modelling_type">
                 # XSD: <xs:element name="overall_bvalue" type="xs:float" minOccurs="0">
                 self.check_set(fit.get_overallBValue, modelling.set_overall_bvalue)
-                if modelling.hasContent_():
+                if modelling.has__content():
                     modelling_list.add_modelling(modelling)
-            if modelling_list.hasContent_():
+            if modelling_list.has__content():
                 intrp.set_modelling_list(modelling_list)
 
         # element 2 - <xs:complexType name="interpretation_type">
@@ -3295,9 +3310,9 @@ class EMDBXMLTranslator(object):
                     # element 2 - <xs:complexType name="figure_type">
                     # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
                     fig.set_details(fig_in.get_details())
-                    if fig.hasContent_():
+                    if fig.has__content():
                         fig_list.add_figure(fig)
-                if fig_list.hasContent_():
+                if fig_list.has__content():
                     intrp.set_figure_list(fig_list)
             # element 3 - <xs:complexType name="interpretation_type">
             # XSD: <xs:element name="segmentation_list" minOccurs="0"> has 1 element
@@ -3322,7 +3337,7 @@ class EMDBXMLTranslator(object):
                     copy_map_19_to_30(mask_in, seg_map)
                     seg.set_mask_details(seg_map)
                     seg_list.add_segmentation(seg)
-                if seg_list.hasContent_():
+                if seg_list.has__content():
                     intrp.set_segmentation_list(seg_list)
             # element 4 - <xs:complexType name="interpretation_type">
             # XSD: <xs:element name="slices_list" minOccurs="0"> has 1 element
@@ -3335,15 +3350,15 @@ class EMDBXMLTranslator(object):
                 for slice_in in slices_in:
                     slice_map = emdb30.map_type()
                     copy_map_19_to_30(slice_in, slice_map)
-                    if slice_map.hasContent_():
+                    if slice_map.has__content():
                         slc_list.add_slice(slice_map)
-                if slc_list.hasContent_():
+                if slc_list.has__content():
                     intrp.set_slices_list(slc_list)
                     # element 5 - <xs:complexType name="interpretation_type">
                     # XSD: <xs:element name="additional_map_list" minOccurs="0">
                     # element 6 - <xs:complexType name="interpretation_type">
                     # XSD: <xs:element name="half_map_list" minOccurs="0">
-        if intrp is not None and intrp.hasContent_():
+        if intrp is not None and intrp.has__content():
             xml_out.set_interpretation(intrp)
         # element 7 - <xs:complexType name="entry_type">
         # XSD: <xs:element name="validation" minOccurs="0">
@@ -3368,7 +3383,7 @@ class EMDBXMLTranslator(object):
                         # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
                         self.check_set(fsc_in.get_details, fsc.set_details)
                         valid_list.add_validation_method(fsc)
-                    if valid_list.hasContent_():
+                    if valid_list.has__content():
                         xml_out.set_validation(valid_list)
 
         # Write XML to file
@@ -3381,12 +3396,12 @@ class EMDBXMLTranslator(object):
 
         # validate the output v3.0 file
         if self.validate_xml_out:
-            print '--validation v3.0' + '-'*100
+            print('--validation v3.0' + '-'*100)
             if self.relaxed:
                 self.validate(output_file, EMDBSettings.schema30relaxed)
             else:
                 self.validate(output_file, EMDBSettings.schema30)
-            print '-'*117
+            print('-'*117)
 
     def translate_1_9_to_1_9(self, input_file, output_file):
         """
@@ -3500,7 +3515,7 @@ class EMDBXMLTranslator(object):
             # an extension of <xs:extension base="pubType"> and has a
             # ... 1 attribute
             ref_in = cite_in.get_citation_type()
-            if ref_in is not None and ref_in.hasContent_():
+            if ref_in is not None and ref_in.has__content():
                 if ref_in.original_tagname_ == 'journal_citation':
                     # XSD: <xs:complexType name="jrnlArtType"> has
                     # ... 8 elements
@@ -3668,7 +3683,7 @@ class EMDBXMLTranslator(object):
                     if self.roundtrip:
                         src_out.set_natSource(nat_src)
                     else:
-                        if nat_src.hasContent_():
+                        if nat_src.has__content():
                             src_out.set_natSource(nat_src)
 
         def copy_ctf_and_euler_angles(im_proc_in, rec_obj, im_proc_out):
@@ -3850,7 +3865,7 @@ class EMDBXMLTranslator(object):
                         if self.roundtrip:
                             spec_prep.set_helicalParameters(hx_par)
                         else:
-                            if hx_par.hasContent_():
+                            if hx_par.has__content():
                                 spec_prep.set_helicalParameters(hx_par)
 
         def copy_map_30_to_19(map_in, map_out):
@@ -3947,7 +3962,7 @@ class EMDBXMLTranslator(object):
             # element 7 - <xs:complexType name="mapType">
             # XSD: <xs:element name="cell" type="cellType"/>
             cell_in = map_in.get_cell()
-            if cell_in is not None and cell_in.hasContent_():
+            if cell_in is not None and cell_in.has__content():
                 cell = emdb_19.cellType(cellA=emdb_19.cType(valueOf_=cell_in.get_a().get_valueOf_(), units='A'),
                                         cellB=emdb_19.cType(valueOf_=cell_in.get_b().get_valueOf_(), units='A'),
                                         cellC=emdb_19.cType(valueOf_=cell_in.get_c().get_valueOf_(), units='A'),
@@ -3958,7 +3973,7 @@ class EMDBXMLTranslator(object):
             # element 8 - <xs:complexType name="mapType">
             # XSD: <xs:element name="axisOrder" type="axisOrderType"/>
             ax_in = map_in.get_axis_order()
-            if ax_in is not None and ax_in.hasContent_():
+            if ax_in is not None and ax_in.has__content():
                 axis_order = emdb_19.axisOrderType(axisOrderFast=ax_in.get_fast().upper(), axisOrderMedium=ax_in.get_medium().upper(), axisOrderSlow=ax_in.get_slow().upper())
                 map_out.set_axisOrder(axis_order)
             # element 9 - <xs:complexType name="mapType">
@@ -3975,7 +3990,7 @@ class EMDBXMLTranslator(object):
             # element 12 - <xs:complexType name="mapType">
             # XSD: <xs:element name="pixelSpacing" type="pixelSpacingType"/>
             pix_in = map_in.get_pixel_spacing()
-            if pix_in is not None and pix_in.hasContent_():
+            if pix_in is not None and pix_in.has__content():
                 pix = emdb_19.pixelSpacingType(emdb_19.pixType(valueOf_=pix_in.get_x().get_valueOf_(), units='A'),
                                                emdb_19.pixType(valueOf_=pix_in.get_y().get_valueOf_(), units='A'),
                                                emdb_19.pixType(valueOf_=pix_in.get_z().get_valueOf_(), units='A'))
@@ -4000,7 +4015,7 @@ class EMDBXMLTranslator(object):
                                 else:
                                     cntr.set_valueOf_(float(cnt_level))
                             self.check_set(cntr_in.get_source, cntr.set_source, string.lower)
-                            if cntr.hasContent_():
+                            if cntr.has__content():
                                 map_out.set_contourLevel(cntr)
             # element 11 - <xs:complexType name="mapType">
             # XSD: <xs:element name="details" type="xs:string"/>
@@ -4146,7 +4161,7 @@ class EMDBXMLTranslator(object):
             # element 7 - <xs:complexType name="depType">
             # XSD: <xs:element name="obsoletedDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
             obs_date = dates_in.get_obsolete()
-            print 'date obs %s' % obs_date
+            print('date obs %s' % obs_date)
             self.check_set(dates_in.get_obsolete, dep.set_obsoletedDate)
             # element 8 - <xs:complexType name="depType">
             # XSD: <xs:element name="supersededByList" type="emdbListType" minOccurs="0" maxOccurs="1"/>
@@ -4155,7 +4170,7 @@ class EMDBXMLTranslator(object):
                 supersede_list = emdb_19.emdbListType()
                 for supersede_in in supersede_list_in.get_entry():
                     supersede_list.add_entry(supersede_in.get_entry())
-                if supersede_list.hasContent_():
+                if supersede_list.has__content():
                     dep.set_supersededByList(supersede_list)
             # element 9 - <xs:complexType name="depType">
             # XSD: <xs:element name="replaceExistingEntry" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
@@ -4167,7 +4182,7 @@ class EMDBXMLTranslator(object):
                 obs_list = emdb_19.emdbListType()
                 for obs_in in obs_list_in.get_entry():
                     obs_list.add_entry(obs_in.get_entry())
-                if obs_list.hasContent_():
+                if obs_list.has__content():
                     # element 9 - <xs:complexType name="depType">
                     # XSD: <xs:element name="replaceExistingEntry" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
                     dep.set_replaceExistingEntry(True)
@@ -4233,7 +4248,7 @@ class EMDBXMLTranslator(object):
                 for sec_cite_in in sec_cites_in:
                     sec_cite = emdb_19.prRefType()
                     copy_citation(sec_cite_in, sec_cite)
-                    if sec_cite.hasContent_():
+                    if sec_cite.has__content():
                         dep.add_secondaryReference(sec_cite)
 
         # element 3 - <xs:complexType name="entryType">
@@ -4266,7 +4281,7 @@ class EMDBXMLTranslator(object):
                         mask = emdb_19.mskType()
                         copy_map_30_to_19(m_seg_in, mask)
                         mask_set.add_mask(mask)
-                if mask_set.hasContent_():
+                if mask_set.has__content():
                     supp.set_maskSet(mask_set)
             # element 2 - <xs:complexType name="supplType">
             # XSD: <xs:element name="sliceSet" type="slcSetType" minOccurs="0"/>
@@ -4277,9 +4292,9 @@ class EMDBXMLTranslator(object):
                 for slc_in in slcs_in:
                     slc = emdb_19.slcType()
                     copy_map_30_to_19(slc_in, slc)
-                    if slc.hasContent_():
+                    if slc.has__content():
                         slc_set.add_slice(slc)
-                if slc_set.hasContent_():
+                if slc_set.has__content():
                     supp.set_sliceSet(slc_set)
             # element 3 - <xs:complexType name="supplType">
             # XSD: <xs:element name="figureSet" type="figSetType" minOccurs="0"/>
@@ -4290,9 +4305,9 @@ class EMDBXMLTranslator(object):
                 figs_in = fig_list_in.get_figure()
                 for map_file in figs_in:
                     fig = emdb_19.figType(map_file.get_file(), map_file.get_details())
-                    if fig.hasContent_():
+                    if fig.has__content():
                         fig_set.add_figure(fig)
-                if fig_set.hasContent_():
+                if fig_set.has__content():
                     supp.set_figureSet(fig_set)
         # element 4 - <xs:complexType name="supplType">
         # XSD: <xs:element name="fscSet" type="fscSetType" minOccurs="0"/>
@@ -4311,9 +4326,9 @@ class EMDBXMLTranslator(object):
                     fsc.set_file(fsc_filename)
                     self.check_set(val_in.get_details, fsc.set_details)
                     fsc_set.add_fsc(fsc)
-            if fsc_set.hasContent_():
+            if fsc_set.has__content():
                 supp.set_fscSet(fsc_set)
-        if supp is not None and supp.hasContent_():
+        if supp is not None and supp.has__content():
             xml_out.set_supplement(supp)
 
         # element 5 - <xs:complexType name="entryType">
@@ -4513,7 +4528,7 @@ class EMDBXMLTranslator(object):
                             # element 8 - <xs:complexType name="proteinType">
                             # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0"/>
                             eng_src = create_eng_source(smol_in)
-                            if eng_src is not None and eng_src.hasContent_:
+                            if eng_src is not None and eng_src.has__content:
                                 protein.set_engSource(eng_src)
                             # element 9 - <xs:complexType name="proteinType">
                             # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
@@ -4556,7 +4571,7 @@ class EMDBXMLTranslator(object):
                         # XSD: <xs:complexType name="engSrcType"> has 4 elements
                         if smol_type_in == 'organelle_or_cellular_component_supramolecule':
                             eng_src = create_eng_source(smol_in)
-                            if eng_src is not None and eng_src.hasContent_:
+                            if eng_src is not None and eng_src.has__content:
                                 cell.set_engSource(eng_src)
                         # element 9 - <xs:complexType name="cellCompType">
                         # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
@@ -4629,7 +4644,7 @@ class EMDBXMLTranslator(object):
                                 # attribute 1 - <xs:complexType name="sciSpeciesType">
                                 # XSD: <xs:attribute name="ncbiTaxId" type="xs:integer"/>
                                 sci_species.set_ncbiTaxId(org_in.get_ncbi())
-                                if sci_species.hasContent_():
+                                if sci_species.has__content():
                                     nat_src_virus.set_hostSpecies(sci_species)
                             # element 3 - <xs:complexType name="natSrcVirusType">
                             # XSD: <xs:element name="hostSpeciesStrain" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -4737,7 +4752,7 @@ class EMDBXMLTranslator(object):
                                 # element 9 - <xs:complexType name="riboTypeEu">
                                 # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0" maxOccurs="1"/>
                                 eng_src = create_eng_source(smol_in)
-                                if eng_src is not None and eng_src.hasContent_:
+                                if eng_src is not None and eng_src.has__content:
                                     rib.set_engSource(eng_src)
                                 # element 10 - <xs:complexType name="riboTypeEu">
                                 # XSD: <xs:element name="details" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -4780,7 +4795,7 @@ class EMDBXMLTranslator(object):
                                 # element 9 - <xs:complexType name="riboTypePro">
                                 # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0" maxOccurs="1"/>
                                 eng_src = create_eng_source(smol_in)
-                                if eng_src is not None and eng_src.hasContent_:
+                                if eng_src is not None and eng_src.has__content:
                                     rib.set_engSource(eng_src)
                                 # element 10 - <xs:complexType name="riboTypePro">
                                 # XSD: <xs:element name="details" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -4869,7 +4884,7 @@ class EMDBXMLTranslator(object):
                         # element 8 - <xs:complexType name="proteinType">
                         # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0"/>
                         eng_src = create_eng_source(mol_in)
-                        if eng_src is not None and eng_src.hasContent_:
+                        if eng_src is not None and eng_src.has__content:
                             protein.set_engSource(eng_src)
                         # element 9 - <xs:complexType name="proteinType">
                         # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
@@ -4961,7 +4976,7 @@ class EMDBXMLTranslator(object):
                         # element 8 - <xs:complexType name="ligandType">
                         # XSD: <xs:element name="engSource" type="engSrcType" minOccurs="0"/>
                         eng_src = create_eng_source(mol_in)
-                        if eng_src is not None and eng_src.hasContent_:
+                        if eng_src is not None and eng_src.has__content:
                             lig.set_engSource(eng_src)
                         # element 9 - <xs:complexType name="ligandType">
                         # XSD: <xs:element name="details" type="xs:string" minOccurs="0"/>
@@ -4996,7 +5011,7 @@ class EMDBXMLTranslator(object):
 
                     comp_list.add_sampleComponent(comp)
 
-                if comp_list.hasContent_():
+                if comp_list.has__content():
                     sample.set_sampleComponentList(comp_list)
 
         # xml_out.set_sample(sample)
@@ -5407,7 +5422,7 @@ class EMDBXMLTranslator(object):
                                     # no same image acquisitions - add this one to the list
                                     image_acquasitions[len(image_acquasitions) + 1] = image_acquasition
                                     if self.roundtrip:
-                                        if im_ac.hasContent_():
+                                        if im_ac.has__content():
                                             exp.add_imageAcquisition(im_ac)
                                     else:
                                         exp.add_imageAcquisition(im_ac)
@@ -5417,7 +5432,7 @@ class EMDBXMLTranslator(object):
                                 # add this acquisition to the list
                                 image_acquasitions[len(image_acquasitions) + 1] = image_acquasition
                             if self.roundtrip:
-                                if im_ac.hasContent_():
+                                if im_ac.has__content():
                                     exp.add_imageAcquisition(im_ac)
                             else:
                                 exp.add_imageAcquisition(im_ac)
@@ -5458,7 +5473,7 @@ class EMDBXMLTranslator(object):
                                             pdb_list.add_pdbChainId(ch_id)
 
                         if self.roundtrip:
-                            if pdb_list.hasContent_():
+                            if pdb_list.has__content():
                                 fit.set_pdbEntryIdList(pdb_list)
                         else:
                             fit.set_pdbEntryIdList(pdb_list)
@@ -5502,7 +5517,7 @@ class EMDBXMLTranslator(object):
                             else:
                                 self.check_set(fit_in.get_details, fit.set_details)
 
-                        if fit.hasContent_():
+                        if fit.has__content():
                             exp.add_fitting(fit)
 
             # element 5 - <xs:complexType name="expType">
@@ -5598,7 +5613,7 @@ class EMDBXMLTranslator(object):
                                 if det3.find('crystalGrowDetails: ') != -1:
                                     grow_det = det3.replace('crystalGrowDetails: ', '')
                                     smpl_prep.set_crystalGrowDetails(grow_det)
-                        if spec_prep_1.hasContent_():
+                        if spec_prep_1.has__content():
                             exp.set_specimenPreparation(spec_prep_1)
                     elif sp_in_id != 1 and vitr_in is None:
                         if sp_prep_type == 'crystallography_preparation':
@@ -5797,7 +5812,7 @@ class EMDBXMLTranslator(object):
                 # Euler angles and ctf have to be set for all reconstruction objects
                 copy_ctf_and_euler_angles(imp_in, rec, proc_spec)
 
-            #         if spec_prep_1.hasContent_():
+            #         if spec_prep_1.has__content():
             #             exp.set_specimenPreparation(spec_prep_1)
         xml_out.set_processing(proc)
         # ---------------------------------
@@ -5812,9 +5827,9 @@ class EMDBXMLTranslator(object):
 
         # validate the output v1.9 file
         if self.validate_xml_out:
-            print '**validation v1.9' + '*'*100
+            print('**validation v1.9' + '*'*100)
             self.validate(output_file, EMDBSettings.schema19)
-            print '*'*117
+            print('*'*117)
 
     def validate_file(self, the_parser, xml_filename):
         """
@@ -5847,14 +5862,14 @@ class EMDBXMLTranslator(object):
             xsd = etree.parse(in_schema_filename)
             xml_schema = etree.XMLSchema(xsd)
             xml_schema.assertValid(xml_doc)
-            print 'File %s validates' % in_xml
+            print('File %s validates' % in_xml)
         except etree.XMLSyntaxError as exp:
-            print 'PARSING ERROR %s' % exp
+            print('PARSING ERROR %s' % exp)
         except etree.DocumentInvalid as exp:
             i = 1
             for err in exp.error_log:
-                print 'VALIDATION ERROR %d: %s' % (i, err)
-                print ''
+                print('VALIDATION ERROR %d: %s' % (i, err))
+                print()
                 i = i + 1
 
     def validate(self, in_xml, in_schema_filename):
@@ -5865,7 +5880,7 @@ class EMDBXMLTranslator(object):
         try:
             in_schema = open(in_schema_filename, 'r')
         except IOError as exp:
-            print 'Validation error %s occurred. Arguments %s.' % (exp.message, exp.args)
+            print('Validation error %s occurred. Arguments %s.' % (exp.message, exp.args))
             return False
         else:
             schema_doc = in_schema.read()
