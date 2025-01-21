@@ -60,7 +60,7 @@ def relax_child(root, child_type, child_name, subs_names):
             last_elem, last_name = child_elem_recursive(element, subs_names)
             for elem_in_last_elem in last_elem.iter():
                 if elem_in_last_elem.attrib.get('name') == last_name[0]:
-                    print 'relax %s in %s' % (elem_in_last_elem.attrib.get('name'), last_elem.attrib.get('name'))
+                    print('relax %s in %s' % (elem_in_last_elem.attrib.get('name'), last_elem.attrib.get('name')))
                     if 'minOccurs' not in elem_in_last_elem.attrib.keys():
                         elem_in_last_elem.attrib['minOccurs'] = "0"
             break
@@ -72,12 +72,12 @@ def add_enum(root, child_type, child_name, new_enumeration, subchild_name=None):
             if subchild_name is not None:
                 for elem in element.iter():
                     if elem.attrib.get('name') == subchild_name:
-                        print 'in <%s><%s> add %s' % (child_name, subchild_name, new_enumeration)
+                        print('in <%s><%s> add %s' % (child_name, subchild_name, new_enumeration))
                         for el in elem.iter('{http://www.w3.org/2001/XMLSchema}restriction'):
                             new_enum = ET.SubElement(el, 'xs:enumeration')
                             new_enum.attrib['value'] = new_enumeration
             else:
-                print 'in <%s> add %s' % (child_name, new_enumeration)
+                print('in <%s> add %s' % (child_name, new_enumeration))
                 for el in element.iter('{http://www.w3.org/2001/XMLSchema}restriction'):
                     new_enum = ET.SubElement(el, 'xs:enumeration')
                     new_enum.attrib['value'] = new_enumeration
@@ -88,7 +88,7 @@ def comment_out_child(root, child_type, child_name, child_to_comment_out):
         if element.attrib.get('name') == child_name:
             for elem in element.iter():
                 if elem.attrib.get('name') == child_to_comment_out:
-                    print 'in %s comment out %s' % (child_name, child_to_comment_out)
+                    print('in %s comment out %s' % (child_name, child_to_comment_out))
                     pattern_el = None
                     for el in elem.iter('{http://www.w3.org/2001/XMLSchema}pattern'):
                         pattern_el = el
@@ -108,16 +108,16 @@ def relax(schema_filename_in, schema_filename_out=None):
     """
     schema_file_in = schema_file_from(schema_filename_in)
     if os.path.isfile(schema_file_in):
-        print 'schema in: %s' % schema_file_in
+        print('schema in: %s' % schema_file_in)
         if schema_filename_out is None:
             schema_filename_out = create_schema_filename(schema_filename_in)
         schema_file_out = schema_file_from(schema_filename_out)
-        print 'schema out: %s' % schema_file_out
+        print('schema out: %s' % schema_file_out)
 
         # Read the schema to releax
         tree = ET.parse(schema_file_in)
         root = tree.getroot()
-        print 'root is %s' % root
+        print('root is %s' % root)
         # 1. in <xs:complexType name="supersedes_type"> relax <xs:element name="date" type="xs:date"/>
         relax_child(root, 'complexType', 'supersedes_type', ('date',))
         # 2. in <xs:element name="journal_citation" substitutionGroup="citation_type"> relax <xs:element name="journal_abbreviation" type="xs:token"/>
@@ -188,14 +188,14 @@ def relax(schema_filename_in, schema_filename_out=None):
         if schema_file_out is not None:
             tree.write(schema_file_out, encoding="UTF-8", method="xml")
     else:
-        print 'Input schema file %s does not exist. It cannot be relaxed.' % schema_file_in
+        print('Input schema file %s does not exist. It cannot be relaxed.' % schema_file_in)
 
 
 def is_schema_name_correct(schema_name):
     if schema_name.endswith('.xsd'):
         return True
     else:
-        print 'Schema file name "%s" is not correct. It should have the ".xsd" extension' % schema_name
+        print('Schema file name "%s" is not correct. It should have the ".xsd" extension' % schema_name)
         return False
 
 
@@ -221,8 +221,8 @@ def main():
         if is_schema_name_correct(args[0]) and is_schema_name_correct(args[1]):
             relax(args[0], args[1])
     else:
-        print 'No input given. Please see the usage.'
-        print usage
+        print('No input given. Please see the usage.')
+        print(usage)
 
 
 if __name__ == "__main__":
